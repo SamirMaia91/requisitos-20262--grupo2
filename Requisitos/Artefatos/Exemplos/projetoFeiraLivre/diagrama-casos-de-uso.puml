@@ -1,0 +1,117 @@
+@startuml
+left to right direction
+
+actor "AT-01\nAdministrador/servidor" as AT01
+actor "AT-02\nFiscal municipal" as AT02
+actor "AT-03\nFeirante" as AT03
+actor "AT-04\nSistema de Emissão de Taxas da Prefeitura" as AT04
+
+package "Módulo de Gestão" {
+    package "Feirantes" {
+        usecase "CDU-01\nConsultar feirantes" as CDU01
+        usecase "CDU-02\nCadastrar feirante" as CDU02
+        usecase "CDU-03\nEditar cadastro de feirante" as CDU03
+        usecase "CDU-04\nExcluir cadastro de feirante" as CDU04
+        usecase "CDU-05\nDesabilitar cadastro de feirante" as CDU05
+        usecase "CDU-23\nRegistrar alteração de cadastro de feirante" as CDU23
+        usecase "CDU-27\nConsultar histórico de feirante" as CDU27
+    }
+    package "Feiras e barracas" {
+        usecase "CDU-06\nConsultar feiras" as CDU06
+        usecase "CDU-07\nCadastrar feira" as CDU07
+        usecase "CDU-08\nEditar feira" as CDU08
+        usecase "CDU-09\nExcluir feira" as CDU09
+        usecase "CDU-10\nDesabilitar feira" as CDU10
+        usecase "CDU-11\nConsultar barracas da feira" as CDU11
+        usecase "CDU-12\nCadastrar barraca" as CDU12
+        usecase "CDU-13\nAssociar feirante a barraca" as CDU13
+        usecase "CDU-14\nEditar barraca" as CDU14
+        usecase "CDU-15\nExcluir barraca" as CDU15
+        usecase "CDU-16\nDesabilitar barraca" as CDU16
+        usecase "CDU-24\nRegistrar alteração de feira" as CDU24
+        usecase "CDU-28\nConsultar histórico de feira" as CDU28
+        usecase "CDU-25\nRegistrar alteração de barraca" as CDU25
+        usecase "CDU-29\nConsultar histórico de barraca" as CDU29
+
+    }
+    package "Taxas" {
+        usecase "CDU-17\nRegistrar pagamento de taxa" as CDU17
+        usecase "CDU-20\nGerar relatórios de arrecadação" as CDU20
+    }
+    package "Controle de acesso e tela principal" {
+        usecase "CDU-22\nAutenticar usuário por perfil" as CDU22
+        usecase "CDU-30\nExibir tela de principal - Intranet" as CDU30
+    }
+}
+
+package "Módulo de Gestão do Feirante" {
+    package "Feirante - Taxas" {
+        usecase "CDU-18\nConsultar situação de pagamento" as CDU18
+        usecase "CDU-19\nEmitir guia de pagamento" as CDU19
+    }
+    package "Controle de acesso e tela principal - Feirante" {
+        usecase "CDU-31\nAutenticar feirante" as CDU31
+        usecase "CDU-32\nExibir tela de principal - Feirante" as CDU32
+    }
+}
+
+package "Módulo de Gestão do Fiscal" {
+    package "Fiscalização" {
+        usecase "CDU-21\nConsultar feirantes autorizados" as CDU21
+        usecase "CDU-26\nRegistrar e emitir multa" as CDU26
+    }
+    package "Controle de acesso e tela principal - Fiscal" {
+        usecase "CDU-33\nAutenticar fiscal" as CDU33
+        usecase "CDU-34\nExibir tela de principal - Fiscal" as CDU34
+    }
+}
+
+AT01 -- CDU01
+AT01 -- CDU02
+AT01 -- CDU03
+AT01 -- CDU04
+AT01 -- CDU05
+AT01 -- CDU06
+AT01 -- CDU07
+AT01 -- CDU08
+AT01 -- CDU09
+AT01 -- CDU10
+AT01 -- CDU11
+AT01 -- CDU12
+AT01 -- CDU13
+AT01 -- CDU14
+AT01 -- CDU15
+AT01 -- CDU16
+AT01 -- CDU17
+AT01 -- CDU20
+AT01 -- CDU22
+CDU22 <.. CDU30 : <<extend>>
+AT01 -- CDU27
+AT01 -- CDU28
+AT01 -- CDU29
+
+
+CDU02 ..> CDU23 : <<include>>
+CDU03 ..> CDU23 : <<include>>
+CDU04 ..> CDU23 : <<include>>
+CDU05 ..> CDU23 : <<include>>
+CDU07 ..> CDU24 : <<include>>
+CDU08 ..> CDU24 : <<include>>
+CDU09 ..> CDU24 : <<include>>
+CDU10 ..> CDU24 : <<include>>
+CDU12 ..> CDU25 : <<include>>
+CDU13 ..> CDU25 : <<include>>
+CDU14 ..> CDU25 : <<include>>
+CDU15 ..> CDU25 : <<include>>
+CDU16 ..> CDU25 : <<include>>
+AT02 -- CDU21
+AT02 -- CDU26
+AT02 -- CDU33
+CDU33 <.. CDU34 : <<extend>>
+
+AT03 -- CDU18
+AT03 -- CDU19
+AT03 -- CDU31
+CDU31 <.. CDU32 : <<extend>>
+AT04 -- CDU19
+@enduml
