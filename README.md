@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📘 Modelo LAPIS de Liderança Ágil
 
 > *Liderança, Agilidade, Padronização, Integração e Sucesso*
@@ -72,3 +73,6 @@ O modelo completo, com descrição de cada dimensão, princípios detalhados, ma
 Para aplicação prática em turma (issues, milestones, sprints e kanban por aluno), consulte:
 
 📄 [TUTORIAL_GITHUB_PROJECTS.md](GestaoConfiguracao/TUTORIAL_GITHUB_PROJECTS.md)
+=======
+# requisitos-20262--grupo2
+>>>>>>> c252bc1a6485ffb34019ddfdd49068bfbe60e196
