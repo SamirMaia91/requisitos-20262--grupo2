@@ -37,10 +37,10 @@ Não coloque o token no arquivo JSON, nos scripts, em capturas de tela ou em com
 
    ```powershell
    .\setup-project.ps1 `
-     -Owner "<usuario-ou-organizacao-do-repositorio>" `
-     -Repo "<nome-do-repositorio>" `
-     -ProjectOwner "<usuario-proprietario-do-project>" `
-     -ProjectNumber <numero-do-project> `
+     -Owner "samirmaia91" `
+     -Repo "requisitos-20262--grupo2" `
+     -ProjectOwner "samirmaia91" `
+     -ProjectNumber 1 `
      -JsonPath ".\issues_github.json" `
      -IterationStartDate "2026-10-20" `
      -IterationCount 3 `
