@@ -25,10 +25,6 @@ A seleção inicial contém cinco adaptações textuais de questões reais do EN
 
 Como alternativa local, baixe o repositório e abra [index.html](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/index.html), mantendo seus arquivos e assets juntos. A versão pública HTTPS é a referência para avaliação de todos os fluxos.
 
-## Situação das evidências
-
-A especificação e o protótipo são baseados em análise documental com fontes identificadas. Entrevistas com participantes, revisão pedagógica e validação externa permanecem pendentes até registro de evidências. Não há comprovação de envio ao AVA ou de acesso do professor anexada. A publicação do link permite avaliar a interface, mas não comprova aceite ou envio da atividade.
-
 ## Organização
 
 - Requisitos/Artefatos/SistemaApoioENADE: documentação vigente, UML e protótipo.
