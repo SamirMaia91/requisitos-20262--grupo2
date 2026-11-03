@@ -36,7 +36,7 @@ AT-01 Estudante utiliza os recursos de estudo. AT-02 Administrador publica conte
 
 ### 2.4 Ambiente e restrições
 
-Navegador em computador ou dispositivo móvel, servidor de aplicação e banco de dados em produção. A infraestrutura é uma arquitetura proposta. A entrega executável atual é um protótipo local, sem servidor de identidade, correio, banco institucional ou comunidade compartilhada.
+Navegador em computador ou dispositivo móvel, servidor de aplicação e banco de dados em produção. A infraestrutura é uma arquitetura proposta. A entrega executável atual é um protótipo de alta fidelidade com hospedagem HTTPS pública e dados locais ao navegador. Cadastro, login e separação de histórico permitem avaliar o fluxo; não há servidor de identidade, correio, banco institucional ou comunidade compartilhada.
 
 ### 2.5 Premissas e dependências
 
@@ -46,7 +46,7 @@ Conteúdo precisa de origem conferida e comentário revisado. Não há necessida
 
 ### 3.1 Interfaces externas
 
-**Usuário:** navegação por início, banco, simulado, resultado, desempenho, materiais, discussão, catálogo e moderação. Filtros combináveis; estados vazios; erros próximos aos campos; confirmação de encerramento e exclusão.
+**Usuário:** navegação por início, cadastro, login, conta, banco, simulado, resultado, desempenho, materiais, discussão, curadoria e moderação. Filtros combináveis por ano, curso, componente e tema tanto na consulta quanto na preparação do simulado; estados vazios; erros próximos aos campos; confirmação de encerramento e exclusão. Curadoria permite editar questões com incremento de versão e manter materiais. A identidade visual segue a [referência UNIFOR](Prototipos/IdentidadeVisual.md).
 
 **Software:** produção terá interfaces de identidade, catálogo, tentativas e discussão com verificação de acesso no servidor. Os nomes dos componentes estão no diagrama correspondente; endpoints e tecnologia não foram impostos como requisito.
 
@@ -93,3 +93,5 @@ Executar os critérios dos catálogos, a [matriz](Rastreabilidade.md), o [roteir
 ## 5. Controle de mudanças
 
 Toda alteração registra data e motivo, preserva IDs existentes, atualiza cobertura dos artefatos e informa impacto. Mudanças de escopo e política dependem de aprovação ainda pendente. Nenhuma data de aceite anterior foi atribuída à versão 2.0.
+
+Em 03/11/2026, o protótipo evoluiu para 3.0 com telas de alta fidelidade, acesso público, cadastro/login locais, edição de questões, manutenção de materiais e quatro filtros de simulado. Os IDs dos requisitos e os modelos do produto foram preservados. Os limites de implementação constam no roteiro do protótipo; essa evolução não registra aceite externo.

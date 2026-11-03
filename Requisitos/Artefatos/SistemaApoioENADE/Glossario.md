@@ -12,4 +12,4 @@
 | Percentual de acertos | Indicador de estudo calculado segundo RN-07; não é a nota oficial do exame. |
 | SRS | Especificação de Requisitos de Software. |
 | Validação | Confirmação de adequação pelos interessados; não se confunde com verificação técnica. |
-| Protótipo | Interface executável local para avaliar navegação e regras, com limites documentados. |
+| Protótipo | Interface executável de alta fidelidade, com acesso público e dados locais ao navegador, para avaliar navegação e regras com limites documentados. |

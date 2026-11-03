@@ -4,6 +4,8 @@ Projeto acadêmico de **Requisitos e Modelagem de Sistemas**, curso de Análise 
 
 Uma proposta de plataforma web para organizar questões, realizar simulados cronometrados e acompanhar o estudo com correção comentada. A entrega reúne especificação, modelagem e prototipação; não representa serviço de produção nem plataforma oficial do Inep.
 
+**[Abrir o protótipo público — sem instalação](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
+
 ## Acessos principais
 
 | Leitura | Conteúdo |
@@ -15,15 +17,17 @@ Uma proposta de plataforma web para organizar questões, realizar simulados cron
 | [Protótipo navegável](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/README.md) | Como abrir e avaliar a interface |
 | [Plano de entregas](Requisitos/Artefatos/SistemaApoioENADE/PlanoDeEntregas.md) | Calendário, evidências e pendências |
 
-## Executar o protótipo
+## Avaliar o protótipo
 
-Baixe o repositório e abra [index.html](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/index.html) em um navegador moderno. Não há dependências de execução nem instalação. O GitHub apresenta o código HTML; a navegação interativa acontece no arquivo aberto localmente.
+Abra o endereço público acima. A versão 3.0 reúne telas de alta fidelidade com as cores e a tipografia da UNIFOR, cadastro e login locais, filtros completos, prática, simulados cronometrados, correção, desempenho e curadoria de questões e materiais. Consulte o [roteiro de avaliação](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/README.md) e as [capturas](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/Wireframes.md).
 
-O catálogo começa vazio. Fontes oficiais estão disponíveis na tela de materiais. Questões podem ser inseridas pelo formulário de curadoria após conferência da prova, do gabarito e do comentário; resultados são calculados a partir das respostas dadas no navegador.
+A seleção inicial contém cinco adaptações textuais de questões reais do ENADE, com prova, número e gabarito conferidos. As [fontes e os limites editoriais](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/ConteudoEFontes.md) estão documentados. Não há contas ou resultados de participantes pré-cadastrados; os indicadores são calculados com as respostas feitas no navegador.
+
+Como alternativa local, baixe o repositório e abra [index.html](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/index.html), mantendo seus arquivos e assets juntos. A versão pública HTTPS é a referência para avaliação de todos os fluxos.
 
 ## Situação das evidências
 
-A versão 2.0 é baseada em análise documental com fontes identificadas. Entrevistas com participantes, revisão pedagógica e validação externa permanecem pendentes até registro de evidências. Não há comprovação de envio ao AVA ou de acesso do professor anexada.
+A especificação e o protótipo são baseados em análise documental com fontes identificadas. Entrevistas com participantes, revisão pedagógica e validação externa permanecem pendentes até registro de evidências. Não há comprovação de envio ao AVA ou de acesso do professor anexada. A publicação do link permite avaliar a interface, mas não comprova aceite ou envio da atividade.
 
 ## Organização
 

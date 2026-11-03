@@ -1,58 +1,59 @@
-# Protótipo navegável
+# Protótipo navegável — Espaço de estudo ENADE
 
-Versão 2.0 · 03/11/2026 · Grupo 2.
+Versão 3.0 · 03/11/2026 · UNIFOR · ADS · Grupo 2.
 
-## Abrir e navegar
+**[Abrir o protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
 
-Baixe o repositório e abra [index.html](index.html) diretamente em Chrome, Edge ou Firefox. A execução não depende de servidor, pacote ou conexão de rede; somente links para fontes externas dependem de internet. No GitHub, o HTML é exibido como código: baixe os arquivos para navegar. Este endereço identifica o artefato versionado; não existe hospedagem pública configurada nesta entrega.
+O professor pode navegar diretamente pelo endereço, sem baixar arquivos ou instalar pacotes. O código versionado está em [index.html](index.html). Como alternativa local, abra esse arquivo mantendo os demais arquivos e a pasta assets ao lado. Acesse a versão HTTPS para avaliar o cadastro se o navegador restringir criptografia em arquivos locais.
 
-[Wireframes](Wireframes.md) · [Capturas da interface](#capturas) · [Especificação do produto](../SRS.md).
+[Telas e wireframes de alta fidelidade](Wireframes.md) · [Identidade visual](IdentidadeVisual.md) · [Conteúdo e fontes](ConteudoEFontes.md) · [SRS](../SRS.md).
 
-## Origem dos dados
+## Conteúdo disponível
 
-O banco começa vazio. Não há contas, notas ou comentários pré-cadastrados. As referências do Inep exibidas na tela de materiais são links oficiais consultados durante a análise documental. Não há extração automática dos PDFs nem afirmação de que o conteúdo dos documentos vinculados foi importado ou revisado.
+A seleção inicial contém cinco adaptações textuais de questões reais do ENADE, das edições 2017 e 2021, nas áreas de Análise e Desenvolvimento de Sistemas e Sistemas de Informação. Provas, números e respostas foram confrontados com os documentos oficiais do Inep. Cada questão identifica a adaptação, a prova e o gabarito; os hashes dos arquivos consultados estão em [content.json](content.json).
 
-O formulário de curadoria permite registrar conteúdo real após conferência. Sem a confirmação de revisão, a questão fica em rascunho. Resultados são calculados com base nas respostas dadas pelo usuário e no gabarito cadastrado. Isso verifica a aplicação da regra, não a qualidade pedagógica ou autenticidade do conteúdo inserido.
+Os comentários são análise técnica do projeto. A revisão pedagógica externa permanece pendente. Não há contas, mensagens ou notas de participantes pré-cadastradas. Os indicadores são calculados exclusivamente com as respostas realizadas por quem navega.
 
-## Fluxos implementados e limites
+## Fluxos e limites
 
-| Fluxo | Disponível no protótipo | Limite em relação ao produto |
+| Caso de uso | Disponível | Limite do protótipo |
 | --- | --- | --- |
-| UC-01 — Acesso e dados | Seleção de perfil para avaliação; retorno ao estudante; apagar dados locais com confirmação | Não cria conta, não autentica, não recebe senha e não aplica autorização de servidor. |
-| UC-02 — Consulta | Filtros combinados por ano, curso, componente e tema; links oficiais e estados vazios | Materiais ficam restritos às fontes documentais da entrega; manutenção de materiais é requisito futuro. |
-| UC-03 — Prática | Seleção de uma alternativa, envio, correção e histórico local | Isolado no navegador, sem conta individual de servidor. |
-| UC-04 — Simulado | Tema, quantidade, duração, navegação, persistência de prazo, retomada e encerramento manual ou por tempo | Usa relógio local; a produção deverá validar o prazo no servidor. |
-| UC-05 — Correção | Acertos, erros, omissões, comentário e referências; fotografia preservada | Gabarito está presente no código/armazenamento local; o protótipo não é ambiente de prova protegida. |
-| UC-06 — Desempenho | Histórico, gráfico e tabela por tema, denominadores e ausência de dados | Agrega somente as tentativas deste navegador; não representa indicadores de turma. |
-| UC-07 — Discussão | Mensagens locais por questão e denúncia com motivo | Não é comunidade compartilhada; autoria é identificada como registro local. |
-| UC-08 — Curadoria | Cadastro, revisão/publicação de rascunho e arquivamento | Não há edição de uma questão publicada: arquive e cadastre a revisão; não há revisão pedagógica automática. |
-| UC-09 — Moderação | Fila local, justificativa e decisão de manter/ocultar | Sem equipe institucional ou comunicação entre pessoas. |
+| UC-01 — Acesso e dados | Cadastro, confirmação de senha, login, saída, separação de histórico por conta, exclusão de conta e limpeza de dados com confirmação | Contas locais ao navegador; sem recuperação por e-mail, servidor de identidade ou autorização institucional. |
+| UC-02 — Consulta | Busca e quatro filtros combinados: ano, curso, componente e tema; filtro de materiais; fontes e estados vazios | A seleção inicial cobre dois anos, dois cursos e somente componente específico. |
+| UC-03 — Prática | Questão com cinco alternativas, bloqueio de envio vazio, correção e histórico | Registros locais; não é aplicação de avaliação oficial. |
+| UC-04 — Simulado | Quatro filtros, contagem de questões disponíveis, quantidade, duração, navegação, retomada, prazo persistente e encerramento manual ou automático | Seleção determinística das primeiras questões filtradas; relógio do dispositivo. |
+| UC-05 — Correção | Acertos, erros e omissões; comentários, fonte e fotografia da versão respondida | Gabarito acessível no código local; não é ambiente de prova protegida. |
+| UC-06 — Desempenho | Histórico por perfil, gráfico e tabela por tema com denominadores | Nenhum indicador de turma ou integração institucional. |
+| UC-07 — Discussão | Mensagem por questão e sinalização com motivo | Mensagens locais, sem comunicação entre pessoas. |
+| UC-08 — Curadoria | Cadastro e edição de questões com incremento de versão; rascunho, publicação após conferência e arquivamento; cadastro, edição e arquivamento de materiais | Modo de avaliação explicitamente ativado. Não equivale a permissão administrativa de produção. |
+| UC-09 — Moderação | Sinalizações, decisão de manter/ocultar e justificativa | Fila local, sem equipe de moderação conectada. |
 
 ## Roteiro de avaliação
 
-1. Abra a visão geral e confira os estados vazios.
-2. Navegue pelo banco, simulados, desempenho e fontes, sem cadastrar conteúdo.
-3. Em Acesso e dados locais, escolha o perfil de administrador.
-4. Consulte uma prova e seu gabarito oficiais, confira as condições de uso e prepare um comentário pedagógico. Cadastre uma questão objetiva com todos os campos; salve em rascunho caso a revisão ainda não tenha ocorrido.
-5. Após conferência, publique a questão. No banco, aplique filtros e responda à questão.
-6. Consulte correção e desempenho. Confira o denominador e a fonte.
-7. Inicie um simulado com quantidade disponível e duração entre 1 e 240 minutos. Responda, atualize a página e confirme que o prazo não reiniciou. Encerre e revise o resultado.
-8. Registre uma mensagem, denuncie e avalie a moderação pelo perfil administrativo.
-9. Arquive a questão e confirme que o resultado anterior continua íntegro.
-10. Apague os dados locais após a avaliação se estiver usando navegador compartilhado.
+1. Acesse o endereço público e confira as cinco questões e o histórico inicialmente vazio.
+2. Abra o banco e combine os filtros. Consulte a prova e o gabarito de uma questão.
+3. Responda a uma questão e leia a correção. Confira a atribuição do comentário e a identificação da adaptação.
+4. Prepare um simulado: ajuste os quatro filtros, a quantidade disponível e a duração, de 1 a 240 minutos inteiros.
+5. Responda, atualize a página e retome. O prazo original e as respostas permanecem. Encerre e confira também as omissões.
+6. Em Meu desempenho, compare o histórico, o total praticado e os indicadores por tema.
+7. Crie uma conta local pela opção de entrada. Confira confirmação de senha, saída e novo acesso. O histórico do visitante permanece separado.
+8. Abra Curadoria de conteúdo e confirme Avaliar curadoria. Edite uma questão e marque a conferência para publicar a nova versão. Sem a marcação, ela fica em rascunho.
+9. Confira que a edição não mudou a correção de uma tentativa anterior. Cadastre, edite e arquive um material com origem identificada.
+10. Na correção, abra a discussão. Registre uma mensagem, sinalize e examine a fila de moderação.
+11. Em Conta e privacidade, encerre a sessão ou apague os dados locais, conforme necessário.
 
-O usuário fornece conteúdo real para os passos que dependem de questões. Os testes técnicos automatizados usam dados mínimos de ensaio em memória, isolados do catálogo distribuído.
+## Dados e manutenção
 
-## Persistência e privacidade
+Contas e conteúdos de avaliação usam localStorage; a sessão usa sessionStorage. A senha é derivada com PBKDF2/SHA-256, 120 mil iterações e sal aleatório, sem armazenamento da senha em texto simples. Isso permite avaliar o fluxo e não substitui autenticação e autorização de servidor. Perfis compartilham o catálogo local e mantêm seus históricos separados.
 
-Os dados usam localStorage quando permitido. O navegador pode remover registros; navegação privada e abertura por arquivo podem restringir persistência. Se a gravação falhar, a interface informa uso apenas em memória. O armazenamento é por navegador/origem, não por pessoa autenticada. Não utilize dados sensíveis e não trate a seleção de perfil como controle de segurança.
+Limpeza do navegador, navegação privada e restrições de armazenamento podem remover os registros. A interface informa falha de gravação. Não há sincronização entre dispositivos. O modo de curadoria não protege dados contra quem utiliza o mesmo navegador.
 
-## Capturas
+O conteúdo inicial é mantido em content.json; **node scripts/build-content.mjs**, na raiz do repositório, atualiza content.js. O pacote não precisa de build para executar. Confira [Verificação técnica](../VerificacaoTecnica.md) e [Publicação](Publicacao.md) para os procedimentos de manutenção.
 
-As capturas mostram o estado inicial, sem dados de participantes.
+## Prévia
 
-![Visão geral em computador](capturas/inicio-desktop.png)
+![Visão geral com identidade UNIFOR](capturas/01-inicio.png)
 
-![Banco de questões vazio](capturas/banco-desktop.png)
+![Cadastro em celular](capturas/17-cadastro-mobile.png)
 
-![Visão geral em celular](capturas/inicio-mobile.png)
+Todas as telas estão em [Wireframes.md](Wireframes.md). Capturas de correção e desempenho documentam ações executadas durante a verificação técnica; não representam resultados de alunos ou aceite externo.

@@ -1,35 +1,40 @@
-# Wireframes de interface
+# Wireframes e telas de alta fidelidade
 
-Versão 2.0 · 03/11/2026. Estruturas de baixa fidelidade para leitura dos fluxos; a interface navegável está em index.html. Os rótulos descrevem campos e estados, sem apresentar entrevistas, usuários ou resultados de exemplo.
+Versão 3.0 · 03/11/2026. Telas capturadas do HTML executável, com navegação, componentes, tipografia, cores e estados implementados. Substituem os esquemas de baixa fidelidade da versão anterior.
 
-## Visão geral
+**[Navegar no protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)** · [Identidade visual UNIFOR](IdentidadeVisual.md).
 
-![Visão geral](wireframes/01-inicio.svg)
+## Mapa das telas
 
-## Banco de questões
+| Tela | Fluxo | Captura |
+| --- | --- | --- |
+| Visão geral | Entrada, catálogo e indicadores locais | [Computador](capturas/01-inicio.png) · [Celular](capturas/15-inicio-mobile.png) |
+| Login | UC-01 | [Entrar](capturas/02-login.png) |
+| Cadastro | UC-01 | [Computador](capturas/03-cadastro.png) · [Celular](capturas/17-cadastro-mobile.png) |
+| Banco e filtros | UC-02 | [Computador](capturas/04-banco.png) · [Celular](capturas/16-banco-mobile.png) |
+| Prática individual | UC-03 | [Questão e alternativas](capturas/05-questao.png) |
+| Preparação | UC-04 | [Computador](capturas/06-preparacao.png) · [Celular](capturas/18-preparacao-mobile.png) |
+| Simulado em andamento | UC-04 | [Prazo, respostas e navegação](capturas/07-simulado.png) |
+| Correção | UC-05 | [Resultado e referências](capturas/08-correcao.png) |
+| Desempenho | UC-06 | [Indicadores e tabela por tema](capturas/09-desempenho.png) |
+| Materiais | UC-02 | [Biblioteca e fontes](capturas/10-materiais.png) |
+| Curadoria de questões | UC-08 | [Lista e ações](capturas/11-curadoria.png) |
+| Edição de questão | UC-08 | [Campos, gabarito e conferência](capturas/12-editar-questao.png) |
+| Curadoria de materiais | UC-08 | [Lista e ações](capturas/13-curadoria-materiais.png) |
+| Cadastro de material | UC-08 | [Formulário](capturas/14-editar-material.png) |
 
-![Banco de questões](wireframes/02-banco.svg)
+UC-07 e UC-09 são avaliados pelas telas de discussão e moderação no protótipo. Não há mensagens de participantes pré-cadastradas para preencher essas telas.
 
-## Simulado cronometrado
+## Comportamento visual
 
-![Simulado cronometrado](wireframes/03-simulado.svg)
+A navegação lateral torna-se superior em celular; listas e formulários se reorganizam em coluna única. Campos têm rótulos visíveis, foco de teclado e feedback de validação. Diálogos confirmam encerramento, curadoria, arquivamento e exclusões. O desempenho tem uma tabela equivalente ao gráfico.
 
-## Correção comentada
+As telas de correção e desempenho foram obtidas após uma resposta e um encerramento com omissão durante o ensaio técnico. Documentam o funcionamento da interface, sem constituir resultado de estudante, entrevista ou validação externa.
 
-![Correção comentada](wireframes/04-resultado.svg)
+## Prévia das interfaces
 
-## Meu desempenho
+![Cadastro](capturas/03-cadastro.png)
 
-![Meu desempenho](wireframes/05-desempenho.svg)
+![Preparação do simulado](capturas/06-preparacao.png)
 
-## Curadoria do catálogo
-
-![Curadoria do catálogo](wireframes/06-curadoria.svg)
-
-## Acesso e dados locais
-
-![Acesso e dados locais](wireframes/07-acesso.svg)
-
-## Cobertura
-
-UC-01: acesso; UC-02: banco e fontes; UC-03: questão; UC-04: simulado; UC-05: correção; UC-06: desempenho; UC-07/UC-09: discussão e moderação no protótipo; UC-08: curadoria. Em telas pequenas, a barra lateral vira navegação superior e os formulários ficam em coluna única.
+![Correção durante a verificação técnica](capturas/08-correcao.png)

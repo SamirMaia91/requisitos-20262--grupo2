@@ -1,6 +1,8 @@
 # Sistema de Apoio ao ENADE — artefatos
 
-> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
+> Documentação consolidada · Protótipo 3.0 · 03/11/2026 · Grupo 2 · Aprovação com usuários: pendente.
+
+**[Abrir o protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
 
 ## P1 — elicitação e modelagem
 
@@ -22,4 +24,4 @@
 
 [Fontes](Fontes.md) · [Glossário](Glossario.md) · [Plano de entregas](PlanoDeEntregas.md) · [Validação e comprovantes](Validacao.md)
 
-As necessidades são derivadas das fontes documentais. Entrevistas de campo, revisão pedagógica e aceite externo aguardam participação dos interessados. O protótipo começa vazio e não contém notas, usuários ou comentários pré-cadastrados.
+As necessidades são derivadas das fontes documentais. Entrevistas de campo, revisão pedagógica e aceite externo aguardam participação dos interessados. O protótipo inclui cinco adaptações identificadas de questões reais, com comentários de análise técnica do projeto e fontes oficiais. Contas, mensagens e resultados de participantes não são pré-cadastrados.
