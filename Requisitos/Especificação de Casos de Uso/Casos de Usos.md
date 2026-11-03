@@ -370,7 +370,7 @@ Para cada fluxo de exceção:
   * Circunstâncias que podem ser garantidas como **verdadeiras** ao final do caso de uso.
   * Ações/eventos que **não** fazem parte do objetivo principal do caso de uso.
 
-**📌Exemplo:** Após armazenar os dados do cliente é gerado o arquivo Dados.txt
+**📌Exemplo:** Após armazenar os dados do cliente, o sistema gera um registro de confirmação.
 
 ### 10. Descreva os requisitos não funcionais
 

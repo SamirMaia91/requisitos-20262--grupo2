@@ -9,7 +9,7 @@ Versão 2.0 · 03/11/2026. Diagramas do produto conceitual proposto.
 - [Sequencia](../DiagramaSequencia.md): imagem SVG e fonte PlantUML.
 - [Atividades](../DiagramaAtividades.md): imagem SVG e fonte PlantUML.
 
-Casos de uso, componentes e implantação cobrem a relação solicitada no TXT da P1; classes, sequência e atividades complementam a modelagem prevista no PDF.
+Casos de uso, componentes e implantação cobrem a relação solicitada no enunciado da P1; classes, sequência e atividades complementam a modelagem prevista no projeto de extensão.
 
 Para regenerar com Java e PlantUML 1.2026.8: **java -jar plantuml.jar -charset UTF-8 -tsvg UML/*.puml**. O executável do renderizador não faz parte do repositório.
 

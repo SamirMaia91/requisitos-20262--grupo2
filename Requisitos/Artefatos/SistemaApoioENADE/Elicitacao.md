@@ -4,7 +4,7 @@
 
 ## 1. Método executado: análise documental
 
-Foram examinados o PDF do projeto ENADE, os TXT das atividades P1 e P2 e o documento de propostas fornecidos para o trabalho. Também foi consultado o catálogo oficial de provas e gabaritos do Inep. As referências e limites de cada fonte estão em [Fontes](Fontes.md).
+Foram examinados o projeto ENADE, os enunciados das atividades P1 e P2 e o documento de propostas da disciplina. Também foi consultado o catálogo oficial de provas e gabaritos do Inep. As referências e limites de cada fonte estão em [Fontes](Fontes.md).
 
 ## 2. Resultados documentais
 

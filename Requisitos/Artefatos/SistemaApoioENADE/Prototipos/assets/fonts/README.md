@@ -1,6 +1,6 @@
 # Tipografia
 
-Satoshi Variable, da Indian Type Foundry, distribuída pelo Fontshare. Arquivo original sem alterações, obtido em 03/11/2026. A licença original está em [FFL.txt](FFL.txt).
+Satoshi Variable, da Indian Type Foundry, distribuída pelo Fontshare. Arquivo original sem alterações, obtido em 03/11/2026. Consulte a [licença original](LICENSE).
 
 - [Família no Fontshare](https://www.fontshare.com/fonts/satoshi)
 - [Licença ITF Free Font License](https://www.fontshare.com/licenses/itf-ffl)

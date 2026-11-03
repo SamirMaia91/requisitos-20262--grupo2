@@ -1,6 +1,6 @@
 # Gestão do trabalho
 
-O planejamento vigente do Grupo 2 está no [Plano de entregas ENADE](../Requisitos/Artefatos/SistemaApoioENADE/PlanoDeEntregas.md). O calendário adotado segue os TXT fornecidos: M1/Sprint 1 de 20/10 a 02/11/2026; M2/Sprint 2 de 03/11 a 23/11/2026.
+O planejamento vigente do Grupo 2 está no [Plano de entregas ENADE](../Requisitos/Artefatos/SistemaApoioENADE/PlanoDeEntregas.md). O calendário adotado segue os enunciados das atividades: M1/Sprint 1 de 20/10 a 02/11/2026; M2/Sprint 2 de 03/11 a 23/11/2026.
 
 As pastas de turmas, planos de ensino e [tutorial de GitHub Projects](TUTORIAL_GITHUB_PROJECTS.md) são referências de apoio. Suas cópias históricas podem conter calendários de outras turmas; não são evidência de entrevistas, validações ou tarefas executadas.
 

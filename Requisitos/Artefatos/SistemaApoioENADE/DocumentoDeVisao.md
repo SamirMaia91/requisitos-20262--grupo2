@@ -48,12 +48,12 @@ Esses IDs são únicos em todos os documentos. As necessidades foram derivadas d
 
 ## 6. Entregas e calendário
 
-| Etapa | Período conforme TXT fornecidos | Entregas |
+| Etapa | Período conforme os enunciados das atividades | Entregas |
 | --- | --- | --- |
 | M1 / Sprint 1 — P1 | 20/10 a 02/11/2026 | Visão, stakeholders, elicitação, RF, RNF, RN, backlog e UML inicial. |
 | M2 / Sprint 2 — P2 | 03/11 a 23/11/2026 | SRS, casos de uso detalhados, consistência, UML atualizada, wireframes e protótipo. |
 
-A versão 2.0 foi elaborada em 03/11/2026; não representa entrega retroativa nem aprovação ocorrida na Sprint 1. Outros calendários presentes em materiais de turmas distintas não substituem os TXT fornecidos.
+A versão 2.0 foi elaborada em 03/11/2026; não representa entrega retroativa nem aprovação ocorrida na Sprint 1. Outros calendários presentes em materiais de turmas distintas não substituem os enunciados da P1 e da P2.
 
 ## 7. Premissas, dependências e riscos
 

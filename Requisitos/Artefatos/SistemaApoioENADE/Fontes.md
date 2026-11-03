@@ -4,9 +4,9 @@ Consulta documental consolidada em 03/11/2026. Os enunciados orientam a entrega 
 
 | ID | Fonte | Uso e limite |
 | --- | --- | --- |
-| FON-01 | [Projeto de Extensão — ENADE](Referencias/ProjetoExtensao.txt), texto extraído do PDF fornecido | Contexto, escopo, metodologia e entregas gerais. Não é resultado de pesquisa do grupo. |
-| FON-02 | Atividade 1 — Trabalho P1, TXT fornecido; [enunciado correspondente no repositório](Referencias/AtividadeP1.md) | Entregáveis e calendário P1. O texto do repositório foi conferido com o material fornecido. |
-| FON-03 | Atividade 2 — Trabalho P2, TXT fornecido; [enunciado correspondente no repositório](Referencias/AtividadeP2.md) | Entregáveis, critérios e calendário P2. |
+| FON-01 | [Projeto de Extensão — ENADE](Referencias/ProjetoExtensao.md), transcrição do material da disciplina | Contexto, escopo, metodologia e entregas gerais. Não é resultado de pesquisa do grupo. |
+| FON-02 | [Atividade 1 — Trabalho P1](Referencias/AtividadeP1.md), enunciado da atividade | Entregáveis e calendário P1. O texto do repositório foi conferido com o material da disciplina. |
+| FON-03 | [Atividade 2 — Trabalho P2](Referencias/AtividadeP2.md), enunciado da atividade | Entregáveis, critérios e calendário P2. |
 | FON-04 | Propostas_Projetos_Internacionalizacao_ENADE_Unifor.docx, material fornecido e examinado durante o levantamento | Propostas adaptáveis. A proposta 5 trata de gestão do conhecimento e aprendizagem para ENADE; importação e integração são possibilidades a investigar. Não é uma lista de requisitos aprovados. |
 | FON-05 | [Inep — Provas e Gabaritos](https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enade/provas-e-gabaritos) | Catálogo oficial consultado. Fonte externa para localizar conteúdo por edição. |
 | FON-06 | [Inep — Provas e Gabaritos 2021](https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enade/provas-e-gabaritos/2021) | Página e documentos oficiais de ADS e SI usados na conferência de três questões adaptadas. |
