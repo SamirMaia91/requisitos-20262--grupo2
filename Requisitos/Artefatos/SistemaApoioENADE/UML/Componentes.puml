@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Componentes — Sistema de Apoio ao ENADE
+package "Aplicação web — arquitetura proposta" {
+ [Interface web] as UI
+ [Identidade e autorização] as ID
+ [Catálogo e curadoria] as CAT
+ [Avaliação e desempenho] as AV
+ [Discussão e moderação] as FOR
+ database "Persistência" as DB
+ UI ..> ID : sessão / perfil
+ UI ..> CAT : questões / materiais
+ UI ..> AV : tentativas / resultados
+ UI ..> FOR : mensagens / denúncias
+ CAT ..> ID : verificar administrador
+ AV ..> ID : verificar proprietário
+ FOR ..> ID : verificar acesso
+ AV ..> CAT : fotografia de questões
+ FOR ..> CAT : referência de questão
+ ID ..> DB
+ CAT ..> DB
+ AV ..> DB
+ FOR ..> DB
+}
+note bottom of DB
+Em produção, decisões de acesso e tempo
+são verificadas no servidor.
+O protótipo usa armazenamento local.
+end note
+@enduml

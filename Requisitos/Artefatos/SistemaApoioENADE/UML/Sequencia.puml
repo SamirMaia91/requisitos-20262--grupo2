@@ -1,0 +1,52 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Sequência — Sistema de Apoio ao ENADE
+actor Estudante as E
+boundary "Interface web" as UI
+control "Serviço de avaliação" as AV
+control "Identidade" as ID
+control "Catálogo" as CAT
+database "Persistência" as DB
+E -> UI : configurar e iniciar
+UI -> AV : iniciar(sessão, filtros, quantidade, duração)
+AV -> ID : validar sessão
+ID --> AV : estudante autorizado
+AV -> CAT : selecionar questões publicadas
+CAT --> AV : questões e versões
+alt configuração inválida / questões insuficientes
+ AV --> UI : rejeitar configuração
+ UI --> E : apresentar correção necessária
+else configuração válida
+ AV -> DB : gravar tentativa, fotografia e prazo absoluto
+ DB --> AV : id da tentativa
+ AV --> UI : tentativa sem gabarito
+ loop enquanto aberta e antes do prazo
+  E -> UI : selecionar alternativa
+  UI -> AV : salvar resposta(tentativa, alternativa)
+  AV -> ID : validar proprietário
+  AV -> DB : salvar se ainda aberta e no prazo
+ end
+ alt encerramento manual confirmado
+  E -> UI : confirmar encerramento
+  UI -> AV : encerrar(tentativa)
+ else prazo atingido
+  AV -> AV : detectar prazo vencido
+ end
+ AV -> DB : transação: concluir somente se aberta
+ DB --> AV : tentativa concluída ou resultado existente
+ AV -> AV : calcular segundo RN-07
+ AV --> UI : resultado e correção comentada
+ UI --> E : apresentar acertos, omissões e fontes
+end
+@enduml

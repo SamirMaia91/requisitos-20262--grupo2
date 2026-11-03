@@ -1,0 +1,37 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Implantação — Sistema de Apoio ao ENADE
+node "Dispositivo do usuário" as DEV {
+ node "Navegador" as BROWSER {
+  artifact "Interface web" as WEB
+ }
+}
+node "Ambiente de aplicação proposto" as APP {
+ node "Servidor de aplicação" as SERVER {
+  artifact "Identidade, catálogo, avaliação\ne colaboração" as API
+ }
+}
+node "Ambiente de dados proposto" as DATA {
+ database "Banco de dados" as DB
+}
+cloud "Portal do Inep\nfonte documental externa" as INEP
+WEB -- API : HTTPS
+API -- DB : conexão autenticada
+WEB ..> INEP : abrir referência HTTPS
+note bottom of APP
+Modelo de produção, sem infraestrutura provisionada.
+Protótipo: HTML/CSS/JS no navegador,
+sem conexão com API ou banco institucional.
+end note
+@enduml

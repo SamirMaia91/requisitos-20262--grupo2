@@ -1,0 +1,95 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Classes — Sistema de Apoio ao ENADE
+hide methods
+class Usuario {
+ id: UUID
+ nome: String
+ email: String
+ hashSenha: String
+ perfil: Estudante | Administrador
+}
+class Questao {
+ id: UUID
+ versao: Integer
+ ano: Integer
+ curso: String
+ componente: Geral | Especifico
+ tema: String
+ numeroOriginal: String
+ urlProva: URL
+ urlGabarito: URL
+ enunciado: Text
+ comentario: Text
+ status: Rascunho | Publicada | Arquivada
+}
+class Alternativa {
+ letra: A..E
+ texto: Text
+ correta: Boolean
+}
+class Tentativa {
+ id: UUID
+ tipo: Pratica | Simulado
+ inicio: DateTime
+ prazo: DateTime [0..1]
+ termino: DateTime [0..1]
+ estado: Aberta | Concluida
+ motivo: Manual | Prazo
+}
+class ItemTentativa {
+ ordem: Integer
+ fotografiaQuestao: Text
+ fotografiaGabarito: A..E
+}
+class Resposta {
+ alternativaSelecionada: A..E [0..1]
+}
+class Material {
+ id: UUID
+ titulo: String
+ tema: String
+ url: URL
+ status: Publicado | Arquivado
+}
+class Mensagem {
+ id: UUID
+ texto: String
+ data: DateTime
+ status: Visivel | Oculta
+}
+class Denuncia {
+ id: UUID
+ motivo: String
+ estado: Pendente | Analisada
+ decisao: Manter | Ocultar
+ justificativa: String [0..1]
+ dataDecisao: DateTime [0..1]
+}
+Usuario "1" -- "0..*" Tentativa : realiza
+Questao "1" *-- "5" Alternativa
+Tentativa "1" *-- "1..*" ItemTentativa
+ItemTentativa "0..*" --> "1" Questao : origem / versão
+ItemTentativa "1" *-- "0..1" Resposta
+Usuario "1" -- "0..*" Mensagem : publica
+Questao "1" -- "0..*" Mensagem
+Mensagem "1" -- "0..*" Denuncia
+Usuario "1" -- "0..*" Denuncia : registra
+Usuario "0..1" -- "0..*" Denuncia : decide (administrador)
+Usuario "1" -- "0..*" Material : mantém (administrador)
+note bottom of ItemTentativa
+Fotografia preservada após alterações do catálogo.
+Exatamente uma alternativa correta por questão publicada.
+end note
+@enduml

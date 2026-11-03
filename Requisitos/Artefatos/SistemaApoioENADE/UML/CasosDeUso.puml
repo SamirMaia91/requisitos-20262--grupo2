@@ -1,0 +1,43 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Casos de Uso — Sistema de Apoio ao ENADE
+left to right direction
+actor "AT-01 Estudante" as E
+actor "AT-02 Administrador" as A
+rectangle "Sistema de Apoio ao ENADE" {
+ usecase "UC-01\nGerenciar acesso e dados" as U1
+ usecase "UC-02\nConsultar questões e materiais" as U2
+ usecase "UC-03\nPraticar questão" as U3
+ usecase "UC-04\nRealizar simulado cronometrado" as U4
+ usecase "UC-05\nConsultar correção comentada" as U5
+ usecase "UC-06\nConsultar desempenho" as U6
+ usecase "UC-07\nDiscutir uma questão" as U7
+ usecase "UC-08\nManter catálogo" as U8
+ usecase "UC-09\nModerar discussão" as U9
+}
+E -- U1
+E -- U2
+E -- U3
+E -- U4
+E -- U5
+E -- U6
+E -- U7
+A -- U1
+A -- U8
+A -- U9
+note bottom of U5
+Gabarito disponível somente
+após concluir a tentativa.
+end note
+@enduml

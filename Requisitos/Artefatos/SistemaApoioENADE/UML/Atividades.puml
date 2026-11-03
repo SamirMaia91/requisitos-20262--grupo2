@@ -1,0 +1,43 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #346B68
+skinparam componentStyle uml2
+skinparam roundcorner 8
+skinparam classBackgroundColor #F1F7F6
+skinparam usecaseBackgroundColor #F1F7F6
+skinparam componentBackgroundColor #F1F7F6
+skinparam nodeBackgroundColor #F1F7F6
+skinparam sequenceMessageAlign center
+title Atividades — Sistema de Apoio ao ENADE
+start
+:Definir filtros, quantidade e duração;
+if (Configuração válida e questões suficientes?) then (sim)
+ :Criar tentativa e fotografia;
+ :Fixar prazo absoluto;
+ while (Tentativa aberta?) is (sim)
+  if (Prazo expirou?) then (sim)
+   :Encerrar por prazo;
+  else (não)
+   :Apresentar questão e tempo;
+   :Registrar ou alterar alternativa;
+   if (Solicitou encerrar?) then (sim)
+    if (Confirmou?) then (sim)
+     :Encerrar manualmente;
+    else (não)
+     :Manter tentativa aberta;
+    endif
+   endif
+  endif
+ endwhile (não)
+ :Persistir encerramento único;
+ :Calcular acertos, erros e omissões;
+ :Liberar comentário e fonte;
+ :Atualizar histórico pessoal;
+else (não)
+ :Informar ajuste necessário;
+endif
+stop
+@enduml

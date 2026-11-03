@@ -1,20 +1,7 @@
-# Diagrama de Implantação — Sistema de Apoio ao ENADE
+# Diagrama de Implantação
 
-## Objetivo
-Representar os dispositivos e ambientes nos quais o sistema poderá ser executado.
+Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
 
-## Diagrama
+![Diagrama de Implantação](UML/Implantacao.svg)
 
-```mermaid
-flowchart TD
-    A["Dispositivo do Estudante<br/>Navegador Web"] --> B["Servidor da Aplicação"]
-    B --> C[("Servidor de Banco de Dados")]
-```
-
-## Descrição dos elementos
-
-- **Dispositivo do Estudante:** computador, tablet ou celular utilizado para acessar o sistema pelo navegador.
-- **Servidor da Aplicação:** ambiente responsável por executar a aplicação e processar as solicitações dos usuários.
-- **Servidor de Banco de Dados:** ambiente responsável por armazenar os dados do sistema.
-
-**Observação:** este é um modelo conceitual inicial. A infraestrutura definitiva será definida conforme a arquitetura escolhida pelo grupo.
+[Arquivo editável PlantUML](UML/Implantacao.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
