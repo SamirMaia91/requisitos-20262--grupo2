@@ -1,90 +1,101 @@
-# Requisitos Não Funcionais — Sistema de Apoio ao ENADE
+# Requisitos funcionais
 
-**Projeto:** Sistema de Apoio ao ENADE  
-**Equipe:** Grupo 2  
-**Data:** 27/10/2026  
-**Versão:** 1.0  
-**Status:** Rascunho para revisão do grupo
+> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
 
-## 1. Objetivo
+As funcionalidades abaixo especificam o produto conceitual. Implementação no protótipo e limitações estão em [Protótipos](Prototipos/README.md). As fontes são documentais, não resultados de entrevistas.
 
-Definir critérios de qualidade e restrições que deverão orientar o desenvolvimento do Sistema de Apoio ao ENADE, considerando usabilidade, desempenho, segurança, compatibilidade e confiabilidade.
+## RF-01 — Cadastrar e autenticar usuários
 
-Os requisitos abaixo são propostas iniciais e deverão ser revisados pela equipe.
+Permitir cadastro com nome, e-mail e senha, entrada e saída de sessão. Atribuir estudante por padrão; conceder administração somente por responsável autorizado.
 
-## 2. Lista de requisitos não funcionais
+**Origem:** NEC-05. **Caso de uso:** UC-01. **Regras:** RN-01. **Prioridade:** Alta.
 
-### RNF-01 — Usabilidade
-A interface deverá apresentar textos claros, menus organizados e navegação intuitiva, facilitando a utilização por estudantes.
+**Aceitação:** Cadastro válido cria conta sem privilégio administrativo; acesso inválido não abre sessão; saída invalida a sessão.
 
-**Categoria:** Usabilidade.  
-**Prioridade:** Alta.  
-**Origem:** NEC-04 e NEC-08.
+## RF-02 — Consultar banco de questões
 
-### RNF-02 — Compatibilidade
-O sistema deverá funcionar nas versões recentes dos principais navegadores, como Google Chrome, Microsoft Edge e Mozilla Firefox.
+Listar questões publicadas e filtrar por ano, curso, componente (formação geral ou específico) e tema, combinando filtros e indicando ausência de resultados.
 
-**Categoria:** Compatibilidade.  
-**Prioridade:** Alta.  
-**Origem:** Necessidade de acesso ao sistema por diferentes usuários.
+**Origem:** NEC-01. **Caso de uso:** UC-02. **Regras:** RN-02, RN-03. **Prioridade:** Alta.
 
-### RNF-03 — Design responsivo
-A interface deverá adaptar sua apresentação a diferentes tamanhos de tela, incluindo computadores, tablets e celulares.
+**Aceitação:** Cada filtro reduz o conjunto conforme os metadados; sem correspondência, exibir estado vazio e opção de limpar filtros.
 
-**Categoria:** Usabilidade e compatibilidade.  
-**Prioridade:** Alta.  
-**Origem:** NEC-04.
+## RF-03 — Responder questões em prática
 
-### RNF-04 — Desempenho
-As páginas e funcionalidades principais deverão responder em até 3 segundos em condições normais de uso e conexão estável, considerando a infraestrutura definida para o projeto.
+Abrir questão objetiva, registrar uma alternativa por questão e confirmar o envio para correção.
 
-**Categoria:** Desempenho.  
-**Prioridade:** Média.  
-**Origem:** Proposta inicial da equipe.
+**Origem:** NEC-02. **Caso de uso:** UC-03. **Regras:** RN-04. **Prioridade:** Alta.
 
-### RNF-05 — Segurança
-Caso o sistema armazene dados pessoais ou informações de desempenho, deverá adotar medidas adequadas para impedir o acesso não autorizado a essas informações.
+**Aceitação:** Envio sem alternativa é impedido; uma resposta enviada mantém vínculo com usuário, questão e versão do gabarito.
 
-**Categoria:** Segurança.  
-**Prioridade:** Alta.  
-**Origem:** Proposta inicial da equipe.
+## RF-04 — Configurar e iniciar simulado
 
-### RNF-06 — Integridade dos dados
-O sistema deverá preservar a consistência dos dados armazenados, evitando que resultados de atividades sejam registrados ou apresentados incorretamente.
+Selecionar filtros, quantidade de questões e duração entre 1 e 240 minutos; criar tentativa com uma fotografia das questões e do gabarito vigente.
 
-**Categoria:** Confiabilidade.  
-**Prioridade:** Alta.  
-**Origem:** Necessidade de apresentar resultados confiáveis.
+**Origem:** NEC-02. **Caso de uso:** UC-04. **Regras:** RN-03, RN-05. **Prioridade:** Alta.
 
-### RNF-07 — Manutenibilidade
-O código deverá ser organizado e dividido em componentes ou módulos de acordo com a arquitetura adotada, facilitando correções e futuras melhorias.
+**Aceitação:** Impedir início com quantidade superior às questões elegíveis ou sem questões; registrar início e prazo de encerramento.
 
-**Categoria:** Manutenibilidade.  
-**Prioridade:** Média.  
-**Origem:** Proposta inicial da equipe.
+## RF-05 — Executar e encerrar simulado
 
-## 3. Resumo
+Permitir navegar entre questões, alterar respostas enquanto a tentativa estiver aberta e finalizar manualmente com confirmação ou automaticamente ao vencer o prazo.
 
-| Código | Categoria | Requisito | Prioridade |
-|---|---|---|---|
-| RNF-01 | Usabilidade | Interface intuitiva | Alta |
-| RNF-02 | Compatibilidade | Navegadores recentes | Alta |
-| RNF-03 | Responsividade | Adaptação a telas | Alta |
-| RNF-04 | Desempenho | Resposta em até 3 segundos | Média |
-| RNF-05 | Segurança | Proteção contra acesso não autorizado | Alta |
-| RNF-06 | Confiabilidade | Consistência dos dados | Alta |
-| RNF-07 | Manutenibilidade | Código organizado e modular | Média |
+**Origem:** NEC-02. **Caso de uso:** UC-04. **Regras:** RN-04, RN-05, RN-06. **Prioridade:** Alta.
 
-## 4. Observações
+**Aceitação:** Encerramento único preserva respostas até o prazo; reenvio não cria outro resultado; tentativa encerrada não permite alteração.
 
-- Os requisitos não funcionais deverão ser avaliados conforme a arquitetura e as tecnologias escolhidas.
-- O limite de 3 segundos é uma meta proposta para o projeto, não um resultado de teste já comprovado.
-- As medidas de segurança dependerão das funcionalidades implementadas e dos dados efetivamente armazenados.
-- Os critérios deverão ser revisados para que possam ser verificados durante os testes.
+## RF-06 — Consultar correção e gabarito comentado
 
-## 5. Pendências para revisão
+Após o envio de prática ou encerramento de simulado, exibir alternativa selecionada, resposta correta, justificativa revisada e referência da questão.
 
-- [ ] Confirmar o limite de desempenho proposto.
-- [ ] Definir como será verificada a compatibilidade com navegadores.
-- [ ] Revisar os critérios de segurança e integridade.
-- [ ] Verificar a viabilidade de cada requisito no prazo do projeto.
+**Origem:** NEC-03. **Caso de uso:** UC-05. **Regras:** RN-03, RN-06, RN-07. **Prioridade:** Alta.
+
+**Aceitação:** Antes do encerramento do simulado, não revelar gabarito; depois, apresentar correção inclusive das questões em branco.
+
+## RF-07 — Acompanhar desempenho
+
+Apresentar histórico pessoal de tentativas concluídas, acertos, erros, omissões e percentual global e por tema, com representação gráfica e tabela equivalente.
+
+**Origem:** NEC-03. **Caso de uso:** UC-06. **Regras:** RN-07, RN-08. **Prioridade:** Alta.
+
+**Aceitação:** Sem tentativas concluídas, não inventar notas; agregações usam somente resultados do próprio estudante e denominador explicitado.
+
+## RF-08 — Participar da discussão da questão
+
+Permitir publicar e consultar mensagens de texto ligadas a uma questão; oferecer denúncia de conteúdo inadequado.
+
+**Origem:** NEC-04. **Caso de uso:** UC-07. **Regras:** RN-09. **Prioridade:** Média.
+
+**Aceitação:** Mensagem vazia ou acima de 2000 caracteres é rejeitada; manter autoria e data; denúncia gera registro para moderação.
+
+## RF-09 — Administrar questões e materiais
+
+Permitir ao administrador cadastrar, revisar, publicar e arquivar questões e links de materiais, mantendo metadados, referência e comentário pedagógico.
+
+**Origem:** NEC-05. **Caso de uso:** UC-08. **Regras:** RN-01, RN-02, RN-03, RN-10. **Prioridade:** Alta.
+
+**Aceitação:** Estudante não altera catálogo; questão sem metadados, gabarito ou comentário revisado permanece em rascunho.
+
+## RF-10 — Moderar discussões
+
+Permitir ao administrador analisar denúncias e ocultar mensagens mediante motivo, preservando registro da decisão.
+
+**Origem:** NEC-04. **Caso de uso:** UC-09. **Regras:** RN-01, RN-09. **Prioridade:** Média.
+
+**Aceitação:** Mensagem ocultada deixa de aparecer no fórum; motivo e responsável ficam registrados para revisão administrativa.
+
+## RF-11 — Consultar materiais e respectivas fontes
+
+Listar materiais por tema com título, endereço de origem e descrição; abrir fonte externa identificada.
+
+**Origem:** NEC-05. **Caso de uso:** UC-02. **Regras:** RN-02, RN-10. **Prioridade:** Média.
+
+**Aceitação:** Link mostra sua origem; catálogo vazio informa ausência de materiais sem preencher registros fictícios.
+
+## RF-12 — Gerenciar os próprios dados
+
+Permitir consultar os dados da conta e solicitar exclusão; informar o efeito sobre tentativas e mensagens antes da confirmação.
+
+**Origem:** NEC-05. **Caso de uso:** UC-01. **Regras:** RN-11. **Prioridade:** Média.
+
+**Aceitação:** Solicitação exige sessão válida e confirmação; tratamento de retenção deve ser aprovado antes da operação em produção.

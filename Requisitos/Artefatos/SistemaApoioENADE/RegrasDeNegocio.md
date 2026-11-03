@@ -1,91 +1,71 @@
-# Regras de Negócio — Sistema de Apoio ao ENADE
+# Regras de negócio
 
-**Projeto:** Sistema de Apoio ao ENADE  
-**Equipe:** Grupo 2  
-**Data:** 27/10/2026  
-**Versão:** 1.0  
-**Status:** Rascunho para revisão do grupo
+> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
 
-## 1. Objetivo
+Regras propostas a partir do escopo documental. Sua aprovação com representantes do domínio está pendente.
 
-Definir regras que orientem o funcionamento do Sistema de Apoio ao ENADE, estabelecendo condições para a realização de exercícios, a apresentação de resultados e a organização dos materiais de estudo.
+## RN-01 — Perfis e autorização
 
-As regras descritas são propostas acadêmicas iniciais e deverão ser revisadas e validadas pelo Grupo 2.
+Estudantes consultam conteúdo e seus próprios resultados; administradores mantêm conteúdo e moderam mensagens. Autorizações são verificadas no servidor em produção.
 
-## 2. Lista de regras de negócio
+**Requisitos relacionados:** RF-01, RF-09, RF-10.
 
-### RN-01 — Organização dos materiais
-Os materiais de estudo deverão ser organizados por assunto ou categoria para facilitar a localização pelo estudante.
+## RN-02 — Identificação e proveniência
 
-**Justificativa:** Facilitar o acesso aos conteúdos de preparação.
+Cada questão registra ID, ano, curso, componente, tema, número na prova e URLs da prova e do gabarito. Material registra título, tema e URL.
 
-**Requisito relacionado:** RF-01 e RF-02.
+**Requisitos relacionados:** RF-02, RF-09, RF-11.
 
-### RN-02 — Registro das respostas
-Cada resposta selecionada pelo estudante deverá ser associada à questão correspondente durante a realização da atividade.
+## RN-03 — Publicação de questões
 
-**Justificativa:** Permitir a avaliação das respostas e a apresentação dos resultados.
+Somente questões objetivas com 5 alternativas distintas, uma resposta correta, referência e comentário pedagógico revisado podem ser publicadas. Questões anuladas e discursivas ficam fora da correção automática inicial.
 
-**Requisito relacionado:** RF-04 e RF-05.
+**Requisitos relacionados:** RF-02, RF-04, RF-06, RF-09.
 
-### RN-03 — Cálculo do resultado
-O resultado de uma atividade deverá ser calculado com base nas respostas corretas e incorretas, conforme o gabarito definido para as questões.
+## RN-04 — Respostas
 
-**Justificativa:** Apresentar resultados coerentes com as respostas fornecidas.
+Uma tentativa mantém no máximo uma alternativa por questão; em simulado aberto ela pode ser alterada. Questão sem resposta é omissão.
 
-**Requisito relacionado:** RF-05 e RNF-06.
+**Requisitos relacionados:** RF-03, RF-05.
 
-### RN-04 — Conclusão da atividade
-Uma atividade de exercícios deverá ser considerada concluída quando o estudante finalizar o preenchimento das respostas e solicitar seu encerramento, conforme o fluxo definido pelo sistema.
+## RN-05 — Prazo do simulado
 
-**Justificativa:** Estabelecer um momento claro para calcular e apresentar o resultado.
+Duração inteira de 1 a 240 minutos definida antes de iniciar. O prazo absoluto não se reinicia ao atualizar a página. Em produção, o relógio do servidor é a autoridade.
 
-**Requisito relacionado:** RF-04 e RF-05.
+**Requisitos relacionados:** RF-04, RF-05.
 
-### RN-05 — Apresentação dos resultados
-Após a conclusão de uma atividade, o sistema deverá apresentar o resultado correspondente ao desempenho do estudante.
+## RN-06 — Encerramento
 
-**Justificativa:** Permitir que o estudante identifique seu desempenho nas questões realizadas.
+Encerramento manual confirmado ou expiração tornam a tentativa imutável e liberam o gabarito. A operação é idempotente.
 
-**Requisito relacionado:** RF-05 e RF-06.
+**Requisitos relacionados:** RF-05, RF-06.
 
-### RN-06 — Associação das questões aos assuntos
-As questões disponibilizadas deverão estar associadas a um assunto ou categoria de estudo.
+## RN-07 — Cálculo do desempenho
 
-**Justificativa:** Facilitar a organização e a localização das questões.
+Cada acerto vale 1; erro e omissão valem 0. Percentual = 100 × acertos / quantidade de questões elegíveis da tentativa, arredondado para uma casa decimal. Sem denominador, exibir ausência de dados. Não equivale à nota oficial do ENADE.
 
-**Requisito relacionado:** RF-02 e RF-03.
+**Requisitos relacionados:** RF-06, RF-07.
 
-### RN-07 — Consistência dos resultados
-O sistema deverá utilizar as respostas registradas e os gabaritos correspondentes para calcular os resultados, evitando divergências entre as respostas e a pontuação apresentada.
+## RN-08 — Histórico e privacidade
 
-**Justificativa:** Manter a confiabilidade das informações exibidas ao estudante.
+Somente tentativas concluídas entram nas estatísticas. Cada usuário acessa apenas seu histórico; a versão de questão e gabarito da tentativa não muda com edições futuras.
 
-**Requisito relacionado:** RF-05, RF-06 e RNF-06.
+**Requisitos relacionados:** RF-07, RF-09.
 
-## 3. Resumo das regras
+## RN-09 — Discussão e moderação
 
-| Código | Regra | Requisitos relacionados |
-|---|---|---|
-| RN-01 | Organização dos materiais | RF-01, RF-02 |
-| RN-02 | Registro das respostas | RF-04, RF-05 |
-| RN-03 | Cálculo do resultado | RF-05, RNF-06 |
-| RN-04 | Conclusão da atividade | RF-04, RF-05 |
-| RN-05 | Apresentação dos resultados | RF-05, RF-06 |
-| RN-06 | Associação das questões aos assuntos | RF-02, RF-03 |
-| RN-07 | Consistência dos resultados | RF-05, RF-06, RNF-06 |
+Mensagens de 1 a 2000 caracteres, sem interpretação de HTML. Denúncia identifica mensagem e motivo; ocultação exige decisão administrativa registrada.
 
-## 4. Observações
+**Requisitos relacionados:** RF-08, RF-10.
 
-- As regras são propostas iniciais e não representam decisões já validadas por usuários reais.
-- A forma de pontuação deverá ser definida pelo grupo durante a especificação do sistema.
-- A persistência do histórico de atividades e resultados dependerá das funcionalidades efetivamente incluídas no escopo.
-- As regras deverão ser revisadas para manter coerência com os requisitos funcionais e com os casos de uso.
+## RN-10 — Materiais e arquivamento
 
-## 5. Pendências para revisão
+Conteúdo externo é referenciado por URL HTTPS. Arquivar impede novas seleções, preservando a fotografia de tentativas existentes. Origem pública não significa autorização automática para republicar conteúdo de terceiros.
 
-- [ ] Validar as regras com a equipe.
-- [ ] Definir a forma de pontuação das atividades.
-- [ ] Confirmar o fluxo de início e conclusão dos exercícios.
-- [ ] Verificar a coerência entre as regras e os requisitos funcionais.
-- [ ] Utilizar as regras aprovadas na especificação dos casos de uso e nos testes.
+**Requisitos relacionados:** RF-09, RF-11.
+
+## RN-11 — Exclusão de dados
+
+Exclusão depende de solicitação confirmada e de política de retenção aprovada. O protótipo oferece apagar todos os dados locais deste navegador; isso não representa exclusão em serviço institucional.
+
+**Requisitos relacionados:** RF-12.

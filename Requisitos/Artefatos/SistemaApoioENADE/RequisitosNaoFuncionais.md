@@ -1,70 +1,85 @@
-# Requisitos Não Funcionais — Sistema de Apoio ao ENADE
+# Requisitos não funcionais
 
-**Projeto:** Sistema de Apoio ao ENADE  
-**Equipe:** Grupo 2  
-**Data:** 27/10/2026  
-**Versão:** 1.0  
-**Status:** Rascunho para revisão do grupo
+> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
 
-## 1. Objetivo
+São metas de aceitação propostas. A execução do protótipo não comprova os requisitos de produção.
 
-Definir os requisitos de qualidade que o Sistema de Apoio ao ENADE deverá atender, considerando usabilidade, desempenho, segurança e compatibilidade.
+## RNF-01 — Acessibilidade
 
-## 2. Requisitos Não Funcionais
+Todas as ações principais devem ser executáveis por teclado, com foco visível, rótulos associados, avisos anunciados e alternativa textual para gráficos.
 
-### RNF-01 — Usabilidade
-A interface deverá ser simples e intuitiva, permitindo que os estudantes encontrem materiais e questões com facilidade.
+**Verificação:** Percorrer UC-01 a UC-09 com teclado; conferir rótulos e foco; testar leitor de tela antes da homologação.
 
 **Prioridade:** Alta.
 
-### RNF-02 — Compatibilidade
-O sistema deverá funcionar nas versões recentes dos navegadores Google Chrome, Microsoft Edge e Mozilla Firefox.
+## RNF-02 — Responsividade
+
+Não apresentar rolagem horizontal no conteúdo principal a 360, 768 e 1440 pixels; controles devem permanecer utilizáveis com zoom de 200%.
+
+**Verificação:** Capturar telas nas três larguras e executar busca, resposta e encerramento com zoom.
 
 **Prioridade:** Alta.
 
-### RNF-03 — Responsividade
-O sistema deverá adaptar sua interface para computadores, tablets e celulares.
+## RNF-03 — Compatibilidade
+
+Atender às duas versões estáveis mais recentes de Chrome, Edge e Firefox na data da homologação.
+
+**Verificação:** Registrar versões efetivamente ensaiadas e repetir os fluxos críticos em cada navegador; não alegar cobertura sem execução.
 
 **Prioridade:** Alta.
 
-### RNF-04 — Desempenho
-As páginas e funcionalidades principais deverão responder em até 3 segundos, em condições normais de uso e conexão estável.
+## RNF-04 — Desempenho
+
+Em produção, 95% das consultas e salvamentos devem responder em até 3 segundos com 100 usuários simultâneos, catálogo de 10000 questões e conexão de 10 Mbps.
+
+**Verificação:** Ensaio de carga com ambiente e massa documentados; meta proposta, sem resultado de produção comprovado.
 
 **Prioridade:** Média.
 
-### RNF-05 — Segurança
-Caso o sistema armazene dados pessoais ou informações de desempenho, deverá implementar medidas para impedir acessos não autorizados.
+## RNF-05 — Proteção de acesso
+
+Em produção, proteger tráfego com HTTPS, armazenar senhas somente com hash resistente e sal individual, verificar autorização no servidor e limitar tentativas de autenticação.
+
+**Verificação:** Revisão de configuração, armazenamento e testes de acesso entre contas. O protótipo não recebe senhas.
 
 **Prioridade:** Alta.
 
-### RNF-06 — Integridade dos dados
-O sistema deverá preservar a consistência dos dados e apresentar corretamente os resultados das atividades realizadas.
+## RNF-06 — Integridade
+
+Não duplicar tentativa ao reenviar encerramento; resultado deve coincidir com respostas e versão do gabarito da tentativa.
+
+**Verificação:** Encerrar duas vezes e comparar o identificador e resultado; editar catálogo e conferir preservação do histórico.
 
 **Prioridade:** Alta.
 
-### RNF-07 — Manutenibilidade
-O código deverá ser organizado de maneira que facilite correções, manutenção e futuras melhorias.
+## RNF-07 — Recuperação
+
+Em produção, manter cópia diária e demonstrar restauração com perda máxima de 24 horas e recuperação em até 4 horas.
+
+**Verificação:** Exercício de restauração registrado em ambiente de homologação; dependente de infraestrutura futura.
 
 **Prioridade:** Média.
 
-## 3. Resumo dos requisitos
+## RNF-08 — Minimização de dados
 
-| Código | Categoria | Prioridade |
-|---|---|---|
-| RNF-01 | Usabilidade | Alta |
-| RNF-02 | Compatibilidade | Alta |
-| RNF-03 | Responsividade | Alta |
-| RNF-04 | Desempenho | Média |
-| RNF-05 | Segurança | Alta |
-| RNF-06 | Integridade dos dados | Alta |
-| RNF-07 | Manutenibilidade | Média |
+Coletar apenas dados necessários à conta e estudo, documentar finalidade e retenção, e não publicar identificadores pessoais no repositório.
 
-## 4. Observações
+**Verificação:** Revisão dos campos, política de dados e arquivos da entrega; aprovação institucional pendente.
 
-Os requisitos apresentados são propostas iniciais e deverão ser revisados pelo Grupo 2. A meta de desempenho deverá ser verificada por meio de testes, e os requisitos de segurança deverão considerar as funcionalidades efetivamente implementadas.
+**Prioridade:** Alta.
 
-## 5. Pendências para revisão
+## RNF-09 — Manutenibilidade
 
-- [ ] Revisar os requisitos com a equipe.
-- [ ] Confirmar a viabilidade das metas propostas.
-- [ ] Definir como os requisitos serão verificados durante os testes.
+Manter documentação e modelo de domínio com IDs estáveis, fontes e rastreabilidade; separar lógica de cálculo da apresentação.
+
+**Verificação:** Executar verificador de referências e testes da lógica; alterações funcionais atualizam os artefatos relacionados.
+
+**Prioridade:** Média.
+
+## RNF-10 — Disponibilidade
+
+Meta proposta de 99% ao mês em produção, excluindo manutenção comunicada; falhas devem informar possibilidade de retomada.
+
+**Verificação:** Medição de disponibilidade por monitoramento em produção; não aplicável como garantia do protótipo local.
+
+**Prioridade:** Média.

@@ -1,95 +1,24 @@
-# Backlog do Produto — Sistema de Apoio ao ENADE
+# Backlog priorizado
 
-**Projeto:** Sistema de Apoio ao ENADE  
-**Equipe:** Grupo 2  
-**Data:** 27/10/2026  
-**Versão:** 1.0  
-**Status:** Rascunho para revisão do grupo
+> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
 
-## 1. Objetivo
+Priorização proposta por dependências e cobertura do enunciado. Ainda não houve ordenação aprovada com estudantes. Alta = núcleo de prática e integridade; Média = colaboração e funções complementares. Desempate pela ordem abaixo.
 
-Organizar e priorizar as funcionalidades propostas para o Sistema de Apoio ao ENADE, orientando o planejamento do desenvolvimento e a validação dos requisitos.
+| Item | Prioridade | Funcionalidade | RF / UC | Aceitação |
+| --- | --- | --- | --- | --- |
+| PB-01 | Alta | Cadastrar e autenticar usuários | RF-01 / UC-01 | Cadastro válido cria conta sem privilégio administrativo; acesso inválido não abre sessão; saída invalida a sessão. |
+| PB-02 | Alta | Consultar banco de questões | RF-02 / UC-02 | Cada filtro reduz o conjunto conforme os metadados; sem correspondência, exibir estado vazio e opção de limpar filtros. |
+| PB-03 | Alta | Responder questões em prática | RF-03 / UC-03 | Envio sem alternativa é impedido; uma resposta enviada mantém vínculo com usuário, questão e versão do gabarito. |
+| PB-04 | Alta | Configurar e iniciar simulado | RF-04 / UC-04 | Impedir início com quantidade superior às questões elegíveis ou sem questões; registrar início e prazo de encerramento. |
+| PB-05 | Alta | Executar e encerrar simulado | RF-05 / UC-04 | Encerramento único preserva respostas até o prazo; reenvio não cria outro resultado; tentativa encerrada não permite alteração. |
+| PB-06 | Alta | Consultar correção e gabarito comentado | RF-06 / UC-05 | Antes do encerramento do simulado, não revelar gabarito; depois, apresentar correção inclusive das questões em branco. |
+| PB-07 | Alta | Acompanhar desempenho | RF-07 / UC-06 | Sem tentativas concluídas, não inventar notas; agregações usam somente resultados do próprio estudante e denominador explicitado. |
+| PB-08 | Média | Participar da discussão da questão | RF-08 / UC-07 | Mensagem vazia ou acima de 2000 caracteres é rejeitada; manter autoria e data; denúncia gera registro para moderação. |
+| PB-09 | Alta | Administrar questões e materiais | RF-09 / UC-08 | Estudante não altera catálogo; questão sem metadados, gabarito ou comentário revisado permanece em rascunho. |
+| PB-10 | Média | Moderar discussões | RF-10 / UC-09 | Mensagem ocultada deixa de aparecer no fórum; motivo e responsável ficam registrados para revisão administrativa. |
+| PB-11 | Média | Consultar materiais e respectivas fontes | RF-11 / UC-02 | Link mostra sua origem; catálogo vazio informa ausência de materiais sem preencher registros fictícios. |
+| PB-12 | Média | Gerenciar os próprios dados | RF-12 / UC-01 | Solicitação exige sessão válida e confirmação; tratamento de retenção deve ser aprovado antes da operação em produção. |
 
-Este backlog é uma proposta inicial baseada no Documento de Visão, nas necessidades identificadas nas entrevistas simuladas e nos requisitos funcionais e não funcionais.
+## Trabalho acadêmico
 
-## 2. Backlog priorizado
-
-| ID | Item do backlog | Descrição | Prioridade | Requisitos relacionados |
-|---|---|---|---|---|
-| PB-01 | Consultar materiais | Permitir que o estudante consulte materiais de estudo. | Alta | RF-01 |
-| PB-02 | Organizar materiais | Organizar materiais por assunto ou categoria. | Alta | RF-02 |
-| PB-03 | Consultar questões | Disponibilizar questões para praticar os conteúdos estudados. | Alta | RF-03 |
-| PB-04 | Responder questões | Permitir que o estudante selecione respostas para as questões. | Alta | RF-04 |
-| PB-05 | Visualizar resultados | Apresentar o resultado após a conclusão de uma atividade. | Alta | RF-05 |
-| PB-06 | Acompanhar desempenho | Permitir a consulta de informações sobre o desempenho nas atividades. | Média | RF-06 |
-| PB-07 | Navegar pelo sistema | Facilitar o acesso às principais funcionalidades. | Alta | RF-07 |
-| PB-08 | Garantir responsividade | Adaptar a interface a diferentes tamanhos de tela. | Alta | RNF-03 |
-| PB-09 | Verificar compatibilidade | Garantir funcionamento nos navegadores definidos no requisito. | Alta | RNF-02 |
-| PB-10 | Avaliar desempenho | Verificar o tempo de resposta das funcionalidades principais. | Média | RNF-04 |
-| PB-11 | Proteger informações | Avaliar e implementar medidas de segurança adequadas aos dados tratados. | Alta | RNF-05 |
-| PB-12 | Preservar consistência | Verificar a consistência dos dados e resultados apresentados. | Alta | RNF-06 |
-
-## 3. Critérios de aceitação iniciais
-
-### PB-01 — Consultar materiais
-- O estudante consegue visualizar os materiais disponíveis.
-- Cada material apresenta informações suficientes para sua identificação.
-
-### PB-02 — Organizar materiais
-- Os materiais são apresentados por assunto ou categoria.
-- O estudante consegue localizar materiais de uma categoria.
-
-### PB-03 — Consultar questões
-- O estudante consegue visualizar as questões disponíveis.
-- As questões estão associadas a um assunto ou categoria.
-
-### PB-04 — Responder questões
-- O estudante consegue selecionar uma resposta para cada questão.
-- A resposta selecionada é considerada no processamento da atividade.
-
-### PB-05 — Visualizar resultados
-- O resultado é apresentado após a conclusão da atividade.
-- O resultado corresponde às respostas registradas e ao gabarito definido.
-
-### PB-06 — Acompanhar desempenho
-- O estudante consegue consultar informações sobre seu desempenho nas atividades realizadas.
-- As informações apresentadas correspondem aos resultados disponíveis no sistema.
-
-### PB-07 — Navegar pelo sistema
-- O usuário consegue localizar as principais funcionalidades.
-- Os elementos de navegação apresentam identificação clara.
-
-### PB-08 — Garantir responsividade
-- A interface se adapta a telas de computador e celular.
-- O conteúdo principal permanece acessível em diferentes tamanhos de tela.
-
-### PB-09 — Verificar compatibilidade
-- As funcionalidades principais são testadas nos navegadores previstos no RNF-02.
-- Eventuais incompatibilidades são registradas para correção.
-
-### PB-10 — Avaliar desempenho
-- O tempo de resposta das funcionalidades principais é medido em condições definidas de teste.
-- A meta proposta de até 3 segundos é verificada durante os testes.
-
-### PB-11 — Proteger informações
-- Os dados tratados pelo sistema são identificados.
-- As medidas de proteção aplicáveis são definidas conforme as funcionalidades implementadas.
-
-### PB-12 — Preservar consistência
-- Os resultados são calculados com base nas respostas e nos gabaritos correspondentes.
-- Os resultados exibidos são consistentes com os dados processados.
-
-## 4. Estratégia de priorização
-
-Os itens classificados como **Alta** representam as funcionalidades essenciais ou os critérios de qualidade considerados prioritários para a primeira versão proposta. Os itens de prioridade **Média** poderão ser planejados após a definição do escopo e da capacidade de desenvolvimento da equipe.
-
-A priorização ainda deverá ser revisada e aprovada pelo Grupo 2.
-
-## 5. Pendências para revisão
-
-- [ ] Confirmar a ordem de prioridade com a equipe.
-- [ ] Verificar se todos os itens estão dentro do escopo do Documento de Visão.
-- [ ] Ajustar os critérios de aceitação conforme a arquitetura e as funcionalidades escolhidas.
-- [ ] Definir quais itens serão contemplados na primeira versão.
-- [ ] Relacionar os itens aprovados aos casos de uso e aos diagramas UML.
-
+M1 concentra elicitação e modelagem inicial; M2 concentra especificação, revisão e prototipação. Esses marcos representam entregas de documentação e não sprints de implementação de um sistema completo. Status real e pendências estão em [Plano de entregas](PlanoDeEntregas.md). Não há estimativas de esforço aprovadas.

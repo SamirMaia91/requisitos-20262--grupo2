@@ -1,0 +1,25 @@
+name: Entrega acadêmica
+description: Registrar um artefato, sua etapa e os critérios de conclusão.
+title: "[M1/S1 ou M2/S2] "
+body:
+  - type: input
+    id: etapa
+    attributes:
+      label: Marco e sprint
+      description: Informe M1/Sprint 1 ou M2/Sprint 2 conforme o calendário vigente.
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo e artefatos afetados
+      description: Use caminhos do repositório e IDs RF/UC/RN quando aplicável.
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Critérios de conclusão e evidência
+      description: Diferencie a verificação do artefato do aceite externo. Não antecipe datas ou aprovações.
+    validations:
+      required: true

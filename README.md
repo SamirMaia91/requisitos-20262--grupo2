@@ -1,43 +1,34 @@
 # Sistema de Apoio ao ENADE
 
-Projeto acadêmico desenvolvido na disciplina **Requisitos e Modelagem de Sistemas**, do curso de Análise e Desenvolvimento de Sistemas da Universidade de Fortaleza (UNIFOR).
+Projeto acadêmico de **Requisitos e Modelagem de Sistemas**, curso de Análise e Desenvolvimento de Sistemas, **Universidade de Fortaleza (UNIFOR) — Grupo 2 — 2026.2**.
 
-## 1. Sobre o projeto
+Uma proposta de plataforma web para organizar questões, realizar simulados cronometrados e acompanhar o estudo com correção comentada. A entrega reúne especificação, modelagem e prototipação; não representa serviço de produção nem plataforma oficial do Inep.
 
-O Sistema de Apoio ao ENADE tem como objetivo apoiar os estudantes em sua preparação para o Exame Nacional de Desempenho dos Estudantes (ENADE), facilitando a organização dos estudos e o acompanhamento das atividades relacionadas à preparação para a avaliação.
+## Acessos principais
 
-## 2. Objetivo
+| Leitura | Conteúdo |
+| --- | --- |
+| [Índice dos artefatos](Requisitos/Artefatos/SistemaApoioENADE/README.md) | Entregas organizadas por P1 e P2 |
+| [Documento de Visão](Requisitos/Artefatos/SistemaApoioENADE/DocumentoDeVisao.md) | Problema, público, escopo e limites |
+| [SRS](Requisitos/Artefatos/SistemaApoioENADE/SRS.md) | Especificação detalhada do produto |
+| [Diagramas UML](Requisitos/Artefatos/SistemaApoioENADE/UML/README.md) | Casos de uso, classes, sequência, atividades, componentes e implantação |
+| [Protótipo navegável](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/README.md) | Como abrir e avaliar a interface |
+| [Plano de entregas](Requisitos/Artefatos/SistemaApoioENADE/PlanoDeEntregas.md) | Calendário, evidências e pendências |
 
-Definir e documentar os requisitos de um sistema que auxilie os estudantes durante sua preparação para o ENADE, considerando suas necessidades, as funcionalidades esperadas e as restrições do projeto.
+## Executar o protótipo
 
-## 3. Escopo da atividade
+Baixe o repositório e abra [index.html](Requisitos/Artefatos/SistemaApoioENADE/Prototipos/index.html) em um navegador moderno. Não há dependências de execução nem instalação. O GitHub apresenta o código HTML; a navegação interativa acontece no arquivo aberto localmente.
 
-A primeira etapa do trabalho contempla o levantamento, a análise e a documentação dos requisitos do sistema, incluindo:
+O catálogo começa vazio. Fontes oficiais estão disponíveis na tela de materiais. Questões podem ser inseridas pelo formulário de curadoria após conferência da prova, do gabarito e do comentário; resultados são calculados a partir das respostas dadas no navegador.
 
-- Documento de Visão;
-- Identificação dos stakeholders;
-- Elicitação de requisitos por meio de entrevistas simuladas;
-- Requisitos funcionais;
-- Requisitos não funcionais;
-- Regras de negócio;
-- Backlog priorizado;
-- Diagramas UML de Casos de Uso, Componentes e Implantação.
+## Situação das evidências
 
-## 4. Organização do repositório
+A versão 2.0 é baseada em análise documental com fontes identificadas. Entrevistas com participantes, revisão pedagógica e validação externa permanecem pendentes até registro de evidências. Não há comprovação de envio ao AVA ou de acesso do professor anexada.
 
-Os documentos e artefatos específicos do projeto estão organizados na pasta **Sistema Apoio ENADE**.
+## Organização
 
-[**Acessar os artefatos do projeto**](./Sistema%20Apoio%20ENADE/)
+- Requisitos/Artefatos/SistemaApoioENADE: documentação vigente, UML e protótipo.
+- Requisitos/Artefatos/Templates e guias de Requisitos: apoio metodológico, separado das entregas preenchidas.
+- GestaoConfiguracao: materiais de configuração e orientações de turmas.
 
-## 5. Disciplina
-
-- **Instituição:** Universidade de Fortaleza (UNIFOR)
-- **Curso:** Análise e Desenvolvimento de Sistemas
-- **Disciplina:** Requisitos e Modelagem de Sistemas
-- **Atividade:** Trabalho P1 — Sistema de Apoio ao ENADE
-- **Grupo:** 2
-
-## 6. Finalidade acadêmica
-
-Este repositório reúne os artefatos produzidos pelo grupo para a atividade acadêmica, documentando as etapas iniciais de engenharia de requisitos e modelagem do sistema.
-
+Para verificar integridade documental e lógica do protótipo, execute: **node scripts/check.mjs**. Os limites dos testes estão registrados na documentação técnica.
