@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Protótipo acadêmico do Sistema de Apoio ao ENADE — Grupo 2.">
+  <title>ENADE · Espaço de estudo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="core.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Pular para o conteúdo</a>
+  <aside class="sidebar" aria-label="Navegação principal">
+    <a class="brand" href="#inicio"><span class="brand-icon" aria-hidden="true">e.</span><span>ENADE<small>ESPAÇO DE ESTUDO</small></span></a>
+    <p class="nav-label">SEU APRENDIZADO</p>
+    <nav id="nav">
+      <a href="#inicio"><span aria-hidden="true">⌂</span> Visão geral</a>
+      <a href="#banco"><span aria-hidden="true">▤</span> Banco de questões</a>
+      <a href="#simulado"><span aria-hidden="true">◷</span> Simulados</a>
+      <a href="#desempenho"><span aria-hidden="true">↗</span> Meu desempenho</a>
+      <a href="#materiais"><span aria-hidden="true">▧</span> Materiais e fontes</a>
+    </nav>
+    <div class="admin-nav"><p class="nav-label">CURADORIA</p><a href="#catalogo">Gerenciar catálogo</a><a href="#moderacao">Moderação</a></div>
+    <div class="sidebar-foot"><span class="dot"></span> Projeto acadêmico<small>UNIFOR · ADS · Grupo 2<br>Requisitos e Modelagem de Sistemas</small></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span id="breadcrumb">Espaço de estudo</span><a href="#acesso" class="profile"><span aria-hidden="true">◎</span> Acesso e dados locais</a></header>
+    <div class="prototype-note">Protótipo acadêmico · Os registros ficam somente neste navegador. <a href="#acesso">Entenda o acesso</a></div>
+    <main id="main" tabindex="-1"></main>
+    <footer>Estudar, compreender, evoluir. <span>Uma proposta de apoio à preparação para o ENADE.</span></footer>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p id="dialog-text"></p><div class="actions"><button id="dialog-cancel" class="secondary">Continuar</button><button id="dialog-ok" class="primary">Confirmar</button></div></dialog>
+</body>
+</html>
