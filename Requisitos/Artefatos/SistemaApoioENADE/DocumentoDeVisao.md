@@ -1,6 +1,6 @@
 # Documento de Visão — Sistema de Apoio ao ENADE
 
-> **Versão 2.1 · 03/11/2026 · Grupo 2**  
+> **Versão 2.1 · 03/11/2026 · Grupo 2**
 > Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
 
 ## 1. Contexto e problema
