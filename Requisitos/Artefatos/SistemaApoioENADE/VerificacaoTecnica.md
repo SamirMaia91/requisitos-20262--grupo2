@@ -20,6 +20,10 @@ O ensaio de prazo adiantou o relógio controlado do navegador em 61 segundos; n�
 
 As [18 capturas](Prototipos/Wireframes.md) mostram telas reais do executável. Correção e desempenho foram capturados após ações do ensaio técnico. Não representam resultados de alunos ou aceite externo. Os seis diagramas UML permanecem renderizados em SVG, com fontes PlantUML preservadas.
 
+## Conferência da publicação no Netlify
+
+Em 03/11/2026, a publicação no endereço enade-grupo2-estudo.netlify.app passou em 25 verificações adicionais no mesmo navegador. Foram conferidos acesso público HTTP 200 sem credenciais, contexto HTTPS com criptografia disponível, carregamento do catálogo e da fonte local, resposta HTTP 200 e igualdade de conteúdo de sete assets, consulta das cinco questões, correção de uma resposta, preservação do prazo após recarga, acesso ao cadastro e layout móvel. Não foram observados erros JavaScript ou falhas de recursos nesse ensaio. Os registros produzidos para essa conferência ficaram exclusivamente no contexto isolado do navegador de teste.
+
 ## Limites
 
 O ensaio automatizado de navegador foi executado no ambiente de desenvolvimento com Playwright. O repositório distribui o verificador sem dependências scripts/check.mjs; Playwright e o navegador não são necessários para abrir o protótipo. As capturas e o roteiro registram a cobertura efetivamente observada.

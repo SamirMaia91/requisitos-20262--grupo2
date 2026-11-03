@@ -2,7 +2,7 @@
 
 Versão 3.0 · 03/11/2026 · UNIFOR · ADS · Grupo 2.
 
-**[Abrir o protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
+**[Abrir o protótipo público](https://enade-grupo2-estudo.netlify.app)**
 
 O professor pode navegar diretamente pelo endereço, sem baixar arquivos ou instalar pacotes. O código versionado está em [index.html](index.html). Como alternativa local, abra esse arquivo mantendo os demais arquivos e a pasta assets ao lado. Acesse a versão HTTPS para avaliar o cadastro se o navegador restringir criptografia em arquivos locais.
 

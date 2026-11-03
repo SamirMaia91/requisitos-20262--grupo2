@@ -2,7 +2,7 @@
 
 > Documentação consolidada · Protótipo 3.0 · 03/11/2026 · Grupo 2 · Aprovação com usuários: pendente.
 
-**[Abrir o protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
+**[Abrir o protótipo público](https://enade-grupo2-estudo.netlify.app)**
 
 ## P1 — elicitação e modelagem
 

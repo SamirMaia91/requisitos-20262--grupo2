@@ -4,7 +4,7 @@ Projeto acadêmico de **Requisitos e Modelagem de Sistemas**, curso de Análise 
 
 Uma proposta de plataforma web para organizar questões, realizar simulados cronometrados e acompanhar o estudo com correção comentada. A entrega reúne especificação, modelagem e prototipação; não representa serviço de produção nem plataforma oficial do Inep.
 
-**[Abrir o protótipo público — sem instalação](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)**
+**[Abrir o protótipo público — sem instalação](https://enade-grupo2-estudo.netlify.app)**
 
 ## Acessos principais
 

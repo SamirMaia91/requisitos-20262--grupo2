@@ -16,7 +16,7 @@ P1 / M1 / Sprint 1: 20/10–02/11/2026. P2 / M2 / Sprint 2: 03/11–23/11/2026 (
 
 ## Gestão do trabalho
 
-Para o campo de link do protótipo no AVA: [Espaço de estudo ENADE](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site). Para o campo do repositório: [Grupo 2 no GitHub](https://github.com/SamirMaia91/requisitos-20262--grupo2). O envio e seu comprovante continuam sob responsabilidade do grupo.
+Para o campo de link do protótipo no AVA: [Espaço de estudo ENADE](https://enade-grupo2-estudo.netlify.app). Para o campo do repositório: [Grupo 2 no GitHub](https://github.com/SamirMaia91/requisitos-20262--grupo2). O envio e seu comprovante continuam sob responsabilidade do grupo.
 
 Issues de documentação podem ser encerradas quando os respectivos arquivos e verificações estiverem publicados. Entrevistas, validação e comprovação de acesso devem permanecer abertas enquanto dependerem de evidência. O encerramento de issue não significa aceite do professor. Não atribuir retrospectivamente tarefas a integrantes nem alterar datas históricas.
 

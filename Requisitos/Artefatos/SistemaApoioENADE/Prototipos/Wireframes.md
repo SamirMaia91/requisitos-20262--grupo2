@@ -2,7 +2,7 @@
 
 Versão 3.0 · 03/11/2026. Telas capturadas do HTML executável, com navegação, componentes, tipografia, cores e estados implementados. Substituem os esquemas de baixa fidelidade da versão anterior.
 
-**[Navegar no protótipo público](https://enade-grupo2-estudo.mario-gmm06.chatgpt.site)** · [Identidade visual UNIFOR](IdentidadeVisual.md).
+**[Navegar no protótipo público](https://enade-grupo2-estudo.netlify.app)** · [Identidade visual UNIFOR](IdentidadeVisual.md).
 
 ## Mapa das telas
 
