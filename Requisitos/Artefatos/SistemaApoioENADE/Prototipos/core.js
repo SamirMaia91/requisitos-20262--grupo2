@@ -177,6 +177,55 @@
       : "";
     return Object.hasOwn(attachmentTypes, extension) ? attachmentTypes[extension] : "";
   }
+  function validPdf(bytes) {
+    const decode = new TextDecoder("latin1");
+    if (!/^%PDF-\d\.\d(?:\r|\n)/.test(decode.decode(bytes.subarray(0, 16)))) return false;
+    const tail = decode.decode(bytes.subarray(Math.max(0, bytes.length - 65536)));
+    const end = /startxref\s+(\d+)\s+%%EOF[\s\0]*$/.exec(tail);
+    if (!end) return false;
+    const offset = Number(end[1]);
+    if (!Number.isSafeInteger(offset) || offset <= 0 || offset >= bytes.length) return false;
+    const crossReference = decode.decode(bytes.subarray(offset, offset + 1024));
+    return /^xref\s+\d+\s+\d+\b/.test(crossReference) ||
+      /^\d+\s+\d+\s+obj\b[\s\S]*?\/Type\s*\/XRef\b/.test(crossReference);
+  }
+  function validOffice(bytes, documentPart) {
+    const zip = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const decode = new TextDecoder();
+    for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--) {
+      if (zip.getUint32(i, true) !== 0x06054b50 ||
+          i + 22 + zip.getUint16(i + 20, true) !== bytes.length) continue;
+      const count = zip.getUint16(i + 10, true);
+      const end = zip.getUint32(i + 12, true) + zip.getUint32(i + 16, true);
+      let cursor = zip.getUint32(i + 16, true);
+      if (end > i || zip.getUint32(i + 4, true) !== 0) return false;
+      const parts = new Set();
+      for (let entry = 0; entry < count; entry++) {
+        if (cursor + 46 > end || zip.getUint32(cursor, true) !== 0x02014b50) return false;
+        const nameLength = zip.getUint16(cursor + 28, true);
+        const name = decode.decode(bytes.subarray(cursor + 46, cursor + 46 + nameLength));
+        const offset = zip.getUint32(cursor + 42, true);
+        if (offset + 30 > cursor || zip.getUint32(offset, true) !== 0x04034b50) return false;
+        const localNameLength = zip.getUint16(offset + 26, true);
+        const dataStart = offset + 30 + localNameLength + zip.getUint16(offset + 28, true);
+        if (dataStart + zip.getUint32(cursor + 20, true) > i ||
+            decode.decode(bytes.subarray(offset + 30, offset + 30 + localNameLength)) !== name) return false;
+        parts.add(name);
+        cursor += 46 + nameLength + zip.getUint16(cursor + 30, true) + zip.getUint16(cursor + 32, true);
+      }
+      return cursor === end && parts.has("[Content_Types].xml") && parts.has(documentPart);
+    }
+    return false;
+  }
+  function validDocument(bytes, type) {
+    if (type === "application/pdf") return validPdf(bytes);
+    const required = {
+      [attachmentTypes.docx]: "word/document.xml",
+      [attachmentTypes.pptx]: "ppt/presentation.xml",
+      [attachmentTypes.xlsx]: "xl/workbook.xml",
+    };
+    return Object.hasOwn(required, type) && validOffice(bytes, required[type]);
+  }
   function validAttachment(a) {
     return (
       typeof a?.id === "string" && a.id.trim() &&
@@ -219,6 +268,7 @@
     attachmentTypes,
     attachmentType,
     attachmentLimit,
+    validDocument,
     validateMaterial,
     reviseQuestion,
   };

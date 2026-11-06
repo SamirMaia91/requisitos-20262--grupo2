@@ -12,6 +12,8 @@ Consulta documental consolidada em 03/11/2026 e ampliada em 06/11/2026 com quest
 | FON-06 | [Inep — Provas e Gabaritos 2021](https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enade/provas-e-gabaritos/2021) | Página e documentos oficiais de ADS e SI usados na conferência de seis questões adaptadas. |
 | FON-07 | [Inep — Provas e Gabaritos 2017](https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enade/provas-e-gabaritos/2017) | Provas e gabaritos oficiais de ADS e SI usados na conferência de duas questões adaptadas. |
 | FON-08 | [Guia de Marca UNIFOR](https://www.unifor.br/documents/20143/6718465/guia_de_marca_unifor.pdf/252dcd04-3cb7-818f-0607-d4a31ac04382?t=1703076953356) | Paleta e tipografia da interface; [aplicação no protótipo](Prototipos/IdentidadeVisual.md). |
+| FON-09 | [Central de Ajuda Qconcursos](https://suporte.qconcursos.com/pt-BR/articles/12118570-como-usar-os-filtros-de-questoes) | Referência de busca por palavra-chave e combinação de filtros. |
+| FON-10 | [Estuda.com para estudantes](https://estuda.com/estudante/) | Referência de prática, simulados e acompanhamento de desempenho por disciplina. |
 
 As URLs específicas das provas e gabaritos, números, páginas, alternativas e método de conferência estão em [Conteúdo e fontes](Prototipos/ConteudoEFontes.md). A adaptação textual e a autoria técnica dos comentários estão identificadas em cada item.
 

@@ -14,3 +14,14 @@ O Grupo 2 analisou o projeto de extensão, os enunciados da P1 e da P2, as propo
 | FON-05, FON-06, FON-07 | Provas e gabaritos oficiais por edição. | Proveniência do catálogo inicial e referência para correção. |
 
 [Fontes](Fontes.md) · [Necessidades e funcionalidades](DocumentoDeVisao.md) · [Matriz de rastreabilidade](Rastreabilidade.md)
+
+## Pesquisa exploratória de soluções similares
+
+Consulta documental às páginas públicas das plataformas em 06/11/2026. A comparação orienta o desenho dos fluxos de estudo do projeto.
+
+| Referência | Prática observada na documentação pública | Aplicação no projeto |
+| --- | --- | --- |
+| Qconcursos · FON-09 | Busca por palavra-chave com combinação de filtros em uma única tela. | O banco combina a busca com ano, curso, componente e tema e informa quando a seleção está vazia (RF-02). |
+| Estuda.com · FON-10 | Questões e simulados acompanhados por relatórios de evolução por disciplina. | O estudante pratica, consulta a correção e acompanha os resultados por tema a partir das próprias tentativas (RF-03, RF-04, RF-06 e RF-07). |
+
+Para o ENADE, o grupo priorizou a indicação da prova e do gabarito em cada questão e uma biblioteca temática com a origem dos materiais identificada (RF-11).

@@ -4,7 +4,7 @@ Protótipo 3.1 · 06/11/2026.
 
 ## Verificação reproduzível
 
-Na raiz do repositório, execute `node scripts/check.mjs`. A execução desta versão concluiu **1.158 verificações**.
+Na raiz do repositório, execute `node scripts/check.mjs`. A execução desta versão concluiu **1.169 verificações**.
 
 - Conferência de identificadores e vínculos nos dois sentidos entre necessidades, requisitos e casos de uso.
 - Correspondência entre casos detalhados, atores, matriz, backlog, fonte PlantUML e SVG do diagrama de casos de uso.

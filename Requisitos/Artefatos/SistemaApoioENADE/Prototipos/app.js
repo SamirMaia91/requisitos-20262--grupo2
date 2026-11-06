@@ -64,9 +64,12 @@
     userId = "guest",
     curator = false,
     savingMaterial = false,
-    lastRoute = "";
-  try {
+    lastRoute = "",
+    storedRaw;
+  function loadState() {
     const raw = localStorage.getItem(key);
+    if (raw === storedRaw) return;
+    const previousRaw = storedRaw;
     if (raw) {
       const loaded = JSON.parse(raw);
       if (
@@ -90,9 +93,14 @@
           ...structuredClone(seed.questions.filter((q) => !knownIds.has(q.id))),
         );
         loaded.seedVersion = seed.version;
-        localStorage.setItem(key, JSON.stringify(loaded));
+        save();
       }
     } else {
+      state = fresh();
+      if (previousRaw) {
+        curator = false;
+        saveSession();
+      }
       const old = JSON.parse(localStorage.getItem("enade.grupo2.v2") || "null");
       if (
         old &&
@@ -114,6 +122,14 @@
         state.reports = old.reports || [];
       }
     }
+    storedRaw = localStorage.getItem(key);
+    if (userId !== "guest" && !state.accounts.some((a) => a.id === userId)) {
+      userId = "guest";
+      curator = false;
+      saveSession();
+    }
+  }
+  function restoreSession() {
     const session = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
     if (session) {
       userId = state.accounts.some((a) => a.id === session.userId)
@@ -121,8 +137,25 @@
         : "guest";
       curator = session.curator === true;
     }
-  } catch {
-    storageError = true;
+  }
+  let queued = Promise.resolve();
+  function withState(action) {
+    const run = () => {
+      try {
+        loadState();
+      } catch {
+        storageError = true;
+      }
+      return action();
+    };
+    queued = queued.then(() =>
+      navigator.locks && location.protocol !== "file:"
+        ? navigator.locks.request(key, run)
+        : run(),
+    ).catch(() => {
+      toast("Não foi possível concluir a ação. Tente novamente.");
+    });
+    return queued;
   }
   const account = () => state.accounts.find((a) => a.id === userId);
   const ownAttempts = () =>
@@ -153,7 +186,9 @@
       : external(m.url, text, kind);
   function save() {
     try {
-      localStorage.setItem(key, JSON.stringify(state));
+      const serialized = JSON.stringify(state);
+      localStorage.setItem(key, serialized);
+      storedRaw = serialized;
       return true;
     } catch {
       storageError = true;
@@ -198,7 +233,7 @@
       : "";
   }
   function questionInfo(q) {
-    return `<aside class="info-stack"><section class="info-card"><p class="overline">SOBRE A QUESTÃO</p><dl class="info-list"><div><dt>Edição</dt><dd>ENADE ${q.year}</dd></div><div><dt>Área</dt><dd>${e(q.course)}</dd></div><div><dt>Componente</dt><dd>${e(q.component)}</dd></div><div><dt>Questão original</dt><dd>${e(q.number)}</dd></div><div><dt>Versão local</dt><dd>${q.version || 1}</dd></div></dl>${external(q.source, "Abrir prova oficial")}${external(q.answerSource, "Abrir gabarito oficial")}</section><section class="info-card"><h3>Pratique. Revise. Compreenda.</h3><p class="info-note">A correção aparece depois da resposta ou do encerramento do simulado. Aproveite o comentário para revisar o raciocínio.</p><small>Comentários: análise técnica do projeto. Revisão pedagógica externa pendente.</small></section></aside>`;
+    return `<aside class="info-stack"><section class="info-card"><p class="overline">SOBRE A QUESTÃO</p><dl class="info-list"><div><dt>Edição</dt><dd>ENADE ${q.year}</dd></div><div><dt>Área</dt><dd>${e(q.course)}</dd></div><div><dt>Componente</dt><dd>${e(q.component)}</dd></div><div><dt>Questão original</dt><dd>${e(q.number)}</dd></div><div><dt>Versão local</dt><dd>${q.version || 1}</dd></div></dl>${external(q.source, "Abrir prova oficial")}${external(q.answerSource, "Abrir gabarito oficial")}</section><section class="info-card"><h3>Pratique. Revise. Compreenda.</h3><p class="info-note">A correção aparece depois da resposta ou do encerramento do simulado. Aproveite o comentário para revisar o raciocínio.</p><small>Comentários: análise técnica do projeto. Gabaritos identificados nas fontes oficiais.</small></section></aside>`;
   }
   function dialog(title, text, confirmLabel, callback, danger = false) {
     const d = document.querySelector("#dialog");
@@ -209,9 +244,10 @@
       d.close();
       oldFocus?.focus();
     };
-    document.querySelector("#dialog-ok").onclick = () => {
-      d.close();
-      callback();
+    document.querySelector("#dialog-ok").onclick = async (event) => {
+      event.currentTarget.disabled = true;
+      await withState(callback);
+      if (d.open) d.close();
     };
     d.showModal();
   }
@@ -409,7 +445,7 @@
         .map((q, i) => {
           const selected = a.answers[q.id],
             ok = selected === q.correct;
-          return `<details class="card review-card" ${i === 0 ? "open" : ""}><summary><span><i class="review-status ${ok ? "" : "wrong"}">${ok ? "✓" : selected ? "×" : "–"}</i><strong>${i + 1}. ${e(q.title || q.theme)}</strong></span><span class="muted">${ok ? "Acerto" : selected ? "Revisar" : "Não respondida"} ${icon("chevron")}</span></summary><div class="review-inner">${meta(q)}<p class="question-text">${e(q.statement)}</p>${q.options.map((t, j) => `<div class="option ${q.correct === C.letters[j] ? "correct" : selected === C.letters[j] ? "wrong" : ""}"><span class="option-letter">${C.letters[j]}</span><span>${e(t)}${q.correct === C.letters[j] ? '<strong class="option-annotation">Gabarito</strong>' : ""}${selected === C.letters[j] ? '<strong class="option-annotation">Sua resposta</strong>' : ""}</span></div>`).join("")}<section class="review-comment"><h3>COMENTÁRIO PARA SUA REVISÃO</h3><p>${e(q.comment)}</p><small>${e(q.commentAttribution || "Comentário cadastrado na curadoria.")} Revisão pedagógica externa pendente.</small></section>${adaptation(q)}<div class="actions">${external(q.source, "Prova original")}${external(q.answerSource, "Gabarito oficial")}${link("discussao/" + q.id, "Discutir a questão", "text-link", "chat")}</div></div></details>`;
+          return `<details class="card review-card" ${i === 0 ? "open" : ""}><summary><span><i class="review-status ${ok ? "" : "wrong"}">${ok ? "✓" : selected ? "×" : "–"}</i><strong>${i + 1}. ${e(q.title || q.theme)}</strong></span><span class="muted">${ok ? "Acerto" : selected ? "Revisar" : "Não respondida"} ${icon("chevron")}</span></summary><div class="review-inner">${meta(q)}<p class="question-text">${e(q.statement)}</p>${q.options.map((t, j) => `<div class="option ${q.correct === C.letters[j] ? "correct" : selected === C.letters[j] ? "wrong" : ""}"><span class="option-letter">${C.letters[j]}</span><span>${e(t)}${q.correct === C.letters[j] ? '<strong class="option-annotation">Gabarito</strong>' : ""}${selected === C.letters[j] ? '<strong class="option-annotation">Sua resposta</strong>' : ""}</span></div>`).join("")}<section class="review-comment"><h3>COMENTÁRIO PARA SUA REVISÃO</h3><p>${e(q.comment)}</p><small>${e(q.commentAttribution || "Comentário cadastrado na curadoria.")}</small></section>${adaptation(q)}<div class="actions">${external(q.source, "Prova original")}${external(q.answerSource, "Gabarito oficial")}${link("discussao/" + q.id, "Discutir a questão", "text-link", "chat")}</div></div></details>`;
         })
         .join("")
     );
@@ -526,7 +562,9 @@
   }
   function questionEditor(id) {
     if (!curator) return curatorGate();
-    const q = state.questions.find((q) => q.id === id) || {
+    const existing = state.questions.find((q) => q.id === id);
+    if (id && !existing) return missing();
+    const q = existing || {
       title: "",
       year: "",
       course: "",
@@ -548,12 +586,14 @@
           : "Uma nova oportunidade de aprender.",
         "Informe a origem e confira o gabarito. Uma edição cria uma nova versão para as próximas tentativas.",
       ) +
-      `<section class="card reduced"><form id="question-form" data-id="${id || ""}"><div class="form-section"><div class="form-section-title"><span class="step-badge">1</span> Identificação e origem</div><div class="form-grid"><label class="full">Título da questão<input name="title" required maxlength="150" value="${e(q.title)}"></label><label>Ano da prova<input type="number" name="year" required min="2004" max="${new Date().getFullYear()}" value="${q.year}"></label><label>Curso<input name="course" required maxlength="150" value="${e(q.course)}"></label><label>Componente<select name="component">${["Formação geral", "Componente específico"].map((c) => `<option ${q.component === c ? "selected" : ""}>${c}</option>`).join("")}</select></label><label>Tema<input name="theme" required maxlength="120" value="${e(q.theme)}"></label><label>Número original<input name="number" required maxlength="20" value="${e(q.number)}"></label><label>URL HTTPS da prova<input type="url" name="source" required value="${e(q.source)}"></label><label class="full">URL HTTPS do gabarito<input type="url" name="answerSource" required value="${e(q.answerSource)}"></label></div></div><div class="form-section"><div class="form-section-title"><span class="step-badge">2</span> Questão e alternativas</div><div class="form-grid"><label class="full">Enunciado<textarea name="statement" required maxlength="20000">${e(q.statement)}</textarea></label>${C.letters.map((l, i) => `<label class="full">Alternativa ${l}<textarea name="option${l}" required maxlength="5000">${e(q.options[i])}</textarea></label>`).join("")}<label>Gabarito<select name="correct">${C.letters.map((l) => `<option ${q.correct === l ? "selected" : ""}>${l}</option>`).join("")}</select></label><label class="full">Comentário para revisão<textarea name="comment" required maxlength="10000">${e(q.comment)}</textarea></label></div></div><div class="form-section"><div class="form-section-title"><span class="step-badge">3</span> Conferência e publicação</div><label class="check-label"><input type="checkbox" name="reviewed"><span>Conferi os campos, a fonte, o gabarito e o comentário desta versão e quero publicá-la. Sem esta confirmação, a questão ficará em rascunho.</span></label>${q.adapted ? '<p class="data-note">Esta questão é uma adaptação de prova oficial. Preserve a identificação da adaptação e as referências.</p>' : ""}<p id="form-error" class="form-error notice error" role="alert"></p><div class="form-actions">${link("admin/questoes", "Cancelar", "text-link")}<button class="primary">Salvar questão ${icon("check")}</button></div></div></form></section>`
+      `<section class="card reduced"><form id="question-form" data-id="${e(id || "")}" data-revision="${q.version || 1}-${e(q.status || "")}"><div class="form-section"><div class="form-section-title"><span class="step-badge">1</span> Identificação e origem</div><div class="form-grid"><label class="full">Título da questão<input name="title" required maxlength="150" value="${e(q.title)}"></label><label>Ano da prova<input type="number" name="year" required min="2004" max="${new Date().getFullYear()}" value="${q.year}"></label><label>Curso<input name="course" required maxlength="150" value="${e(q.course)}"></label><label>Componente<select name="component">${["Formação geral", "Componente específico"].map((c) => `<option ${q.component === c ? "selected" : ""}>${c}</option>`).join("")}</select></label><label>Tema<input name="theme" required maxlength="120" value="${e(q.theme)}"></label><label>Número original<input name="number" required maxlength="20" value="${e(q.number)}"></label><label>URL HTTPS da prova<input type="url" name="source" required value="${e(q.source)}"></label><label class="full">URL HTTPS do gabarito<input type="url" name="answerSource" required value="${e(q.answerSource)}"></label></div></div><div class="form-section"><div class="form-section-title"><span class="step-badge">2</span> Questão e alternativas</div><div class="form-grid"><label class="full">Enunciado<textarea name="statement" required maxlength="20000">${e(q.statement)}</textarea></label>${C.letters.map((l, i) => `<label class="full">Alternativa ${l}<textarea name="option${l}" required maxlength="5000">${e(q.options[i])}</textarea></label>`).join("")}<label>Gabarito<select name="correct">${C.letters.map((l) => `<option ${q.correct === l ? "selected" : ""}>${l}</option>`).join("")}</select></label><label class="full">Comentário para revisão<textarea name="comment" required maxlength="10000">${e(q.comment)}</textarea></label></div></div><div class="form-section"><div class="form-section-title"><span class="step-badge">3</span> Conferência e publicação</div><label class="check-label"><input type="checkbox" name="reviewed"><span>Conferi os campos, a fonte, o gabarito e o comentário desta versão e quero publicá-la. Sem esta confirmação, a questão ficará em rascunho.</span></label>${q.adapted ? '<p class="data-note">Esta questão é uma adaptação de prova oficial. Preserve a identificação da adaptação e as referências.</p>' : ""}<p id="form-error" class="form-error notice error" role="alert"></p><div class="form-actions">${link("admin/questoes", "Cancelar", "text-link")}<button class="primary">Salvar questão ${icon("check")}</button></div></div></form></section>`
     );
   }
   function materialEditor(id) {
     if (!curator) return curatorGate();
-    const m = state.materials.find((m) => m.id === id) || {
+    const existing = state.materials.find((m) => m.id === id);
+    if (id && !existing) return missing();
+    const m = existing || {
       title: "",
       theme: "",
       description: "",
@@ -565,7 +605,7 @@
         id ? "Editar material" : "Novo material",
         "Identifique o conteúdo, anexe um arquivo e escolha quando ele aparece na biblioteca deste navegador.",
       ) +
-      `<section class="card reduced"><form id="material-form" data-id="${e(id || "")}" class="form-grid"><label class="full">Título<input name="title" required maxlength="150" value="${e(m.title)}"></label><label>Tema<input name="theme" required maxlength="120" value="${e(m.theme)}"></label><label>Situação<select name="status"><option value="published" ${m.status === "published" ? "selected" : ""}>Publicado</option><option value="archived" ${m.status === "archived" ? "selected" : ""}>Arquivado</option></select></label><label class="full">Descrição<textarea name="description" required maxlength="2000">${e(m.description)}</textarea></label>${m.attachment || m.url ? `<p class="full data-note material-filename">Origem atual: ${m.attachment ? e(m.attachment.name) : materialOrigin(m)}</p>` : ""}<label class="full attachment-field"><span>${m.attachment || m.url ? "Substituir por um arquivo" : "Anexar arquivo"}</span><span class="attachment-picker"><input type="file" name="attachment" accept="${Object.keys(C.attachmentTypes).map((ext) => "." + ext).join(",")}" aria-describedby="attachment-help" ${id ? "" : "required"}><span class="attachment-button" aria-hidden="true">Selecionar arquivo</span><span class="attachment-name" aria-hidden="true">Nenhum arquivo selecionado</span></span></label><p class="full data-note" id="attachment-help">PDF, PNG, JPG, WebP, GIF, DOCX, PPTX ou XLSX. Até 15 MB por arquivo. O anexo fica disponível somente neste navegador.</p><p id="form-error" class="form-error notice error full" role="alert"></p><div class="form-actions full">${link("admin/materiais", "Cancelar", "text-link")}<button class="primary">Salvar material ${icon("check")}</button></div></form></section>`
+      `<section class="card reduced"><form id="material-form" data-id="${e(id || "")}" data-revision="${m.updatedAt || 0}" class="form-grid"><label class="full">Título<input name="title" required maxlength="150" value="${e(m.title)}"></label><label>Tema<input name="theme" required maxlength="120" value="${e(m.theme)}"></label><label>Situação<select name="status"><option value="published" ${m.status === "published" ? "selected" : ""}>Publicado</option><option value="archived" ${m.status === "archived" ? "selected" : ""}>Arquivado</option></select></label><label class="full">Descrição<textarea name="description" required maxlength="2000">${e(m.description)}</textarea></label>${m.attachment || m.url ? `<p class="full data-note material-filename">Origem atual: ${m.attachment ? e(m.attachment.name) : materialOrigin(m)}</p>` : ""}<label class="full attachment-field"><span>${m.attachment || m.url ? "Substituir por um arquivo" : "Anexar arquivo"}</span><span class="attachment-picker"><input type="file" name="attachment" accept="${Object.keys(C.attachmentTypes).map((ext) => "." + ext).join(",")}" aria-describedby="attachment-help" ${id ? "" : "required"}><span class="attachment-button" aria-hidden="true">Selecionar arquivo</span><span class="attachment-name" aria-hidden="true">Nenhum arquivo selecionado</span></span></label><p class="full data-note" id="attachment-help">PDF, PNG, JPG, WebP, GIF, DOCX, PPTX ou XLSX. Até 15 MB por arquivo. O anexo fica disponível somente neste navegador.</p><p id="form-error" class="form-error notice error full" role="alert"></p><div class="form-actions full">${link("admin/materiais", "Cancelar", "text-link")}<button class="primary">Salvar material ${icon("check")}</button></div></form></section>`
     );
   }
   function discussion(id) {
@@ -620,11 +660,6 @@
     );
   }
   function render() {
-    const expired = expire();
-    if (expired) {
-      go("resultado/" + expired.id);
-      return;
-    }
     const route = location.hash.slice(1).split("?")[0] || "inicio",
       [name, id] = route.split("/");
     const pages = {
@@ -824,23 +859,36 @@
     const type = C.attachmentType(file.name);
     if (!type || file.size === 0 || file.size > C.attachmentLimit)
       throw Error("Escolha um arquivo compatível de até 15 MB.");
-    const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
-    const header = String.fromCharCode(...bytes);
-    const signatures = {
-      "application/pdf": header.startsWith("%PDF-"),
-      "image/png": header.startsWith("\x89PNG\r\n\x1a\n"),
-      "image/jpeg": header.startsWith("\xff\xd8\xff"),
-      "image/webp": header.startsWith("RIFF") && header.slice(8, 12) === "WEBP",
-      "image/gif": header.startsWith("GIF87a") || header.startsWith("GIF89a"),
-    };
-    const matchesFormat = signatures[type] ?? header.startsWith("PK\x03\x04");
-    if (!matchesFormat) throw Error("O conteúdo do arquivo não corresponde ao formato informado.");
+    if (type.startsWith("image/")) {
+      const header = String.fromCharCode(...new Uint8Array(await file.slice(0, 12).arrayBuffer()));
+      const signatures = {
+        "image/png": header.startsWith("\x89PNG\r\n\x1a\n"),
+        "image/jpeg": header.startsWith("\xff\xd8\xff"),
+        "image/webp": header.startsWith("RIFF") && header.slice(8, 12) === "WEBP",
+        "image/gif": header.startsWith("GIF87a") || header.startsWith("GIF89a"),
+      };
+      if (!signatures[type]) throw Error("O conteúdo do arquivo não corresponde ao formato informado.");
+      try {
+        const image = await createImageBitmap(file);
+        image.close();
+      } catch {
+        throw Error("O arquivo de imagem está incompleto ou não pode ser aberto.");
+      }
+    } else {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      if (!C.validDocument(bytes, type))
+        throw Error("O arquivo está incompleto ou não corresponde ao formato informado.");
+    }
     return { id: uuid(), name: file.name, type, size: file.size };
   }
 
   async function saveMaterial(form, data) {
     if (!curator || savingMaterial) return;
     const prior = state.materials.find((m) => m.id === form.dataset.id);
+    if (form.dataset.id && (!prior || (prior.updatedAt || 0) !== Number(form.dataset.revision))) {
+      formError("O material foi alterado em outra aba. Abra-o novamente para editar.");
+      return;
+    }
     const file = form.elements.attachment.files[0];
     const material = {
       id: prior?.id || uuid(),
@@ -909,19 +957,25 @@
       "O item sairá do catálogo e, se houver anexo, o arquivo será removido deste navegador.",
       "Excluir material",
       async () => {
-        if (savingMaterial) return;
+        if (savingMaterial || !curator) return;
+        const current = state.materials.find((item) => item.id === id);
+        if (!current || (current.updatedAt || 0) !== (material.updatedAt || 0)) {
+          render();
+          toast("O material mudou em outra aba. Confira a lista atual.");
+          return;
+        }
         savingMaterial = true;
-        const index = state.materials.indexOf(material);
+        const index = state.materials.indexOf(current);
         try {
           if (index < 0) return;
           state.materials.splice(index, 1);
           if (!save()) {
-            state.materials.splice(index, 0, material);
+            state.materials.splice(index, 0, current);
             return;
           }
-          if (material.attachment) await removeAttachment(material.attachment.id);
+          if (current.attachment) await removeAttachment(current.attachment.id);
         } catch {
-          state.materials.splice(index, 0, material);
+          state.materials.splice(index, 0, current);
           save();
           render();
           toast("Não foi possível remover o arquivo. Tente excluir o material novamente.");
@@ -955,10 +1009,17 @@
       toast("Não foi possível abrir o anexo neste navegador.");
     }
   }
-  main.addEventListener("submit", async (event) => {
+  main.addEventListener("submit", (event) => {
     event.preventDefault();
-    const form = event.target,
-      data = new FormData(form);
+    const form = event.target;
+    const data = new FormData(form);
+    const route = location.hash;
+    void withState(() => {
+      if (location.hash === route) return submitForm(form, data);
+    });
+  });
+  async function submitForm(form, data) {
+    if (!form.isConnected) return;
     if (form.id === "auth-form") {
       await authSubmit(form, data);
       return;
@@ -1022,7 +1083,12 @@
     }
     if (form.id === "question-form") {
       if (!curator) return;
-      const prior = state.questions.find((q) => q.id === form.dataset.id),
+      const prior = state.questions.find((q) => q.id === form.dataset.id);
+      if (form.dataset.id && (!prior || form.dataset.revision !== (prior.version || 1) + "-" + prior.status)) {
+        formError("A questão foi alterada em outra aba. Abra-a novamente para editar.");
+        return;
+      }
+      const
         reviewed = data.has("reviewed");
       const fields = {
         title: String(data.get("title")).trim(),
@@ -1104,7 +1170,7 @@
       render();
       toast("Decisão registrada.");
     }
-  });
+  }
   main.addEventListener("change", (event) => {
     if (event.target.matches("#material-form [name=attachment]"))
       event.target.parentElement.querySelector(".attachment-name").textContent =
@@ -1114,44 +1180,54 @@
       event.target.closest("#running") &&
       event.target.name === "alternative"
     ) {
-      const a = active();
-      if (!a) return;
-      if (
-        !C.answer(
-          a,
-          event.target.closest("form").dataset.id,
-          event.target.value,
-        )
-      ) {
-        const ex = expire();
-        if (ex) go("resultado/" + ex.id);
-        return;
-      }
-      save();
-      document.querySelector("#answered-count").textContent =
-        `${Object.keys(a.answers).length} de ${a.questions.length} respondida(s)`;
-      document.querySelector("#exam-bar").style.width =
-        (Object.keys(a.answers).length / a.questions.length) * 100 + "%";
-      document
-        .querySelectorAll(".progress-nav [data-step]")
-        .forEach((b) =>
-          b.classList.toggle(
-            "answered",
-            !!a.answers[a.questions[Number(b.dataset.step)].id],
-          ),
-        );
+      const target = event.target;
+      const questionId = target.closest("form").dataset.id;
+      const selected = target.value;
+      void withState(() => {
+        const a = active();
+        if (!a || !target.isConnected) return;
+        if (
+          !C.answer(
+            a,
+            questionId,
+            selected,
+          )
+        ) {
+          const ex = expire();
+          if (ex) go("resultado/" + ex.id);
+          return;
+        }
+        save();
+        document.querySelector("#answered-count").textContent =
+          `${Object.keys(a.answers).length} de ${a.questions.length} respondida(s)`;
+        document.querySelector("#exam-bar").style.width =
+          (Object.keys(a.answers).length / a.questions.length) * 100 + "%";
+        document
+          .querySelectorAll(".progress-nav [data-step]")
+          .forEach((b) =>
+            b.classList.toggle(
+              "answered",
+              !!a.answers[a.questions[Number(b.dataset.step)].id],
+            ),
+          );
+      });
     }
   });
   main.addEventListener("click", (event) => {
     const b = event.target.closest("button");
     if (!b || b.disabled) return;
+    if (b.type === "submit" && b.form) return;
+    void withState(() => {
+      if (b.isConnected && !b.disabled) return handleButton(b);
+    });
+  });
+  function handleButton(b) {
     if (b.dataset.deleteMaterial) {
       confirmMaterialDeletion(b.dataset.deleteMaterial);
       return;
     }
     if (b.dataset.downloadMaterial) {
-      void downloadMaterial(b.dataset.downloadMaterial);
-      return;
+      return downloadMaterial(b.dataset.downloadMaterial);
     }
     if (b.dataset.password) {
       const field = document.getElementById(b.dataset.password),
@@ -1178,9 +1254,11 @@
           `${a.questions.length - Object.keys(a.answers).length} questão(ões) sem resposta. Após encerrar, sua correção será liberada e as respostas não poderão ser alteradas.`,
           "Encerrar simulado",
           () => {
-            C.finish(a);
+            const current = state.attempts.find((item) => item.id === a.id && item.owner === userId);
+            if (!current) return;
+            C.finish(current);
             save();
-            go("resultado/" + a.id);
+            go("resultado/" + current.id);
           },
         );
       return;
@@ -1194,7 +1272,7 @@
       }
       dialog(
         "Avaliar a curadoria?",
-        "Você poderá cadastrar, editar e arquivar conteúdos neste navegador. Este modo serve para avaliar a interface e não representa uma autorização administrativa de um serviço real.",
+        "Você poderá cadastrar, editar, arquivar e excluir materiais neste navegador. Este modo serve para avaliar a interface e não representa uma autorização administrativa de um serviço real.",
         "Entrar na curadoria",
         () => {
           curator = true;
@@ -1237,6 +1315,7 @@
           storageError = false;
           try {
             localStorage.removeItem(key);
+            storedRaw = null;
             localStorage.removeItem("enade.grupo2.v2");
             sessionStorage.removeItem(sessionKey);
             await attachmentRequest("readwrite", (store) => store.clear());
@@ -1292,12 +1371,22 @@
           : "A questão sai das novas consultas e tentativas. Resultados anteriores serão preservados.",
         "Arquivar",
         () => {
-          const previous = { ...item };
-          item.status = "archived";
-          if (isMaterial) item.archivedAt = Date.now();
+          if (!curator) return;
+          const current = (isMaterial ? state.materials : state.questions).find((record) => record.id === item.id);
+          if (!current) {
+            render();
+            return;
+          }
+          const previous = { ...current };
+          current.status = "archived";
+          if (isMaterial) {
+            current.archivedAt = Date.now();
+            current.updatedAt = current.archivedAt;
+          }
           if (!save()) {
-            Object.assign(item, previous);
-            if (!previous.archivedAt) delete item.archivedAt;
+            Object.assign(current, previous);
+            if (!previous.archivedAt) delete current.archivedAt;
+            if (!previous.updatedAt) delete current.updatedAt;
             return;
           }
           render();
@@ -1315,28 +1404,38 @@
         ev.preventDefault();
         const reason = new FormData(ev.target).get("reason").trim();
         if (!reason) return;
-        state.reports.push({
-          id: uuid(),
-          message: b.dataset.report,
-          reason,
-          created: Date.now(),
-          decision: null,
+        void withState(() => {
+          if (!state.messages.some((message) => message.id === b.dataset.report)) {
+            d.close();
+            toast("A mensagem já não está disponível.");
+            return;
+          }
+          state.reports.push({
+            id: uuid(),
+            message: b.dataset.report,
+            reason,
+            created: Date.now(),
+            decision: null,
+          });
+          save();
+          d.close();
+          toast("Sinalização registrada para análise local.");
         });
-        save();
-        d.close();
-        toast("Sinalização registrada para análise local.");
       };
       d.showModal();
     }
-  });
+  }
   function tick() {
-    const ex = expire();
-    if (ex) {
-      go("resultado/" + ex.id);
+    const a = active();
+    if (a && a.deadline !== null && Date.now() >= a.deadline) {
+      void withState(() => {
+        const ended = expire();
+        if (ended) go("resultado/" + ended.id);
+        else if (!active() && main.dataset.route === "tentativa") render();
+      });
       return;
     }
-    const a = active(),
-      timer = document.querySelector("#timer");
+    const timer = document.querySelector("#timer");
     if (a && timer) {
       const seconds = Math.max(0, Math.ceil((a.deadline - Date.now()) / 1000));
       timer.innerHTML =
@@ -1345,8 +1444,28 @@
       timer.classList.toggle("low", seconds <= 60);
     }
   }
-  window.addEventListener("hashchange", render);
+  document.querySelector(".skip").addEventListener("click", (event) => {
+    event.preventDefault();
+    main.focus({ preventScroll: true });
+    main.scrollIntoView();
+  });
+  window.addEventListener("hashchange", () => void withState(render));
+  window.addEventListener("storage", (event) => {
+    if (event.key !== key && event.key !== null) return;
+    void withState(() => {
+      if (!main.querySelector("form") && !document.querySelector("dialog").open) render();
+    });
+  });
   document.addEventListener("visibilitychange", tick);
   setInterval(tick, 1000);
-  render();
+  void withState(() => {
+    try {
+      restoreSession();
+    } catch {
+      storageError = true;
+    }
+    const expired = expire();
+    if (expired) go("resultado/" + expired.id);
+    else render();
+  });
 })();

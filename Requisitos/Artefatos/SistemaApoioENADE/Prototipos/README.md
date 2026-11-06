@@ -47,11 +47,11 @@ Os comentários são análise técnica do projeto. Não há contas, mensagens ou
 4. Mantenha a situação **Publicado** e salve. Abra **Materiais de estudo**, filtre pelo tema e escolha **Baixar anexo**.
 5. Use **Arquivar** para retirar o material da biblioteca e manter o cadastro, o anexo e a data no histórico da curadoria. Use **Excluir** e confirme para remover o item e seu anexo deste navegador.
 
-O protótipo guarda os arquivos e os dados no navegador de avaliação. As referências oficiais incluídas na biblioteca continuam acessíveis por link.
+O protótipo guarda os arquivos e os dados no navegador de avaliação. O cadastro confere a estrutura de PDFs e arquivos Office e a leitura de imagens. As referências oficiais incluídas na biblioteca continuam acessíveis por link.
 
 ## Dados e manutenção
 
-Contas e metadados do catálogo usam localStorage. Arquivos anexados usam IndexedDB e a sessão usa sessionStorage. A senha é derivada com PBKDF2/SHA-256, 120 mil iterações e sal aleatório, sem armazenamento da senha em texto simples. Isso permite avaliar o fluxo e não substitui autenticação e autorização de servidor. Perfis compartilham o catálogo local e mantêm seus históricos separados.
+Contas e metadados do catálogo usam localStorage. Arquivos anexados usam IndexedDB e a sessão usa sessionStorage. A senha é derivada com PBKDF2/SHA-256, 120 mil iterações e sal aleatório, sem armazenamento da senha em texto simples. Isso permite avaliar o fluxo e não substitui autenticação e autorização de servidor. Perfis compartilham o catálogo local e mantêm seus históricos separados. No site HTTPS, as abas compartilham os registros e coordenam gravações no mesmo navegador.
 
 Limpeza do navegador, navegação privada e restrições de armazenamento podem remover os registros. A interface informa falha de gravação. Não há sincronização entre dispositivos. O modo de curadoria não protege dados contra quem utiliza o mesmo navegador.
 

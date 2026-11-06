@@ -356,6 +356,14 @@ for (const changes of [
 ])
   check(C.validateMaterial({ ...material, attachment: { ...attachment, ...changes } }).includes("attachment"),
     "Anexo inválido aceito: " + JSON.stringify(changes));
+check(
+  !C.validDocument(Buffer.from("%PDF-1.7\n%%EOF"), C.attachmentTypes.pdf),
+  "PDF sem estrutura foi aceito",
+);
+check(
+  !C.validDocument(Buffer.from([0x50, 0x4b, 3, 4, 0, 0]), C.attachmentTypes.docx),
+  "Arquivo ZIP sem estrutura do Office foi aceito",
+);
 console.log(
   `${checks} verificações concluídas: referências, links, cobertura, SVG, cálculo, prazo, histórico, filtros, versões, materiais e proveniência.`,
 );

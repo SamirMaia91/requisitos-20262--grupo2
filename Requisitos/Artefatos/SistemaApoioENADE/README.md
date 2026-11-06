@@ -19,6 +19,7 @@
 - [Rastreabilidade e consistência](Rastreabilidade.md)
 - [Wireframes e protótipo navegável](Prototipos/README.md)
 - [Verificação técnica](VerificacaoTecnica.md)
+- [Apresentação do projeto](Apresentacao.md)
 
 ## Referências
 
