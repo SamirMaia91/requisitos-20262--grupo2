@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "date": "2026-11-03",
+  "version": "2.2",
+  "date": "2026-11-06",
   "needs": [
     [
       "NEC-01",
@@ -28,15 +28,27 @@
     ],
     [
       "NEC-05",
-      "Controlar acesso e manter a qualidade e a origem dos conteúdos",
-      "FON-01, FON-04",
-      "RF-01, RF-09, RF-11, RF-12"
+      "Acessar a própria conta e controlar os dados pessoais",
+      "FON-01",
+      "RF-01, RF-12"
     ],
     [
       "NEC-06",
       "Usar interfaces acessíveis em computador e celular",
       "FON-01, FON-02, FON-03",
       "RNF-01, RNF-02, RNF-03"
+    ],
+    [
+      "NEC-07",
+      "Encontrar materiais de estudo por tema e acessar o conteúdo de origem",
+      "FON-01, FON-04, FON-05",
+      "RF-09, RF-11"
+    ],
+    [
+      "NEC-08",
+      "Manter questões e materiais identificados, atualizados e disponíveis para consulta",
+      "FON-01, FON-04",
+      "RF-09"
     ]
   ],
   "rf": [
@@ -53,12 +65,12 @@
     [
       "RF-02",
       "Consultar banco de questões",
-      "Listar questões publicadas e filtrar por ano, curso, componente (formação geral ou específico) e tema, combinando filtros e indicando ausência de resultados.",
+      "Listar questões publicadas, buscar por título, enunciado, tema, curso ou número e combinar os filtros de ano, curso, componente e tema.",
       "NEC-01",
       "UC-02",
       "RN-02, RN-03",
       "Alta",
-      "Cada filtro reduz o conjunto conforme os metadados; sem correspondência, exibir estado vazio e opção de limpar filtros."
+      "A busca por título funciona em conjunto com os filtros. Sem correspondências, mostrar estado vazio e permitir limpar os filtros."
     ],
     [
       "RF-03",
@@ -122,13 +134,13 @@
     ],
     [
       "RF-09",
-      "Administrar questões e materiais",
-      "Permitir ao administrador cadastrar, revisar, publicar e arquivar questões e links de materiais, mantendo metadados, referência e comentário pedagógico.",
-      "NEC-05",
-      "UC-08",
+      "Gerenciar conteúdos de estudo",
+      "Permitir ao administrador gerenciar questões e cadastrar, editar, publicar ou arquivar materiais de estudo. Um novo material requer título, tema, descrição, arquivo e situação. Referências externas já incluídas no catálogo conservam o link de origem. Permitir exclusão confirmada de materiais, com remoção do registro e do anexo associado.",
+      "NEC-07, NEC-08",
+      "UC-08, UC-10, UC-12, UC-13",
       "RN-01, RN-02, RN-03, RN-10",
       "Alta",
-      "Estudante não altera catálogo; questão sem metadados, gabarito ou comentário revisado permanece em rascunho."
+      "Somente o administrador altera o catálogo. Questões incompletas ficam em rascunho. Materiais novos exigem arquivo válido. Materiais publicados aparecem na biblioteca e materiais arquivados saem da consulta. A exclusão confirmada remove o registro e o arquivo do navegador de avaliação."
     ],
     [
       "RF-10",
@@ -142,13 +154,13 @@
     ],
     [
       "RF-11",
-      "Consultar materiais e respectivas fontes",
-      "Listar materiais por tema com título, endereço de origem e descrição; abrir fonte externa identificada.",
-      "NEC-05",
-      "UC-02",
+      "Consultar materiais de estudo",
+      "Listar materiais publicados por tema com título e descrição. Oferecer o download do anexo ou o acesso à referência externa com o domínio de origem identificado.",
+      "NEC-07",
+      "UC-11",
       "RN-02, RN-10",
       "Média",
-      "Link mostra sua origem; catálogo vazio informa ausência de materiais sem preencher registros fictícios."
+      "O filtro mostra apenas materiais publicados do tema selecionado. O aluno pode baixar o anexo ou abrir a fonte externa identificada. O catálogo informa quando não há resultados."
     ],
     [
       "RF-12",
@@ -170,7 +182,7 @@
     [
       "RN-02",
       "Identificação e proveniência",
-      "Cada questão registra ID, ano, curso, componente, tema, número na prova e URLs da prova e do gabarito. Material registra título, tema e URL."
+      "Cada questão registra ID, ano, curso, componente, tema, número original e URLs da prova e do gabarito. Material registra título, tema, descrição, situação e origem, representada por anexo ou referência HTTPS já cadastrada."
     ],
     [
       "RN-03",
@@ -210,7 +222,7 @@
     [
       "RN-10",
       "Materiais e arquivamento",
-      "Conteúdo externo é referenciado por URL HTTPS. Arquivar impede novas seleções, preservando a fotografia de tentativas existentes. Origem pública não significa autorização automática para republicar conteúdo de terceiros."
+      "O catálogo mostra apenas materiais publicados. Novos materiais são cadastrados por anexo e as referências externas existentes usam HTTPS. O protótipo mantém os anexos no navegador. Arquivar uma questão preserva o histórico de tentativas. Arquivar um material retira-o da biblioteca e mantém no histórico da curadoria o cadastro, a origem e a data do arquivamento. O grupo deve usar arquivos próprios ou autorizados para o uso pretendido. A exclusão de material exige confirmação e remove o registro e o arquivo associado."
     ],
     [
       "RN-11",
@@ -223,7 +235,7 @@
       "RNF-01",
       "Acessibilidade",
       "Todas as ações principais devem ser executáveis por teclado, com foco visível, rótulos associados, avisos anunciados e alternativa textual para gráficos.",
-      "Percorrer UC-01 a UC-09 com teclado; conferir rótulos e foco; testar leitor de tela antes da homologação.",
+      "Percorrer os casos de uso com teclado e conferir rótulos, foco visível e ordem de navegação, inclusive no cadastro.",
       "Alta"
     ],
     [
@@ -251,7 +263,7 @@
       "RNF-05",
       "Proteção de acesso",
       "Em produção, proteger tráfego com HTTPS, armazenar senhas somente com hash resistente e sal individual, verificar autorização no servidor e limitar tentativas de autenticação.",
-      "Revisão de configuração, armazenamento e testes de acesso entre contas. O protótipo não recebe senhas.",
+      "O protótipo recebe a senha no navegador e armazena apenas o resultado da derivação PBKDF2/SHA-256 com 120 mil iterações e sal aleatório individual. A senha em texto simples não é persistida nem transmitida. A avaliação de autorização e limitação de tentativas no servidor aplica-se ao ambiente de produção.",
       "Alta"
     ],
     [
@@ -272,7 +284,7 @@
       "RNF-08",
       "Minimização de dados",
       "Coletar apenas dados necessários à conta e estudo, documentar finalidade e retenção, e não publicar identificadores pessoais no repositório.",
-      "Revisão dos campos, política de dados e arquivos da entrega; aprovação institucional pendente.",
+      "Revisar os campos, a finalidade e a retenção dos dados. No protótipo, conferir a exclusão dos dados locais e dos anexos.",
       "Alta"
     ],
     [
@@ -313,22 +325,21 @@
     ],
     [
       "UC-02",
-      "Consultar questões e materiais",
+      "Consultar banco de questões",
       "Estudante",
-      "Catálogo publicado disponível; resultados vazios são permitidos.",
+      "Banco acessível. A consulta pode retornar uma lista vazia.",
       [
-        "Estudante abre banco de questões ou materiais.",
-        "Sistema apresenta filtros de ano, curso, componente e tema.",
-        "Estudante combina filtros e seleciona um item.",
-        "Sistema apresenta questão ou material com origem identificada."
+        "Estudante abre o Banco de questões.",
+        "Sistema apresenta busca e filtros por ano, curso, componente e tema.",
+        "Estudante pesquisa pelo título, enunciado, tema, curso ou número e pode combinar os filtros.",
+        "Sistema lista as questões publicadas correspondentes e mostra as referências na questão selecionada."
       ],
       [
-        "Sem correspondência: estado vazio e limpar filtros.",
-        "Fonte externa indisponível: preservar referência e permitir voltar ao catálogo."
+        "Sem correspondência, apresentar estado vazio e permitir limpar os filtros."
       ],
-      "Conteúdo localizado, sem alteração do histórico.",
-      "RF-02, RF-11",
-      "RN-02, RN-03, RN-10"
+      "Questão localizada com referências identificadas.",
+      "RF-02",
+      "RN-02, RN-03"
     ],
     [
       "UC-03",
@@ -431,24 +442,23 @@
     ],
     [
       "UC-08",
-      "Manter catálogo",
+      "Gerenciar questões",
       "Administrador",
       "Sessão administrativa válida.",
       [
-        "Administrador cadastra ou edita questão ou material.",
-        "Sistema valida campos e origem.",
-        "Administrador revisa gabarito e comentário e solicita publicação.",
-        "Sistema publica conteúdo elegível ou mantém rascunho com pendências.",
-        "Administrador pode arquivar conteúdo, preservando tentativas anteriores."
+        "Administrador abre Curadoria de conteúdo e seleciona Questões.",
+        "Administrador cadastra ou edita uma questão e informa metadados, alternativas, fontes, gabarito e comentário.",
+        "Sistema valida os dados. A questão é publicada após conferência ou permanece em rascunho.",
+        "Administrador pode arquivar a questão. Ao editar, uma nova versão atende as próximas tentativas."
       ],
       [
-        "Perfil estudante: negar alteração.",
-        "Fonte, alternativas ou comentário ausentes: impedir publicação.",
-        "Item já utilizado: editar uma nova versão, sem mudar a fotografia de tentativas."
+        "Perfil sem autorização, negar alteração.",
+        "Dados de publicação ausentes, manter em rascunho quando elegível.",
+        "Histórico existente continua vinculado à fotografia da versão respondida."
       ],
       "Catálogo atualizado com rastreabilidade da revisão.",
       "RF-09",
-      "RN-01, RN-02, RN-03, RN-08, RN-10"
+      "RN-01, RN-02, RN-03, RN-08"
     ],
     [
       "UC-09",
@@ -468,6 +478,81 @@
       "Denúncia analisada com decisão rastreável.",
       "RF-10",
       "RN-01, RN-09"
+    ],
+    [
+      "UC-10",
+      "Cadastrar material de estudo",
+      "Administrador",
+      "Sessão administrativa válida. No protótipo, ativar Avaliar curadoria.",
+      [
+        "Administrador abre Curadoria de conteúdo, seleciona Materiais e escolhe Novo material.",
+        "Administrador preenche título, tema e descrição, seleciona o arquivo e a situação e solicita o salvamento.",
+        "Sistema valida os campos e o anexo, registra a origem do tipo arquivo e salva o material.",
+        "Se publicado, o item passa a aparecer na biblioteca para o estudante filtrar por tema e baixar o arquivo."
+      ],
+      [
+        "Arquivo ausente, tamanho acima do limite ou formato incompatível, manter o formulário e indicar o ajuste.",
+        "Falha de armazenamento, informar o erro e conservar o formulário para nova tentativa."
+      ],
+      "Material registrado. A situação publicada disponibiliza o item para UC-11.",
+      "RF-09",
+      "RN-01, RN-02, RN-10"
+    ],
+    [
+      "UC-11",
+      "Consultar materiais de estudo",
+      "Estudante",
+      "Biblioteca acessível. A consulta pode retornar uma lista vazia.",
+      [
+        "Estudante abre Materiais de estudo.",
+        "Sistema lista os materiais publicados com título, tema, descrição e origem.",
+        "Estudante filtra por tema e seleciona um material.",
+        "Estudante baixa o anexo ou abre o endereço externo identificado na ficha."
+      ],
+      [
+        "Sem correspondência, exibir estado vazio e oferecer a lista de todos os materiais.",
+        "Se a fonte externa estiver indisponível ou o arquivo não puder ser lido, manter a ficha e permitir voltar à biblioteca."
+      ],
+      "Material consultado, com sua origem identificada.",
+      "RF-11",
+      "RN-02, RN-10"
+    ],
+    [
+      "UC-12",
+      "Atualizar e arquivar material de estudo",
+      "Administrador",
+      "Sessão administrativa válida e material existente.",
+      [
+        "Administrador abre a lista de materiais na curadoria.",
+        "Administrador edita os metadados, troca o anexo quando necessário ou solicita o arquivamento.",
+        "Sistema valida e persiste a mudança. Ao arquivar, registra a data e conserva o cadastro e o anexo no histórico da curadoria. O material deixa de aparecer na biblioteca."
+      ],
+      [
+        "Na edição sem novo arquivo, preservar o anexo atual ou a referência externa existente.",
+        "Arquivo inválido ou falha de armazenamento, manter o material anterior."
+      ],
+      "Catálogo atualizado. Materiais arquivados ficam no histórico da curadoria e a consulta mostra somente os publicados.",
+      "RF-09",
+      "RN-01, RN-02, RN-10"
+    ],
+    [
+      "UC-13",
+      "Excluir material de estudo",
+      "Administrador",
+      "Sessão administrativa válida e material existente.",
+      [
+        "Administrador abre a aba Materiais na Curadoria de conteúdo e aciona Excluir no item.",
+        "Sistema explica o efeito da exclusão e solicita confirmação.",
+        "Administrador confirma.",
+        "Sistema remove o material e seu anexo, quando houver, e atualiza a lista."
+      ],
+      [
+        "Cancelamento mantém o material e o arquivo.",
+        "Falha ao salvar a alteração mantém o material na lista e informa o erro."
+      ],
+      "Material removido da curadoria e da biblioteca. Outros materiais e tentativas são preservados.",
+      "RF-09",
+      "RN-01, RN-10"
     ]
   ]
 }

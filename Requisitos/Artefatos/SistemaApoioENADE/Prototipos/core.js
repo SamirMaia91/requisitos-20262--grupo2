@@ -154,15 +154,44 @@
           (k) => !filters[k] || String(q[k]) === String(filters[k]),
         ) &&
         (!query ||
-          [q.statement, q.theme, q.course, q.number].some((v) =>
-            String(v).toLocaleLowerCase("pt-BR").includes(query),
+          [q.title, q.statement, q.theme, q.course, q.number].some((v) =>
+            String(v ?? "").toLocaleLowerCase("pt-BR").includes(query),
           )),
+    );
+  }
+  const attachmentTypes = Object.freeze({
+    pdf: "application/pdf",
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+    gif: "image/gif",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const attachmentLimit = 15 * 1024 * 1024;
+  function attachmentType(name) {
+    const extension = typeof name === "string" && name.includes(".")
+      ? name.split(".").at(-1).toLowerCase()
+      : "";
+    return Object.hasOwn(attachmentTypes, extension) ? attachmentTypes[extension] : "";
+  }
+  function validAttachment(a) {
+    return (
+      typeof a?.id === "string" && a.id.trim() &&
+      typeof a.name === "string" && a.name.length <= 255 &&
+      !/[/\\\u0000-\u001f\u007f]/.test(a.name) &&
+      attachmentType(a.name) && attachmentType(a.name) === a.type &&
+      Number.isSafeInteger(a.size) && a.size > 0 && a.size <= attachmentLimit
     );
   }
   function validateMaterial(m) {
     return ["id", "title", "theme", "description"]
       .filter((k) => typeof m[k] !== "string" || !m[k].trim())
-      .concat(https(m.url) ? [] : ["url"])
+      .concat(m.attachment
+        ? (!m.url && validAttachment(m.attachment) ? [] : ["attachment"])
+        : (https(m.url) ? [] : ["url"]))
       .concat(["published", "archived"].includes(m.status) ? [] : ["status"]);
   }
   function reviseQuestion(previous, changes) {
@@ -187,6 +216,9 @@
     finish,
     aggregate,
     filterQuestions,
+    attachmentTypes,
+    attachmentType,
+    attachmentLimit,
     validateMaterial,
     reviseQuestion,
   };

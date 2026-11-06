@@ -782,17 +782,23 @@ main {
 .source-card:last-child {
   border-bottom: 0;
 }
+.source-card > div {
+  min-width: 0;
+}
+.source-card > .library-card-icon {
+  flex-shrink: 0;
+}
 .source-badge {
-  width: 36px;
-  height: 39px;
-  border-radius: 9px;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 6px;
+  padding: 3px 7px;
+  border-radius: 6px;
   background: #dfe8fa;
   color: #224893;
-  display: grid;
-  place-items: center;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 750;
-  flex-shrink: 0;
+  overflow-wrap: anywhere;
 }
 .source-card h3 {
   font-size: 12px;
@@ -1752,20 +1758,28 @@ td small {
   font-weight: 650;
   color: #1d3d7e;
 }
-.password-wrap {
-  position: relative;
-}
-.password-wrap input {
-  padding-right: 45px;
-}
 .password-toggle {
-  position: absolute;
-  right: 10px;
-  top: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  max-width: 100%;
   border: 0;
+  border-radius: 8px;
   background: transparent;
-  padding: 6px;
-  color: #60759f;
+  padding: 6px 10px;
+  color: #132190;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.password-toggle:hover {
+  background: #e4f2fe;
+}
+.password-toggle:focus-visible {
+  outline: 2px solid #004af7;
+  outline-offset: 2px;
 }
 .password-toggle .icon {
   width: 16px;
@@ -2621,13 +2635,6 @@ textarea:focus-visible {
 .auth-story p {
   color: #d2e3ff;
 }
-.password-wrap {
-  display: block;
-}
-.password-toggle {
-  top: 50%;
-  transform: translateY(-50%);
-}
 @media (max-width: 700px) {
   #admin-nav a {
     color: #c1d6f8;
@@ -2641,4 +2648,58 @@ textarea:focus-visible {
   .page-footer {
     font-size: 10px;
   }
+}
+
+
+.material-filename {
+  overflow-wrap: anywhere;
+}
+.source-card button.text-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.attachment-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 7px 9px;
+  border: 1px solid #b3c7ef;
+  border-radius: 9px;
+  background: #fff;
+}
+.attachment-picker:focus-within {
+  outline: 2px solid #004af7;
+  outline-offset: 2px;
+}
+.attachment-picker input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.attachment-button {
+  flex-shrink: 0;
+  border-radius: 7px;
+  padding: 9px 11px;
+  color: #132190;
+  background: #e4f2fe;
+  font-weight: 750;
+}
+.attachment-name {
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.delete-material {
+  color: #9e2b2b;
+}
+.delete-material:hover {
+  background: #fff0f0;
 }

@@ -1,41 +1,78 @@
 @startuml
 skinparam backgroundColor #FFFFFF
-skinparam defaultFontName SansSerif
-skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
 skinparam shadowing false
-skinparam ArrowColor #346B68
-skinparam componentStyle uml2
-skinparam roundcorner 8
-skinparam classBackgroundColor #F1F7F6
-skinparam usecaseBackgroundColor #F1F7F6
-skinparam componentBackgroundColor #F1F7F6
-skinparam nodeBackgroundColor #F1F7F6
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
 skinparam sequenceMessageAlign center
-title Componentes — Sistema de Apoio ao ENADE
-package "Aplicação web — arquitetura proposta" {
- [Interface web] as UI
- [Identidade e autorização] as ID
- [Catálogo e curadoria] as CAT
- [Avaliação e desempenho] as AV
- [Discussão e moderação] as FOR
- database "Persistência" as DB
- UI ..> ID : sessão / perfil
- UI ..> CAT : questões / materiais
- UI ..> AV : tentativas / resultados
- UI ..> FOR : mensagens / denúncias
- CAT ..> ID : verificar administrador
- AV ..> ID : verificar proprietário
- FOR ..> ID : verificar acesso
- AV ..> CAT : fotografia de questões
- FOR ..> CAT : referência de questão
- ID ..> DB
- CAT ..> DB
- AV ..> DB
- FOR ..> DB
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Componentes · responsabilidades do sistema
+skinparam componentStyle uml2
+skinparam linetype polyline
+package "Interface web" {
+ [Área administrativa] as ADM
+ [Área de estudo] as EST
+ ADM -[hidden]right-> EST
 }
-note bottom of DB
-Em produção, decisões de acesso e tempo
-são verificadas no servidor.
-O protótipo usa armazenamento local.
+package "Serviços da aplicação proposta" {
+ [Gestão de conteúdos] as GEST #D5E9FF
+ [Catálogo] as CAT #D5E9FF
+ [Avaliação e desempenho] as AVAL
+ [Discussão e moderação] as MOD
+ GEST .right.> CAT : atualiza catálogo
+ CAT -[hidden]right-> AVAL
+ AVAL -[hidden]right-> MOD
+}
+package "Persistência" {
+ database "Dados do sistema" as DADOS
+ storage "Arquivos de materiais" as FILES
+ FILES -[hidden]right-> DADOS
+}
+ADM .down.> GEST : cadastra e publica
+EST .down.> CAT : busca por filtros
+EST .down.> AVAL : pratica e acompanha
+EST .down.> MOD : discute e sinaliza
+GEST .down.> FILES : salva arquivo
+CAT .down.> FILES : recupera anexo
+CAT .down.> DADOS : consulta metadados
+note bottom of DADOS
+Identidade e autorização são transversais.
+A aplicação verifica o perfil para administrar
+e o titular para acessar o histórico pessoal.
 end note
 @enduml

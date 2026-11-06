@@ -1,0 +1,80 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
+skinparam shadowing false
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
+skinparam sequenceMessageAlign center
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Publicação e consulta de materiais · UC-10 e UC-11
+start
+partition "Administrador" {
+ :Abrir Materiais e escolher Novo material;
+ :Informar título, tema, descrição e situação;
+ :Selecionar arquivo;
+}
+partition "Sistema" {
+ if (Dados e arquivo válidos?) then (sim)
+  :Gravar anexo e dados do material;
+  if (Gravação confirmada?) then (sim)
+   if (Situação publicada?) then (sim)
+    :Disponibilizar item no catálogo do tema;
+   else (arquivada)
+    :Manter item somente na curadoria;
+    stop
+   endif
+  else (não)
+   :Informar falha e manter formulário;
+   stop
+  endif
+ else (não)
+  :Indicar o campo ou arquivo a corrigir;
+  stop
+ endif
+}
+partition "Estudante" {
+ :Abrir Materiais de estudo e filtrar por tema;
+ :Selecionar material publicado;
+ if (Origem do material?) then (anexo)
+  :Baixar arquivo;
+ else (referência externa)
+  :Abrir a fonte identificada;
+ endif
+}
+stop
+@enduml

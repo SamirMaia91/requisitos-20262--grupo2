@@ -1,43 +1,81 @@
 @startuml
 skinparam backgroundColor #FFFFFF
-skinparam defaultFontName SansSerif
-skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
 skinparam shadowing false
-skinparam ArrowColor #346B68
-skinparam componentStyle uml2
-skinparam roundcorner 8
-skinparam classBackgroundColor #F1F7F6
-skinparam usecaseBackgroundColor #F1F7F6
-skinparam componentBackgroundColor #F1F7F6
-skinparam nodeBackgroundColor #F1F7F6
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
 skinparam sequenceMessageAlign center
-title Casos de Uso — Sistema de Apoio ao ENADE
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Ações do estudante e do administrador
 left to right direction
-actor "AT-01 Estudante" as E
-actor "AT-02 Administrador" as A
+actor "AT-01\nEstudante" as E
+actor "AT-02\nAdministrador" as A
 rectangle "Sistema de Apoio ao ENADE" {
- usecase "UC-01\nGerenciar acesso e dados" as U1
- usecase "UC-02\nConsultar questões e materiais" as U2
- usecase "UC-03\nPraticar questão" as U3
- usecase "UC-04\nRealizar simulado cronometrado" as U4
- usecase "UC-05\nConsultar correção comentada" as U5
- usecase "UC-06\nConsultar desempenho" as U6
- usecase "UC-07\nDiscutir uma questão" as U7
- usecase "UC-08\nManter catálogo" as U8
- usecase "UC-09\nModerar discussão" as U9
+ package "Estudo e acompanhamento" {
+  usecase "UC-02 · Consultar banco de questões" as U02
+  usecase "UC-03 · Praticar questão" as U03
+  usecase "UC-04 · Realizar simulado cronometrado" as U04
+  usecase "UC-05 · Consultar correção comentada" as U05
+  usecase "UC-06 · Consultar desempenho" as U06
+  usecase "UC-07 · Discutir uma questão" as U07
+  usecase "UC-11 · Consultar materiais de estudo" as U11 #D5E9FF
+ }
+ usecase "UC-01 · Gerenciar acesso e dados da conta" as U01
+ package "Gestão de conteúdos e moderação" {
+  usecase "UC-08 · Gerenciar questões" as U08
+  usecase "UC-10 · Cadastrar material de estudo" as U10 #D5E9FF
+  usecase "UC-12 · Atualizar e arquivar material de estudo" as U12
+  usecase "UC-13 · Excluir material de estudo" as U13
+  usecase "UC-09 · Moderar discussão" as U09
+ }
 }
-E -- U1
-E -- U2
-E -- U3
-E -- U4
-E -- U5
-E -- U6
-E -- U7
-A -- U1
-A -- U8
-A -- U9
-note bottom of U5
-Gabarito disponível somente
-após concluir a tentativa.
-end note
+E -- U02
+E -- U03
+E -- U04
+E -- U05
+E -- U06
+E -- U07
+E -- U11
+E -- U01
+U01 -- A
+U08 -- A
+U10 -- A
+U12 -- A
+U13 -- A
+U09 -- A
 @enduml

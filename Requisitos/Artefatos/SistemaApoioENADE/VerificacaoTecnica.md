@@ -1,31 +1,32 @@
 # Verificação técnica dos artefatos
 
-Protótipo 3.0 · 03/11/2026.
+Protótipo 3.1 · 06/11/2026.
 
-## Verificação reproduzível no repositório
+## Verificação reproduzível
 
-**node scripts/check.mjs**, na raiz, verifica IDs, referências, cobertura de requisitos nos casos de uso e backlog, links locais, imagens UML, regras de pontuação e agregação, omissões, prazo, finalização única, preservação de histórico, filtros combinados, edição com incremento de versão, validação de materiais e integridade do catálogo publicado. Confere também que content.js corresponde ao content.json.
+Na raiz do repositório, execute `node scripts/check.mjs`. A execução desta versão concluiu **1.158 verificações**.
 
-Os registros mínimos de ensaio dessa rotina ficam em memória; não entram no catálogo distribuído. A seleção inicial possui apenas as cinco adaptações documentadas em [Conteúdo e fontes](Prototipos/ConteudoEFontes.md). A conferência editorial dos documentos oficiais é distinta da validação estrutural automatizada.
+- Conferência de identificadores e vínculos nos dois sentidos entre necessidades, requisitos e casos de uso.
+- Correspondência entre casos detalhados, atores, matriz, backlog, fonte PlantUML e SVG do diagrama de casos de uso.
+- Verificação dos links locais, das rotas registradas no protótipo e dos arquivos SVG.
+- Regras de correção, omissões, prazo, encerramento único e preservação das versões no histórico.
+- Busca por título combinada aos filtros, formatos e metadados de anexo, proveniência das oito questões e igualdade entre content.json e content.js.
 
-Na execução desta versão, o comando concluiu 763 verificações com sucesso.
+A documentação da seleção está em [Conteúdo e fontes](Prototipos/ConteudoEFontes.md).
 
 ## Ensaio de navegador
 
-Executado em 03/11/2026 no Chrome Headless Shell 156.0.8078.4. Foram concluídas 97 verificações: 37 condições de interface e funcionamento e 60 combinações de 15 rotas nas larguras 360, 768, 1440 e 1920 pixels. Não foram observados erros JavaScript ou rolagem horizontal no documento nessas combinações.
+Em 06/11/2026, foram concluídas **144 verificações** com Chrome Headless Shell 156.0.8078.4 e Playwright, a partir de um servidor HTTP local e de um contexto isolado.
 
-O roteiro cobriu consulta com filtros e sem correspondências; bloqueio de resposta vazia; correção conforme o gabarito; cadastro e edição de materiais; publicação e rascunho de questões; incremento de versão; preservação de fotografia da tentativa; mensagem com marcação HTML exibida como texto; sinalização e moderação; simulado com preservação de prazo e respostas após recarga; cancelamento e confirmação do encerramento; omissões; finalização por prazo sem duplicação; cadastro com confirmação de senha; login incorreto e correto; ausência de senha em texto simples; separação de histórico de visitante e conta; exclusão de conta.
+- Cadastro e login locais, separação do histórico por perfil e exclusão de dados.
+- Busca com filtros combinados, correção de questões dos dois componentes e simulado com encerramento manual e por prazo. O teste de expiração usou o relógio controlado do navegador.
+- Cadastro de PDF, download com comparação SHA-256, edição sem trocar arquivo, substituição por imagem e preservação dos links oficiais.
+- Rejeição de arquivo incompatível e de gravação incompleta. Arquivamento com data e retenção do anexo. Cancelamento da exclusão e remoção confirmada do registro e do arquivo.
+- Atualização de um catálogo local anterior sem sobrescrever as alterações ou tentativas já registradas.
+- Verificação de rotas em 360, 768, 1440 e 1920 pixels. Navegação por teclado no cadastro em 320, 360, 390 e 768 pixels, incluindo foco visível e acionamento do controle de senha com uma sobreposição de ensaio.
 
-O ensaio de prazo adiantou o relógio controlado do navegador em 61 segundos; não aguardou um minuto real. O ajuste de leitura e layout também foi conferido em janela de 720 × 500 pixels. Isso não substitui teste manual de zoom em todos os navegadores.
+O ensaio concluiu sem erros JavaScript ou rolagem horizontal do documento nas combinações verificadas. As [18 capturas](Prototipos/Wireframes.md) foram atualizadas a partir da interface executável. Os seis tipos UML têm nove vistas em [PlantUML e SVG](UML/README.md).
 
-As [18 capturas](Prototipos/Wireframes.md) mostram telas reais do executável. Correção e desempenho foram capturados após ações do ensaio técnico. Não representam resultados de alunos ou aceite externo. Os seis diagramas UML permanecem renderizados em SVG, com fontes PlantUML preservadas.
+## Escopo técnico
 
-## Conferência da publicação no Netlify
-
-Em 03/11/2026, a publicação no endereço enade-grupo2-estudo.netlify.app passou em 25 verificações adicionais no mesmo navegador. Foram conferidos acesso público HTTP 200 sem credenciais, contexto HTTPS com criptografia disponível, carregamento do catálogo e da fonte local, resposta HTTP 200 e igualdade de conteúdo de sete assets, consulta das cinco questões, correção de uma resposta, preservação do prazo após recarga, acesso ao cadastro e layout móvel. Não foram observados erros JavaScript ou falhas de recursos nesse ensaio. Os registros produzidos para essa conferência ficaram exclusivamente no contexto isolado do navegador de teste.
-
-## Limites
-
-O ensaio automatizado de navegador foi executado no ambiente de desenvolvimento com Playwright. O repositório distribui o verificador sem dependências scripts/check.mjs; Playwright e o navegador não são necessários para abrir o protótipo. As capturas e o roteiro registram a cobertura efetivamente observada.
-
-Não foram realizados testes de carga, autenticação de servidor, integração institucional, recuperação de desastre ou avaliação com participantes. Leitor de tela, múltiplos navegadores e revisão pedagógica continuam pendentes. Dados, contas e mensagens são locais ao navegador. A publicação HTTPS comprova disponibilização técnica, não envio ao AVA, acesso concedido ao professor ou aprovação acadêmica.
+O protótipo guarda contas, histórico, metadados e anexos no navegador. O ensaio cobre a interface e a lógica local. Carga, autenticação de servidor e armazenamento compartilhado pertencem à arquitetura de produção.

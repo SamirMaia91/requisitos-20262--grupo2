@@ -1,7 +1,13 @@
-# Diagrama de Componentes
+# Diagrama de componentes
 
-Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-![Diagrama de Componentes](UML/Componentes.svg)
+A gestão de conteúdos atualiza o catálogo. O catálogo oferece questões publicadas para prática e simulado e disponibiliza materiais por tema.
 
-[Arquivo editável PlantUML](UML/Componentes.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
+### Responsabilidades e dependências da arquitetura proposta
+
+![Responsabilidades e dependências da arquitetura proposta](UML/Componentes.svg)
+
+[Editar em PlantUML](UML/Componentes.puml)
+
+[Índice de modelagem](UML/README.md)

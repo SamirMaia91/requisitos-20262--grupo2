@@ -1,6 +1,6 @@
 # Especificação de Requisitos de Software (SRS)
 
-> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
 ## 1. Introdução
 
@@ -18,7 +18,7 @@ Consultar [Glossário](Glossario.md) e [Fontes](Fontes.md). Os documentos vincul
 
 ### 1.4 Organização
 
-Esta SRS estabelece contexto, interfaces, dados e restrições. O detalhamento normativo está nos catálogos RF, RNF, RN e casos de uso referenciados na seção 3. As evidências de campo e de aceite são separadas em Elicitação e Validação.
+Esta SRS estabelece contexto, interfaces, dados e restrições. O detalhamento normativo está nos catálogos RF, RNF, RN e casos de uso referenciados na seção 3. As necessidades e suas fontes estão na [elicitação documental](Elicitacao.md) e na [Visão](DocumentoDeVisao.md).
 
 ## 2. Descrição geral
 
@@ -28,11 +28,11 @@ Produto independente para apoio ao estudo; não substitui o exame, inscrição o
 
 ### 2.2 Funções
 
-Identidade e acesso; busca e curadoria de conteúdo; prática e simulado; correção e indicadores pessoais; discussão e moderação.
+Identidade e acesso, busca de questões, prática e simulado, correção e desempenho, discussão e moderação. Gestão de conteúdos inclui cadastro e manutenção de materiais. A biblioteca oferece consulta por tema, anexos e referências externas.
 
 ### 2.3 Usuários
 
-AT-01 Estudante utiliza os recursos de estudo. AT-02 Administrador publica conteúdo e modera mensagens. Professores e coordenação participam da validação pedagógica sem acesso presumido aos resultados individuais.
+AT-01 Estudante utiliza os recursos de estudo. AT-02 Administrador publica conteúdo e modera mensagens. Professores e coordenação são partes interessadas na qualidade acadêmica. O acesso ao histórico individual cabe ao estudante.
 
 ### 2.4 Ambiente e restrições
 
@@ -40,13 +40,13 @@ Navegador em computador ou dispositivo móvel, servidor de aplicação e banco d
 
 ### 2.5 Premissas e dependências
 
-Conteúdo precisa de origem conferida e comentário revisado. Não há necessidade confirmada por entrevistas nesta versão. Autenticação, política de retenção e infraestrutura devem ser validadas antes de uso em produção.
+Questões registram prova, gabarito e comentário. Materiais registram os dados de identificação e a origem. Em produção, autorização e retenção dependem da infraestrutura e das regras do produto.
 
 ## 3. Requisitos específicos
 
 ### 3.1 Interfaces externas
 
-**Usuário:** navegação por início, cadastro, login, conta, banco, simulado, resultado, desempenho, materiais, discussão, curadoria e moderação. Filtros combináveis por ano, curso, componente e tema tanto na consulta quanto na preparação do simulado; estados vazios; erros próximos aos campos; confirmação de encerramento e exclusão. Curadoria permite editar questões com incremento de versão e manter materiais. A identidade visual segue a [referência UNIFOR](Prototipos/IdentidadeVisual.md).
+**Usuário:** navegação por início, cadastro, login, conta, banco, simulado, resultado, desempenho, materiais, discussão, curadoria e moderação. Busca por título no banco e filtros combináveis por ano, curso, componente e tema no banco e na preparação do simulado; estados vazios; erros próximos aos campos; confirmação de encerramento e exclusão. Curadoria permite editar questões com incremento de versão. Em Materiais, Novo material recebe título, tema, descrição, arquivo e situação. A curadoria preserva cadastro, anexo e data no histórico ao arquivar. A exclusão exige confirmação. A biblioteca permite baixar o anexo ou abrir a referência externa identificada. A identidade visual segue a [referência UNIFOR](Prototipos/IdentidadeVisual.md).
 
 **Software:** produção terá interfaces de identidade, catálogo, tentativas e discussão com verificação de acesso no servidor. Os nomes dos componentes estão no diagrama correspondente; endpoints e tecnologia não foram impostos como requisito.
 
@@ -60,7 +60,7 @@ Conteúdo precisa de origem conferida e comentário revisado. Não há necessida
 
 ### 3.3 Comportamento e regras
 
-[UC-01 a UC-09](CasosDeUso.md) definem fluxos principais e exceções. [RN-01 a RN-11](RegrasDeNegocio.md) definem publicação, tempo, pontuação, histórico e moderação.
+[UC-01 a UC-13](CasosDeUso.md) definem fluxos principais e exceções. [RN-01 a RN-11](RegrasDeNegocio.md) definem publicação, tempo, pontuação, histórico e moderação.
 
 ### 3.4 Requisitos não funcionais
 
@@ -72,7 +72,7 @@ Conteúdo precisa de origem conferida e comentário revisado. Não há necessida
 | --- | --- | --- |
 | Usuário | ID, nome, e-mail, hash de senha, perfil | E-mail único; senha nunca armazenada em texto aberto em produção. |
 | Questão / versão | ID, origem, número, ano, curso, componente, tema, enunciado, alternativas, gabarito, comentário, situação | Exatamente uma alternativa correta; publicação sujeita a RN-03. |
-| Material | ID, título, tema, descrição, URL, situação | Origem e status identificados. |
+| Material de estudo | ID, título, tema, descrição, situação, referência HTTPS ou dados do anexo | Uma origem por material. Apenas itens publicados aparecem na biblioteca. |
 | Tentativa | ID, usuário, tipo, início, prazo, término, estado, fotografia das questões | Finalização única e imutável. |
 | Resposta | Tentativa, questão, alternativa selecionada ou omissão | Uma resposta por questão da tentativa. |
 | Mensagem | ID, usuário, questão, texto, data, situação | Texto limitado; HTML não executado. |
@@ -80,11 +80,11 @@ Conteúdo precisa de origem conferida e comentário revisado. Não há necessida
 
 ### 3.6 Estados e consistência
 
-Tentativa: aberta → concluída manualmente ou concluída por prazo. Não retorna a aberta. Questão: rascunho → publicada → arquivada; alteração gera versão para novas tentativas. Denúncia: pendente → analisada, com decisão de manter ou ocultar.
+Tentativa: aberta → concluída manualmente ou concluída por prazo. Não retorna a aberta. Material: publicado ou arquivado, conforme a situação escolhida na curadoria. Questão: rascunho → publicada → arquivada; alteração gera versão para novas tentativas. Denúncia: aguardando análise → analisada, com decisão de manter ou ocultar.
 
-### 3.7 Verificação e aceite
+### 3.7 Verificação
 
-Executar os critérios dos catálogos, a [matriz](Rastreabilidade.md), o [roteiro do protótipo](Prototipos/README.md) e o [plano de validação](Validacao.md). O aceite do professor e de representantes do domínio só pode ser registrado após sua manifestação.
+A [matriz](Rastreabilidade.md) relaciona necessidades, requisitos, casos de uso, regras e telas. Os procedimentos de verificação estão em [Verificação técnica](VerificacaoTecnica.md).
 
 ## 4. Modelagem e interface
 
@@ -92,6 +92,6 @@ Executar os critérios dos catálogos, a [matriz](Rastreabilidade.md), o [roteir
 
 ## 5. Controle de mudanças
 
-Toda alteração registra data e motivo, preserva IDs existentes, atualiza cobertura dos artefatos e informa impacto. Mudanças de escopo e política dependem de aprovação ainda pendente. Nenhuma data de aceite anterior foi atribuída à versão 2.0.
+Alterações registram data e motivo, preservam IDs existentes e atualizam os vínculos entre os artefatos.
 
-Em 03/11/2026, o protótipo evoluiu para 3.0 com telas de alta fidelidade, acesso público, cadastro/login locais, edição de questões, manutenção de materiais e quatro filtros de simulado. Os IDs dos requisitos e os modelos do produto foram preservados. Os limites de implementação constam no roteiro do protótipo; essa evolução não registra aceite externo.
+Em 06/11/2026, a versão 2.2 separou consulta e cadastro de materiais, revisou a UML e alinhou a especificação ao protótipo 3.1. A implantação está descrita em [Diagrama de Implantação](DiagramaImplantacao.md).

@@ -1,7 +1,19 @@
-# Diagrama de Atividades
+# Diagrama de atividades
 
-Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-![Diagrama de Atividades](UML/Atividades.svg)
+As visões mostram as decisões de prazo e encerramento do simulado e os pontos de validação, salvamento e publicação de materiais.
 
-[Arquivo editável PlantUML](UML/Atividades.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
+### Simulado cronometrado · UC-04 e UC-05
+
+![Simulado cronometrado · UC-04 e UC-05](UML/Atividades.svg)
+
+[Editar em PlantUML](UML/Atividades.puml)
+
+### Publicação e consulta de materiais · UC-10 e UC-11
+
+![Publicação e consulta de materiais · UC-10 e UC-11](UML/AtividadesMateriais.svg)
+
+[Editar em PlantUML](UML/AtividadesMateriais.puml)
+
+[Índice de modelagem](UML/README.md)

@@ -1,4 +1,4 @@
-/* ENADE v3 — protótipo acadêmico. Dados e autenticação de avaliação ficam no navegador. */
+/* ENADE — protótipo acadêmico. Dados e autenticação de avaliação ficam no navegador. */
 (() => {
   "use strict";
   const C = window.EnadeCore,
@@ -23,6 +23,7 @@
     plus: "M12 4v16M4 12h16",
     edit: "m16 3 5 5-12 12-6 1 1-6zM14 5l5 5",
     archive: "M3 4h18v5H3zM5 9v12h14V9M9 13h6",
+    trash: "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7M14 10v7",
     user: "M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3a8 8 0 0 1 16 0v3",
     eye: "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0",
     lock: "M6 10h12v11H6zM8 10V6a4 4 0 0 1 8 0v4M12 14v3",
@@ -49,6 +50,7 @@
   const uuid = () => crypto.randomUUID();
   const fresh = () => ({
     version: 3,
+    seedVersion: seed.version,
     questions: structuredClone(seed.questions),
     materials: structuredClone(seed.materials),
     accounts: [],
@@ -61,6 +63,7 @@
     index = 0,
     userId = "guest",
     curator = false,
+    savingMaterial = false,
     lastRoute = "";
   try {
     const raw = localStorage.getItem(key);
@@ -81,6 +84,14 @@
       )
         throw Error("Estrutura incompatível.");
       state = loaded;
+      if ((loaded.seedVersion ?? 3) < seed.version) {
+        const knownIds = new Set(loaded.questions.map((q) => q.id));
+        loaded.questions.push(
+          ...structuredClone(seed.questions.filter((q) => !knownIds.has(q.id))),
+        );
+        loaded.seedVersion = seed.version;
+        localStorage.setItem(key, JSON.stringify(loaded));
+      }
     } else {
       const old = JSON.parse(localStorage.getItem("enade.grupo2.v2") || "null");
       if (
@@ -135,6 +146,11 @@
     `<a class="${kind}" href="#${route}">${text}${ico ? icon(ico) : ""}</a>`;
   const external = (url, text, kind = "text-link") =>
     `<a class="${kind}" href="${e(url)}" target="_blank" rel="noopener noreferrer">${text}${icon("external")}</a>`;
+  const materialOrigin = (m) => m.attachment ? "Anexo local" : e(new URL(m.url).hostname);
+  const materialAction = (m, text = "Acessar material", kind = "secondary") =>
+    m.attachment
+      ? `<button type="button" class="${kind}" data-download-material="${e(m.id)}">Baixar anexo ${icon("file")}</button>`
+      : external(m.url, text, kind);
   function save() {
     try {
       localStorage.setItem(key, JSON.stringify(state));
@@ -237,7 +253,7 @@
         .slice(0, 2)
         .map(
           (m) =>
-            `<article class="source-card"><span class="source-badge">INEP</span><div><h3>${e(m.title)}</h3><p>${e(m.description.slice(0, 115))}</p>${external(m.url, "Consultar fonte")}</div></article>`,
+            `<article class="source-card"><span class="library-card-icon">${icon("file")}</span><div><span class="source-badge">${materialOrigin(m)}</span><h3>${e(m.title)}</h3><p>${e(m.description.slice(0, 115))}</p>${materialAction(m, "Consultar fonte", "text-link")}</div></article>`,
         )
         .join(
           "",
@@ -276,7 +292,7 @@
         "Banco de questões",
         "Encontre seu próximo desafio. Todas as questões da seleção inicial remetem a provas e gabaritos oficiais.",
       ) +
-      `<form id="filters" class="filter-panel"><div class="search-bar">${icon("search")}<input type="search" name="search" aria-label="Buscar por tema ou palavra-chave" placeholder="Busque por tema, palavra-chave ou número da questão" value="${e(filters.search || "")}"></div><div class="filter-grid">${filterFields(filters)}</div><div class="filter-footer"><span>Combine os filtros para direcionar sua prática.</span><div class="actions">${link("banco", "Limpar filtros", "text-link")}<button class="primary">Aplicar filtros ${icon("search")}</button></div></div></form><div class="results-head"><strong>${list.length} questão(ões) encontrada(s)</strong><span class="muted">Origem identificada · Gabarito conferido</span></div>` +
+      `<form id="filters" class="filter-panel"><div class="search-bar">${icon("search")}<input type="search" name="search" aria-label="Buscar questões por título ou palavra-chave" placeholder="Busque por título, tema ou número da questão" value="${e(filters.search || "")}"></div><div class="filter-grid">${filterFields(filters)}</div><div class="filter-footer"><span>Combine os filtros para direcionar sua prática.</span><div class="actions">${link("banco", "Limpar filtros", "text-link")}<button class="primary">Aplicar filtros ${icon("search")}</button></div></div></form><div class="results-head"><strong>${list.length} questão(ões) encontrada(s)</strong><span class="muted">Origem identificada · Gabarito conferido</span></div>` +
       (list.length
         ? list
             .map(
@@ -443,10 +459,10 @@
     return (
       head(
         "BIBLIOTECA DE ESTUDO",
-        "Boas fontes. Novas possibilidades.",
-        "Acesse as referências e amplie sua revisão. Os links identificam a origem dos materiais.",
+        "Materiais de estudo",
+        "Encontre materiais por tema, baixe anexos ou abra as referências externas identificadas.",
       ) +
-      `<form id="material-filters" class="filter-panel"><label>Tema<select name="theme"><option value="">Todos os temas</option>${[...new Set(state.materials.filter((m) => m.status === "published").map((m) => m.theme))].map((t) => `<option ${t === theme ? "selected" : ""}>${e(t)}</option>`).join("")}</select></label><div class="filter-footer"><span>${items.length} material(is) disponível(is)</span><button class="secondary">Filtrar materiais</button></div></form><div class="library-grid">${items.map((m) => `<article class="card library-card"><span class="library-card-icon">${icon("file")}</span><div class="question-meta"><span class="chip">${e(m.theme)}</span><span class="chip neutral">${e(new URL(m.url).hostname)}</span></div><h2>${e(m.title)}</h2><p>${e(m.description)}</p><div class="actions">${external(m.url, "Acessar material", "secondary")}</div></article>`).join("")}</div>` +
+      `<form id="material-filters" class="filter-panel"><label>Tema<select name="theme"><option value="">Todos os temas</option>${[...new Set(state.materials.filter((m) => m.status === "published").map((m) => m.theme))].map((t) => `<option ${t === theme ? "selected" : ""}>${e(t)}</option>`).join("")}</select></label><div class="filter-footer"><span>${items.length} material(is) disponível(is)</span><button class="secondary">Filtrar materiais</button></div></form><div class="library-grid">${items.map((m) => `<article class="card library-card"><span class="library-card-icon">${icon("file")}</span><div class="question-meta"><span class="chip">${e(m.theme)}</span><span class="chip neutral">${materialOrigin(m)}</span></div><h2>${e(m.title)}</h2><p>${e(m.description)}</p>${m.attachment ? `<p class="material-filename">${e(m.attachment.name)}</p>` : ""}<div class="actions">${materialAction(m)}</div></article>`).join("")}</div>` +
       (items.length
         ? ""
         : empty(
@@ -457,7 +473,7 @@
     );
   }
   function auth(signup = false) {
-    return `<div class="auth-layout"><section class="auth-story"><div><p class="eyebrow">APRENDER É CONSTRUIR CAMINHOS</p><h2>Seu próximo passo<br>merece <em>atenção.</em></h2><p>Um espaço para praticar, compreender suas respostas e voltar ao que realmente importa: aprender.</p><div class="auth-points"><div>${icon("book")} Questões com origem identificada</div><div>${icon("clock")} Desafios com tempo definido</div><div>${icon("chart")} Um histórico que acompanha seu ritmo</div></div></div><small>Protótipo acadêmico UNIFOR · Grupo 2.<br>Cadastro e sessão funcionam somente neste navegador. Nenhum dado é enviado a um serviço de contas.</small></section><section class="auth-form-panel"><p class="eyebrow">${signup ? "SEU ESPAÇO COMEÇA AQUI" : "BOM TER VOCÊ DE VOLTA"}</p><h1>${signup ? "Crie seu espaço de estudo." : "Entre para continuar."}</h1><p class="intro">${signup ? "Cadastre uma conta local para separar seu histórico neste navegador." : "Acesse a conta que você cadastrou neste navegador."}</p><form id="auth-form" data-mode="${signup ? "signup" : "login"}">${signup ? '<label>Seu nome<input name="name" autocomplete="name" required maxlength="80" placeholder="Como você gostaria de ser chamado?"></label>' : ""}<label>E-mail<input type="email" name="email" autocomplete="email" required maxlength="200" placeholder="Seu endereço de e-mail"></label><label>Senha<span class="password-wrap"><input type="password" name="password" id="password" autocomplete="${signup ? "new-password" : "current-password"}" required minlength="8" maxlength="128" placeholder="${signup ? "Pelo menos 8 caracteres" : "Sua senha local"}"><button type="button" class="password-toggle" data-password="password" aria-label="Mostrar senha">${icon("eye")}</button></span></label>${signup ? '<label>Confirme sua senha<input type="password" name="confirmation" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="Digite a senha novamente"></label><label class="check-label"><input type="checkbox" name="accept" required><span>Entendo que esta conta é local e que não há recuperação por e-mail ou sincronização entre dispositivos.</span></label>' : ""}<p id="form-error" class="form-error notice error" role="alert"></p><button class="primary" id="auth-submit">${signup ? "Criar conta local" : "Entrar no meu espaço"} ${icon("arrow")}</button></form><p class="auth-bottom">${signup ? 'Já criou sua conta? <a href="#entrar">Entrar</a>' : 'Ainda não tem conta? <a href="#cadastro">Criar conta local</a>'}</p><div class="auth-divider">ou</div><a href="#inicio" class="guest-link">Continuar explorando como visitante →</a></section></div>`;
+    return `<div class="auth-layout"><section class="auth-story"><div><p class="eyebrow">APRENDER É CONSTRUIR CAMINHOS</p><h2>Seu próximo passo<br>merece <em>atenção.</em></h2><p>Um espaço para praticar, compreender suas respostas e voltar ao que realmente importa: aprender.</p><div class="auth-points"><div>${icon("book")} Questões com origem identificada</div><div>${icon("clock")} Desafios com tempo definido</div><div>${icon("chart")} Um histórico que acompanha seu ritmo</div></div></div><small>Protótipo acadêmico UNIFOR · Grupo 2.<br>Cadastro e sessão funcionam somente neste navegador. Nenhum dado é enviado a um serviço de contas.</small></section><section class="auth-form-panel"><p class="eyebrow">${signup ? "SEU ESPAÇO COMEÇA AQUI" : "BOM TER VOCÊ DE VOLTA"}</p><h1>${signup ? "Crie seu espaço de estudo." : "Entre para continuar."}</h1><p class="intro">${signup ? "Cadastre uma conta local para separar seu histórico neste navegador." : "Acesse a conta que você cadastrou neste navegador."}</p><form id="auth-form" data-mode="${signup ? "signup" : "login"}">${signup ? '<label>Seu nome<input name="name" autocomplete="name" required maxlength="80" placeholder="Como você gostaria de ser chamado?"></label>' : ""}<label>E-mail<input type="email" name="email" autocomplete="email" required maxlength="200" placeholder="Seu endereço de e-mail"></label><div class="password-field"><label for="password">Senha<input type="password" name="password" id="password" autocomplete="${signup ? "new-password" : "current-password"}" required minlength="8" maxlength="128" placeholder="${signup ? "Pelo menos 8 caracteres" : "Sua senha local"}"></label><button type="button" class="password-toggle" data-password="password" aria-controls="password">${icon("eye")}<span>Mostrar senha</span></button></div>${signup ? '<label>Confirme sua senha<input type="password" name="confirmation" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="Digite a senha novamente"></label><label class="check-label"><input type="checkbox" name="accept" required><span>Entendo que esta conta é local e que não há recuperação por e-mail ou sincronização entre dispositivos.</span></label>' : ""}<p id="form-error" class="form-error notice error" role="alert"></p><button class="primary" id="auth-submit">${signup ? "Criar conta local" : "Entrar no meu espaço"} ${icon("arrow")}</button></form><p class="auth-bottom">${signup ? 'Já criou sua conta? <a href="#entrar">Entrar</a>' : 'Ainda não tem conta? <a href="#cadastro">Criar conta local</a>'}</p><div class="auth-divider">ou</div><a href="#inicio" class="guest-link">Continuar explorando como visitante →</a></section></div>`;
   }
   function accountPage() {
     const a = account();
@@ -505,7 +521,7 @@
           "plus",
         ),
       ) +
-      `<nav class="tabs" aria-label="Tipo de conteúdo"><a class="${isQ ? "active" : ""}" href="#admin/questoes">Questões <small>${state.questions.length}</small></a><a class="${!isQ ? "active" : ""}" href="#admin/materiais">Materiais <small>${state.materials.length}</small></a></nav><section class="card"><div class="section-head"><div><h2>${isQ ? "Banco de questões" : "Biblioteca de materiais"}</h2><p>Catálogo compartilhado entre os perfis deste navegador.</p></div><span class="tag">Modo de avaliação</span></div><div class="table-wrap"><table><thead><tr><th>CONTEÚDO</th><th>${isQ ? "EDIÇÃO" : "TEMA"}</th><th>SITUAÇÃO</th><th>AÇÕES</th></tr></thead><tbody>${items.map((item) => `<tr><td><strong>${e(item.title || item.theme)}</strong><small>${isQ ? `${e(shortCourse(item.course))} · Questão ${e(item.number)} · v${item.version || 1}` : e(item.description.slice(0, 85))}</small></td><td>${isQ ? item.year : e(item.theme)}</td><td><span class="status-pill ${item.status}">${item.status === "published" ? "Publicado" : item.status === "draft" ? "Rascunho" : "Arquivado"}</span></td><td><div class="table-actions"><a class="icon-button" href="#${isQ ? "editar-questao" : "editar-material"}/${item.id}" aria-label="Editar ${e(item.title || item.theme)}">${icon("edit")}</a>${item.status !== "archived" ? `<button class="icon-button" data-archive="${item.id}" data-kind="${isQ ? "question" : "material"}" aria-label="Arquivar ${e(item.title || item.theme)}">${icon("archive")}</button>` : ""}</div></td></tr>`).join("")}</tbody></table></div></section>`
+      `<nav class="tabs" aria-label="Tipo de conteúdo"><a class="${isQ ? "active" : ""}" href="#admin/questoes">Questões <small>${state.questions.length}</small></a><a class="${!isQ ? "active" : ""}" href="#admin/materiais">Materiais <small>${state.materials.length}</small></a></nav><section class="card"><div class="section-head"><div><h2>${isQ ? "Banco de questões" : "Biblioteca de materiais"}</h2><p>Catálogo compartilhado entre os perfis deste navegador.</p></div><span class="tag">Modo de avaliação</span></div><div class="table-wrap"><table><thead><tr><th>CONTEÚDO</th><th>${isQ ? "EDIÇÃO" : "TEMA"}</th><th>SITUAÇÃO</th><th>AÇÕES</th></tr></thead><tbody>${items.map((item) => `<tr><td><strong>${e(item.title || item.theme)}</strong><small>${isQ ? `${e(shortCourse(item.course))} · Questão ${e(item.number)} · v${item.version || 1}` : e(item.description.slice(0, 85))}</small></td><td>${isQ ? item.year : e(item.theme)}</td><td><span class="status-pill ${item.status}">${item.status === "published" ? "Publicado" : item.status === "draft" ? "Rascunho" : "Arquivado"}</span>${!isQ && item.status === "archived" && item.archivedAt ? `<small>Arquivado em ${e(date(item.archivedAt))}</small>` : ""}</td><td><div class="table-actions"><a class="icon-button" href="#${isQ ? "editar-questao" : "editar-material"}/${item.id}" aria-label="Editar ${e(item.title || item.theme)}">${icon("edit")}</a>${item.status !== "archived" ? `<button class="icon-button" data-archive="${e(item.id)}" data-kind="${isQ ? "question" : "material"}" aria-label="Arquivar ${e(item.title || item.theme)}">${icon("archive")}</button>` : ""}${isQ ? "" : `<button type="button" class="icon-button delete-material" data-delete-material="${e(item.id)}" aria-label="Excluir ${e(item.title)}" title="Excluir material">${icon("trash")}</button>`}</div></td></tr>`).join("")}</tbody></table></div></section>`
     );
   }
   function questionEditor(id) {
@@ -541,16 +557,15 @@
       title: "",
       theme: "",
       description: "",
-      url: "",
       status: "published",
     };
     return (
       head(
         "CURADORIA DE MATERIAIS",
-        id ? "Mantenha a biblioteca em dia." : "Compartilhe uma boa fonte.",
-        "Identifique o material e sua origem. O conteúdo será aberto por um link externo.",
+        id ? "Editar material" : "Novo material",
+        "Identifique o conteúdo, anexe um arquivo e escolha quando ele aparece na biblioteca deste navegador.",
       ) +
-      `<section class="card reduced"><form id="material-form" data-id="${id || ""}" class="form-grid"><label class="full">Título<input name="title" required maxlength="150" value="${e(m.title)}"></label><label>Tema<input name="theme" required maxlength="120" value="${e(m.theme)}"></label><label>Situação<select name="status"><option value="published" ${m.status === "published" ? "selected" : ""}>Publicado</option><option value="archived" ${m.status === "archived" ? "selected" : ""}>Arquivado</option></select></label><label class="full">Descrição<textarea name="description" required maxlength="2000">${e(m.description)}</textarea></label><label class="full">URL HTTPS do material<input type="url" name="url" required value="${e(m.url)}"></label><p id="form-error" class="form-error notice error full" role="alert"></p><div class="form-actions full">${link("admin/materiais", "Cancelar", "text-link")}<button class="primary">Salvar material ${icon("check")}</button></div></form></section>`
+      `<section class="card reduced"><form id="material-form" data-id="${e(id || "")}" class="form-grid"><label class="full">Título<input name="title" required maxlength="150" value="${e(m.title)}"></label><label>Tema<input name="theme" required maxlength="120" value="${e(m.theme)}"></label><label>Situação<select name="status"><option value="published" ${m.status === "published" ? "selected" : ""}>Publicado</option><option value="archived" ${m.status === "archived" ? "selected" : ""}>Arquivado</option></select></label><label class="full">Descrição<textarea name="description" required maxlength="2000">${e(m.description)}</textarea></label>${m.attachment || m.url ? `<p class="full data-note material-filename">Origem atual: ${m.attachment ? e(m.attachment.name) : materialOrigin(m)}</p>` : ""}<label class="full attachment-field"><span>${m.attachment || m.url ? "Substituir por um arquivo" : "Anexar arquivo"}</span><span class="attachment-picker"><input type="file" name="attachment" accept="${Object.keys(C.attachmentTypes).map((ext) => "." + ext).join(",")}" aria-describedby="attachment-help" ${id ? "" : "required"}><span class="attachment-button" aria-hidden="true">Selecionar arquivo</span><span class="attachment-name" aria-hidden="true">Nenhum arquivo selecionado</span></span></label><p class="full data-note" id="attachment-help">PDF, PNG, JPG, WebP, GIF, DOCX, PPTX ou XLSX. Até 15 MB por arquivo. O anexo fica disponível somente neste navegador.</p><p id="form-error" class="form-error notice error full" role="alert"></p><div class="form-actions full">${link("admin/materiais", "Cancelar", "text-link")}<button class="primary">Salvar material ${icon("check")}</button></div></form></section>`
     );
   }
   function discussion(id) {
@@ -640,7 +655,7 @@
       tentativa: "Simulado em andamento",
       resultado: "Correção comentada",
       desempenho: "Meu desempenho",
-      materiais: "Materiais e fontes",
+      materiais: "Materiais de estudo",
       entrar: "Entrar",
       cadastro: "Criar conta",
       conta: "Conta e privacidade",
@@ -648,7 +663,7 @@
       admin: "Curadoria",
       catalogo: "Curadoria",
       "editar-questao": "Editar questão",
-      "editar-material": "Editar material",
+      "editar-material": id ? "Editar material" : "Novo material",
       discussao: "Discussão",
       moderacao: "Moderação",
     };
@@ -666,7 +681,7 @@
       ["banco", "Banco de questões", "book"],
       ["simulado", "Simulados", "clock"],
       ["desempenho", "Meu desempenho", "chart"],
-      ["materiais", "Materiais e fontes", "file"],
+      ["materiais", "Materiais de estudo", "file"],
     ];
     const adminNavigation = [
       ["admin/questoes", "Curadoria de conteúdo", "grid"],
@@ -786,6 +801,160 @@
       }
     }
   }
+  async function attachmentRequest(mode, operation) {
+    const db = await new Promise((resolve, reject) => {
+      const request = indexedDB.open("enade.grupo2.attachments", 1);
+      request.onupgradeneeded = () => request.result.createObjectStore("files");
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    try {
+      return await new Promise((resolve, reject) => {
+        const transaction = db.transaction("files", mode);
+        const request = operation(transaction.objectStore("files"));
+        transaction.oncomplete = () => resolve(request.result);
+        transaction.onabort = () => reject(transaction.error);
+      });
+    } finally {
+      db.close();
+    }
+  }
+
+  async function readAttachmentMetadata(file) {
+    const type = C.attachmentType(file.name);
+    if (!type || file.size === 0 || file.size > C.attachmentLimit)
+      throw Error("Escolha um arquivo compatível de até 15 MB.");
+    const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    const header = String.fromCharCode(...bytes);
+    const signatures = {
+      "application/pdf": header.startsWith("%PDF-"),
+      "image/png": header.startsWith("\x89PNG\r\n\x1a\n"),
+      "image/jpeg": header.startsWith("\xff\xd8\xff"),
+      "image/webp": header.startsWith("RIFF") && header.slice(8, 12) === "WEBP",
+      "image/gif": header.startsWith("GIF87a") || header.startsWith("GIF89a"),
+    };
+    const matchesFormat = signatures[type] ?? header.startsWith("PK\x03\x04");
+    if (!matchesFormat) throw Error("O conteúdo do arquivo não corresponde ao formato informado.");
+    return { id: uuid(), name: file.name, type, size: file.size };
+  }
+
+  async function saveMaterial(form, data) {
+    if (!curator || savingMaterial) return;
+    const prior = state.materials.find((m) => m.id === form.dataset.id);
+    const file = form.elements.attachment.files[0];
+    const material = {
+      id: prior?.id || uuid(),
+      title: String(data.get("title")).trim(),
+      theme: String(data.get("theme")).trim(),
+      description: String(data.get("description")).trim(),
+      status: data.get("status"),
+      updatedAt: Date.now(),
+    };
+    if (material.status === "archived") material.archivedAt = prior?.archivedAt || material.updatedAt;
+    if (!file && !prior) {
+      formError("Selecione um arquivo para anexar.");
+      return;
+    }
+    const submit = form.querySelector('button[type="submit"], button:not([type])');
+    savingMaterial = true;
+    submit.disabled = true;
+    let staged;
+    try {
+      if (file) material.attachment = await readAttachmentMetadata(file);
+      else if (prior.attachment) material.attachment = prior.attachment;
+      else material.url = prior.url;
+
+      if (C.validateMaterial(material).length)
+        throw Error("Confira o título, o tema, a descrição e o arquivo.");
+      if (file) {
+        await attachmentRequest("readwrite", (store) => store.put(file, material.attachment.id));
+        staged = material.attachment.id;
+      }
+      if (!form.isConnected || !curator) return;
+
+      const index = prior ? state.materials.indexOf(prior) : state.materials.length;
+      state.materials[index] = material;
+      if (!save()) {
+        if (prior) state.materials[index] = prior;
+        else state.materials.pop();
+        throw Error("O material não foi salvo. Libere espaço ou tente novamente.");
+      }
+      staged = null;
+      if (file && prior?.attachment) await removeAttachment(prior.attachment.id).catch(() => {});
+      go("admin/materiais");
+      toast("Material salvo na biblioteca local.");
+    } catch (error) {
+      if (form.isConnected)
+        formError(error instanceof Error && error.name === "Error"
+          ? error.message
+          : "Não foi possível armazenar o arquivo neste navegador.");
+    } finally {
+      if (staged) {
+        await removeAttachment(staged).catch(() => {});
+      }
+      savingMaterial = false;
+      submit.disabled = false;
+    }
+  }
+
+  const removeAttachment = (id) =>
+    attachmentRequest("readwrite", (store) => store.delete(id));
+
+  function confirmMaterialDeletion(id) {
+    if (!curator || savingMaterial) return;
+    const material = state.materials.find((item) => item.id === id);
+    if (!material) return;
+    dialog(
+      "Excluir material de estudo?",
+      "O item sairá do catálogo e, se houver anexo, o arquivo será removido deste navegador.",
+      "Excluir material",
+      async () => {
+        if (savingMaterial) return;
+        savingMaterial = true;
+        const index = state.materials.indexOf(material);
+        try {
+          if (index < 0) return;
+          state.materials.splice(index, 1);
+          if (!save()) {
+            state.materials.splice(index, 0, material);
+            return;
+          }
+          if (material.attachment) await removeAttachment(material.attachment.id);
+        } catch {
+          state.materials.splice(index, 0, material);
+          save();
+          render();
+          toast("Não foi possível remover o arquivo. Tente excluir o material novamente.");
+          return;
+        } finally {
+          savingMaterial = false;
+        }
+        render();
+        main.querySelector(".delete-material, .tabs a")?.focus();
+        toast("Material excluído.");
+      },
+      true,
+    );
+  }
+
+  async function downloadMaterial(id) {
+    const material = state.materials.find((m) => m.id === id && m.status === "published");
+    if (!material?.attachment) return;
+    try {
+      const file = await attachmentRequest("readonly", (store) => store.get(material.attachment.id));
+      if (!(file instanceof Blob)) throw Error("Anexo indisponível.");
+      const url = URL.createObjectURL(new Blob([file], { type: material.attachment.type }));
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = material.attachment.name;
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    } catch {
+      toast("Não foi possível abrir o anexo neste navegador.");
+    }
+  }
   main.addEventListener("submit", async (event) => {
     event.preventDefault();
     const form = event.target,
@@ -895,26 +1064,7 @@
       return;
     }
     if (form.id === "material-form") {
-      if (!curator) return;
-      const prior = state.materials.find((m) => m.id === form.dataset.id),
-        m = {
-          id: prior?.id || uuid(),
-          title: String(data.get("title")).trim(),
-          theme: String(data.get("theme")).trim(),
-          description: String(data.get("description")).trim(),
-          url: String(data.get("url")).trim(),
-          status: data.get("status"),
-          updatedAt: Date.now(),
-        };
-      if (C.validateMaterial(m).length) {
-        formError("Preencha todos os campos e informe uma URL HTTPS válida.");
-        return;
-      }
-      if (prior) state.materials[state.materials.indexOf(prior)] = m;
-      else state.materials.push(m);
-      save();
-      go("admin/materiais");
-      toast("Material salvo na biblioteca local.");
+      await saveMaterial(form, data);
       return;
     }
     if (form.id === "message-form") {
@@ -956,6 +1106,9 @@
     }
   });
   main.addEventListener("change", (event) => {
+    if (event.target.matches("#material-form [name=attachment]"))
+      event.target.parentElement.querySelector(".attachment-name").textContent =
+        event.target.files[0]?.name || "Nenhum arquivo selecionado";
     if (event.target.closest("#setup")) updateSetup();
     if (
       event.target.closest("#running") &&
@@ -992,11 +1145,19 @@
   main.addEventListener("click", (event) => {
     const b = event.target.closest("button");
     if (!b || b.disabled) return;
+    if (b.dataset.deleteMaterial) {
+      confirmMaterialDeletion(b.dataset.deleteMaterial);
+      return;
+    }
+    if (b.dataset.downloadMaterial) {
+      void downloadMaterial(b.dataset.downloadMaterial);
+      return;
+    }
     if (b.dataset.password) {
       const field = document.getElementById(b.dataset.password),
         show = field.type === "password";
       field.type = show ? "text" : "password";
-      b.setAttribute("aria-label", show ? "Ocultar senha" : "Mostrar senha");
+      b.querySelector("span").textContent = show ? "Ocultar senha" : "Mostrar senha";
       return;
     }
     if (b.dataset.minutes) {
@@ -1062,11 +1223,14 @@
       return;
     }
     if (b.id === "erase") {
+      if (savingMaterial) return;
       dialog(
         "Apagar os dados deste navegador?",
         "Esta ação remove todas as contas, respostas, mensagens e conteúdos cadastrados localmente. A seleção original de questões e materiais será restaurada.",
         "Apagar dados",
-        () => {
+        async () => {
+          if (savingMaterial) return;
+          savingMaterial = true;
           state = fresh();
           userId = "guest";
           curator = false;
@@ -1075,11 +1239,14 @@
             localStorage.removeItem(key);
             localStorage.removeItem("enade.grupo2.v2");
             sessionStorage.removeItem(sessionKey);
+            await attachmentRequest("readwrite", (store) => store.clear());
           } catch {
             storageError = true;
+          } finally {
+            savingMaterial = false;
           }
           go("inicio");
-          toast("Dados locais apagados. A seleção original foi restaurada.");
+          toast(storageError ? "Não foi possível apagar todos os dados. Tente novamente." : "Dados locais apagados. A seleção original foi restaurada.");
         },
         true,
       );
@@ -1113,19 +1280,28 @@
       return;
     }
     if (b.dataset.archive && curator) {
-      const list =
-          b.dataset.kind === "material" ? state.materials : state.questions,
+      if (b.dataset.kind === "material" && savingMaterial) return;
+      const isMaterial = b.dataset.kind === "material";
+      const list = isMaterial ? state.materials : state.questions,
         item = list.find((i) => i.id === b.dataset.archive);
       if (!item) return;
       dialog(
-        "Arquivar este conteúdo?",
-        "Ele deixará de aparecer nas novas consultas e tentativas. Resultados anteriores serão preservados.",
+        isMaterial ? "Arquivar material de estudo?" : "Arquivar esta questão?",
+        isMaterial
+          ? "O material sai da biblioteca do estudante. O cadastro e o anexo ficam no histórico da curadoria."
+          : "A questão sai das novas consultas e tentativas. Resultados anteriores serão preservados.",
         "Arquivar",
         () => {
+          const previous = { ...item };
           item.status = "archived";
-          save();
+          if (isMaterial) item.archivedAt = Date.now();
+          if (!save()) {
+            Object.assign(item, previous);
+            if (!previous.archivedAt) delete item.archivedAt;
+            return;
+          }
           render();
-          toast("Conteúdo arquivado.");
+          toast(isMaterial ? "Material arquivado no histórico." : "Questão arquivada.");
         },
       );
       return;

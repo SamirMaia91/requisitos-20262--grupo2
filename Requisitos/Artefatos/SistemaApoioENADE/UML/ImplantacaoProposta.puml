@@ -1,0 +1,60 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
+skinparam shadowing false
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
+skinparam sequenceMessageAlign center
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Implantação · sistema proposto
+ node "Dispositivo do usuário" as USER {
+  node "Navegador" as B2 {
+   artifact "Interface web" as WEB2
+  }
+ }
+ node "Servidor de aplicação" as SERV {
+  artifact "Identidade · catálogo\navaliação · discussão" as APP
+ }
+ database "Banco de dados" as DB
+ storage "Repositório de anexos" as FILES
+ cloud "Fontes públicas" as SRC2
+ WEB2 --> APP : HTTPS
+ APP --> DB : conexão autenticada
+ APP --> FILES : leitura e gravação autorizadas
+ WEB2 ..> SRC2 : abre referência
+@enduml

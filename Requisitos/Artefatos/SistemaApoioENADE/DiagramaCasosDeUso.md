@@ -1,7 +1,13 @@
-# Diagrama de Casos de Uso
+# Diagrama de casos de uso
 
-Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-![Diagrama de Casos de Uso](UML/CasosDeUso.svg)
+Os casos em destaque separam o cadastro administrativo da consulta do estudante. A manutenção inclui arquivamento e exclusão confirmada. Os fluxos e exceções estão na [especificação](CasosDeUso.md).
 
-[Arquivo editável PlantUML](UML/CasosDeUso.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
+### Ações do estudante e do administrador
+
+![Ações do estudante e do administrador](UML/CasosDeUso.svg)
+
+[Editar em PlantUML](UML/CasosDeUso.puml)
+
+[Índice de modelagem](UML/README.md)

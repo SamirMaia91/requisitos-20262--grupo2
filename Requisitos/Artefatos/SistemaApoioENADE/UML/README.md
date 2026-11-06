@@ -1,16 +1,18 @@
 # Modelagem UML
 
-Versão 2.0 · 03/11/2026. Diagramas do produto conceitual proposto.
+Versão 2.2 · 06/11/2026. Os modelos usam a paleta da UNIFOR e seguem a [Visão](../DocumentoDeVisao.md), a [SRS](../SRS.md) e a [matriz de rastreabilidade](../Rastreabilidade.md).
 
-- [CasosDeUso](../DiagramaCasosDeUso.md): imagem SVG e fonte PlantUML.
-- [Componentes](../DiagramaComponentes.md): imagem SVG e fonte PlantUML.
-- [Implantacao](../DiagramaImplantacao.md): imagem SVG e fonte PlantUML.
-- [Classes](../DiagramaClasses.md): imagem SVG e fonte PlantUML.
-- [Sequencia](../DiagramaSequencia.md): imagem SVG e fonte PlantUML.
-- [Atividades](../DiagramaAtividades.md): imagem SVG e fonte PlantUML.
+- [Casos de uso](../DiagramaCasosDeUso.md) · Ações do estudante e do administrador
+- [Classes](../DiagramaClasses.md) · Modelo de domínio do sistema proposto
+- [Componentes](../DiagramaComponentes.md) · Responsabilidades e dependências da arquitetura proposta
+- [Implantação](../DiagramaImplantacao.md) · Protótipo publicado e arquitetura de produção proposta
+- [Sequência](../DiagramaSequencia.md) · Simulado cronometrado e correção · UC-04 e UC-05
+- [Atividades](../DiagramaAtividades.md) · Simulado cronometrado · UC-04 e UC-05
 
-Casos de uso, componentes e implantação cobrem a relação solicitada no enunciado da P1; classes, sequência e atividades complementam a modelagem prevista no projeto de extensão.
+Sequência e atividades têm visões separadas para simulado e materiais. Implantação tem vistas do protótipo publicado e da arquitetura proposta. Cada vista tem uma imagem SVG e sua fonte PlantUML.
 
-Para regenerar com Java e PlantUML 1.2026.8: **java -jar plantuml.jar -charset UTF-8 -tsvg UML/*.puml**. O executável do renderizador não faz parte do repositório.
+Para renderizar a partir da pasta de artefatos, use Java e PlantUML 1.2026.8.
 
-A arquitetura de implantação e os controles de servidor são propostas para uma implementação futura, sem afirmar disponibilidade de infraestrutura.
+```shell
+java -jar plantuml.jar -charset UTF-8 -tsvg UML/*.puml
+```

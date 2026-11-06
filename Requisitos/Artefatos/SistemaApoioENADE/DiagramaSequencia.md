@@ -1,7 +1,19 @@
-# Diagrama de Sequência
+# Diagrama de sequência
 
-Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-![Diagrama de Sequência](UML/Sequencia.svg)
+A primeira visão descreve a arquitetura proposta para o simulado. A segunda detalha o cadastro e a consulta de um material publicado. Na demonstração, os dados e arquivos estão no navegador.
 
-[Arquivo editável PlantUML](UML/Sequencia.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
+### Simulado cronometrado e correção · UC-04 e UC-05
+
+![Simulado cronometrado e correção · UC-04 e UC-05](UML/Sequencia.svg)
+
+[Editar em PlantUML](UML/Sequencia.puml)
+
+### Cadastro e consulta de materiais · UC-10 e UC-11
+
+![Cadastro e consulta de materiais · UC-10 e UC-11](UML/SequenciaMateriais.svg)
+
+[Editar em PlantUML](UML/SequenciaMateriais.puml)
+
+[Índice de modelagem](UML/README.md)

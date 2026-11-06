@@ -1,8 +1,8 @@
 # Regras de negócio
 
-> Versão 2.0 · 03/11/2026 · Grupo 2 · Especificação proposta para revisão acadêmica. Aprovação com usuários: pendente.
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-Regras propostas a partir do escopo documental. Sua aprovação com representantes do domínio está pendente.
+Regras do produto derivadas da análise documental.
 
 ## RN-01 — Perfis e autorização
 
@@ -12,7 +12,7 @@ Estudantes consultam conteúdo e seus próprios resultados; administradores mant
 
 ## RN-02 — Identificação e proveniência
 
-Cada questão registra ID, ano, curso, componente, tema, número na prova e URLs da prova e do gabarito. Material registra título, tema e URL.
+Cada questão registra ID, ano, curso, componente, tema, número original e URLs da prova e do gabarito. Material registra título, tema, descrição, situação e origem, representada por anexo ou referência HTTPS já cadastrada.
 
 **Requisitos relacionados:** RF-02, RF-09, RF-11.
 
@@ -60,7 +60,7 @@ Mensagens de 1 a 2000 caracteres, sem interpretação de HTML. Denúncia identif
 
 ## RN-10 — Materiais e arquivamento
 
-Conteúdo externo é referenciado por URL HTTPS. Arquivar impede novas seleções, preservando a fotografia de tentativas existentes. Origem pública não significa autorização automática para republicar conteúdo de terceiros.
+O catálogo mostra apenas materiais publicados. Novos materiais são cadastrados por anexo e as referências externas existentes usam HTTPS. O protótipo mantém os anexos no navegador. Arquivar uma questão preserva o histórico de tentativas. Arquivar um material retira-o da biblioteca e mantém no histórico da curadoria o cadastro, a origem e a data do arquivamento. O grupo deve usar arquivos próprios ou autorizados para o uso pretendido. A exclusão de material exige confirmação e remove o registro e o arquivo associado.
 
 **Requisitos relacionados:** RF-09, RF-11.
 

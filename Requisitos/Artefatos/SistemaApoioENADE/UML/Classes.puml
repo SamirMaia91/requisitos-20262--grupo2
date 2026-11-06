@@ -1,95 +1,131 @@
 @startuml
 skinparam backgroundColor #FFFFFF
-skinparam defaultFontName SansSerif
-skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
 skinparam shadowing false
-skinparam ArrowColor #346B68
-skinparam componentStyle uml2
-skinparam roundcorner 8
-skinparam classBackgroundColor #F1F7F6
-skinparam usecaseBackgroundColor #F1F7F6
-skinparam componentBackgroundColor #F1F7F6
-skinparam nodeBackgroundColor #F1F7F6
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
 skinparam sequenceMessageAlign center
-title Classes — Sistema de Apoio ao ENADE
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Modelo de domínio do sistema proposto
 hide methods
-class Usuario {
- id: UUID
- nome: String
- email: String
- hashSenha: String
- perfil: Estudante | Administrador
+hide circle
+skinparam linetype polyline
+class "Usuário" as Usuario {
+ id : UUID
+ nome : Texto
+ email : Texto
+ hashSenha : Texto
+ salSenha : Texto
+ perfil : Estudante ou Administrador
 }
-class Questao {
- id: UUID
- versao: Integer
- ano: Integer
- curso: String
- componente: Geral | Especifico
- tema: String
- numeroOriginal: String
- urlProva: URL
- urlGabarito: URL
- enunciado: Text
- comentario: Text
- status: Rascunho | Publicada | Arquivada
+class "Questão" as Questao {
+ id : UUID
+ versão : Inteiro
+ ano, curso, componente, tema
+ número original, prova, gabarito
+ enunciado, comentário
+ situação : Rascunho, Publicada ou Arquivada
 }
-class Alternativa {
- letra: A..E
- texto: Text
- correta: Boolean
+class "Alternativa" as Alt {
+ letra : A..E
+ texto : Texto
+ correta : Booleano
 }
-class Tentativa {
- id: UUID
- tipo: Pratica | Simulado
- inicio: DateTime
- prazo: DateTime [0..1]
- termino: DateTime [0..1]
- estado: Aberta | Concluida
- motivo: Manual | Prazo
+class "Tentativa" as Tentativa {
+ id : UUID
+ tipo : Prática ou Simulado
+ início, prazo, término
+ estado : Aberta ou Concluída
+ motivo : Manual ou Prazo
 }
-class ItemTentativa {
- ordem: Integer
- fotografiaQuestao: Text
- fotografiaGabarito: A..E
+class "Item da tentativa" as Item {
+ ordem : Inteiro
+ fotografia da questão
+ fotografia do gabarito
 }
-class Resposta {
- alternativaSelecionada: A..E [0..1]
+class "Resposta" as Resposta {
+ letra selecionada : A..E
 }
-class Material {
- id: UUID
- titulo: String
- tema: String
- url: URL
- status: Publicado | Arquivado
+class "Material de Estudo" as Material #E4F2FE {
+ id : UUID
+ título : Texto
+ tema : Texto
+ descrição : Texto
+ situação : Publicado ou Arquivado
+ arquivadoEm : DataHora [0..1]
+ urlOrigem : HTTPS [0..1]
 }
-class Mensagem {
- id: UUID
- texto: String
- data: DateTime
- status: Visivel | Oculta
+class "Anexo" as Anexo {
+ id : UUID
+ nome : Texto
+ tipo : MIME
+ tamanho : Bytes
 }
-class Denuncia {
- id: UUID
- motivo: String
- estado: Pendente | Analisada
- decisao: Manter | Ocultar
- justificativa: String [0..1]
- dataDecisao: DateTime [0..1]
+class "Mensagem" as Msg {
+ id : UUID
+ texto : Texto
+ data : DataHora
+ situação : Visível ou Oculta
+}
+class "Denúncia" as Den {
+ id : UUID
+ motivo : Texto
+ estado : Aguardando análise ou Analisada
+ decisão, justificativa, data da decisão
 }
 Usuario "1" -- "0..*" Tentativa : realiza
-Questao "1" *-- "5" Alternativa
-Tentativa "1" *-- "1..*" ItemTentativa
-ItemTentativa "0..*" --> "1" Questao : origem / versão
-ItemTentativa "1" *-- "0..1" Resposta
-Usuario "1" -- "0..*" Mensagem : publica
-Questao "1" -- "0..*" Mensagem
-Mensagem "1" -- "0..*" Denuncia
-Usuario "1" -- "0..*" Denuncia : registra
-Usuario "0..1" -- "0..*" Denuncia : decide (administrador)
-Usuario "1" -- "0..*" Material : mantém (administrador)
-note bottom of ItemTentativa
-Fotografia preservada após alterações do catálogo.
-Exatamente uma alternativa correta por questão publicada.
+Usuario "1" -- "0..*" Msg : publica
+Usuario "1" -- "0..*" Den : registra
+Usuario "0..1" -- "0..*" Den : decide {administrador}
+Usuario "0..1" -- "0..*" Material : mantém {administrador}
+Material "1" *-- "0..1" Anexo : arquivo
+Questao "1" *-- "5" Alt : alternativas
+Questao "1" -- "0..*" Msg : discussão
+Msg "1" -- "0..*" Den : sinalizações
+Tentativa "1" *-- "1..*" Item : itens
+Item "0..*" --> "1" Questao : referência
+Item "1" *-- "0..1" Resposta : seleção
+note bottom of Material
+Uma origem por material:
+anexo ou referência HTTPS.
+end note
+note bottom of Item
+A fotografia preserva a versão
+respondida em tentativas anteriores.
 end note
 @enduml

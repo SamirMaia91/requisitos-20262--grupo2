@@ -1,43 +1,77 @@
 @startuml
 skinparam backgroundColor #FFFFFF
-skinparam defaultFontName SansSerif
-skinparam defaultFontSize 15
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
 skinparam shadowing false
-skinparam ArrowColor #346B68
-skinparam componentStyle uml2
-skinparam roundcorner 8
-skinparam classBackgroundColor #F1F7F6
-skinparam usecaseBackgroundColor #F1F7F6
-skinparam componentBackgroundColor #F1F7F6
-skinparam nodeBackgroundColor #F1F7F6
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
 skinparam sequenceMessageAlign center
-title Atividades — Sistema de Apoio ao ENADE
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Simulado cronometrado · UC-04 e UC-05
 start
-:Definir filtros, quantidade e duração;
-if (Configuração válida e questões suficientes?) then (sim)
- :Criar tentativa e fotografia;
- :Fixar prazo absoluto;
+partition "Preparar" {
+ :Definir filtros, quantidade e duração;
+ if (Configuração válida e itens suficientes?) then (sim)
+  :Criar tentativa e preservar a versão das questões;
+  :Fixar prazo absoluto;
+ else (não)
+  :Informar ajuste necessário;
+  stop
+ endif
+}
+partition "Responder e encerrar" {
  while (Tentativa aberta?) is (sim)
-  if (Prazo expirou?) then (sim)
+  if (Prazo atingido?) then (sim)
    :Encerrar por prazo;
   else (não)
    :Apresentar questão e tempo;
-   :Registrar ou alterar alternativa;
-   if (Solicitou encerrar?) then (sim)
-    if (Confirmou?) then (sim)
-     :Encerrar manualmente;
-    else (não)
-     :Manter tentativa aberta;
-    endif
+   :Registrar seleção quando houver resposta;
+   if (Confirma encerramento manual?) then (sim)
+    :Encerrar manualmente;
+   else (não)
+    :Manter a tentativa aberta;
    endif
   endif
  endwhile (não)
+}
+partition "Consultar resultado" {
  :Persistir encerramento único;
  :Calcular acertos, erros e omissões;
- :Liberar comentário e fonte;
- :Atualizar histórico pessoal;
-else (não)
- :Informar ajuste necessário;
-endif
+ :Liberar correção comentada e atualizar histórico;
+}
 stop
 @enduml

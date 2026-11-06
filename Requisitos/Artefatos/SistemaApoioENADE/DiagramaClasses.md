@@ -1,7 +1,13 @@
-# Diagrama de Classes
+# Diagrama de classes
 
-Versão 2.0 · 03/11/2026. Modelo proposto, alinhado à [SRS](SRS.md) e aos [casos de uso](CasosDeUso.md).
+> Versão 2.2 · 06/11/2026 · Grupo 2
 
-![Diagrama de Classes](UML/Classes.svg)
+O modelo preserva a fotografia da questão por tentativa e representa as duas formas de origem de um material. Os campos da entrega estão na [SRS](SRS.md).
 
-[Arquivo editável PlantUML](UML/Classes.puml). O modelo descreve o produto conceitual; limites do protótipo estão documentados separadamente.
+### Modelo de domínio do sistema proposto
+
+![Modelo de domínio do sistema proposto](UML/Classes.svg)
+
+[Editar em PlantUML](UML/Classes.puml)
+
+[Índice de modelagem](UML/README.md)

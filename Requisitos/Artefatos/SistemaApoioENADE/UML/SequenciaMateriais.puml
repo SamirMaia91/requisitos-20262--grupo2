@@ -1,0 +1,84 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor #132190
+skinparam titleFontColor #132190
+skinparam titleFontSize 23
+skinparam shadowing false
+skinparam ArrowColor #46658F
+skinparam ArrowThickness 1.2
+skinparam roundcorner 12
+skinparam BorderColor #87A8DE
+skinparam actorBorderColor #132190
+skinparam actorFontColor #132190
+skinparam actorBackgroundColor #E4F2FE
+skinparam packageBorderColor #87A8DE
+skinparam packageBackgroundColor #F7FAFF
+skinparam rectangleBorderColor #87A8DE
+skinparam rectangleBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #7096D6
+skinparam usecaseBackgroundColor #E4F2FE
+skinparam classBackgroundColor #F4F8FE
+skinparam classBorderColor #7096D6
+skinparam componentBackgroundColor #E4F2FE
+skinparam componentBorderColor #7096D6
+skinparam nodeBackgroundColor #F4F8FE
+skinparam nodeBorderColor #7096D6
+skinparam databaseBackgroundColor #E4F2FE
+skinparam databaseBorderColor #7096D6
+skinparam noteBackgroundColor #F7FAFF
+skinparam noteBorderColor #87A8DE
+skinparam sequenceGroupBorderColor #87A8DE
+skinparam sequenceGroupBackgroundColor #E4F2FE
+skinparam sequenceLifeLineBorderColor #87A8DE
+skinparam sequenceParticipantBorderColor #7096D6
+skinparam sequenceParticipantBackgroundColor #E4F2FE
+skinparam sequenceMessageAlign center
+skinparam activityBackgroundColor #E4F2FE
+skinparam activityBorderColor #7096D6
+skinparam activityDiamondBackgroundColor #F4F8FE
+skinparam activityDiamondBorderColor #7096D6
+skinparam activityStartColor #004AF7
+skinparam activityEndColor #132190
+title Cadastro e consulta de materiais · UC-10 e UC-11
+hide footbox
+actor Administrador as A
+boundary "Interface web" as UI
+control "Gestão de conteúdos" as G
+control "Catálogo" as C
+database "Dados e anexos" as DB
+actor Estudante as E
+A -> UI : abre Materiais e escolhe Novo material
+A -> UI : informa título, tema, descrição, arquivo e situação
+UI -> G : solicita salvar
+G -> G : verifica perfil, dados e arquivo
+alt acesso negado ou dados inválidos
+ G --> UI : informa o ajuste
+ UI --> A : mantém o formulário
+else dados válidos
+ G -> DB : grava anexo e registro do material
+ alt falha de armazenamento
+  DB --> G : gravação recusada
+  G --> UI : informa a falha
+ else gravação confirmada
+  DB --> G : material registrado
+  G --> UI : confirma salvamento
+  UI --> A : volta à lista de materiais
+ end
+end
+== Consulta após publicação ==
+E -> UI : abre Materiais de estudo e filtra por tema
+UI -> C : solicita materiais publicados
+C -> DB : recupera registros do tema
+DB --> C : lista de materiais
+C --> UI : apresenta a lista
+opt estudante seleciona um material anexado
+ E -> UI : escolhe Baixar anexo
+ UI -> C : solicita o arquivo
+ C -> DB : lê anexo de material publicado
+ DB --> C : arquivo
+ C --> UI : entrega o arquivo
+ UI --> E : inicia o download
+end
+@enduml

@@ -6,6 +6,8 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "Requisitos/Artefatos/SistemaApoioENADE");
 const require = createRequire(import.meta.url);
+const proto = path.join(dir, "Prototipos");
+const read = (name) => fs.readFile(path.join(dir, name), "utf8");
 const C = require(path.join(dir, "Prototipos/core.js"));
 const data = JSON.parse(
   await fs.readFile(path.join(dir, "catalogo.json"), "utf8"),
@@ -32,21 +34,63 @@ for (const [type, rows] of Object.entries(data))
       ))
         check(valid.has(ref[0]), `${type}: referência inexistente ${ref[0]}`);
     }
-for (const r of data.rf) {
-  check(
-    data.cases.some((c) => c[0] === r[4] && c[7].split(", ").includes(r[0])),
-    `${r[0]} sem cobertura no caso de uso`,
-  );
-  for (const name of [
-    "RequisitosFuncionais.md",
-    "Backlog.md",
-    "Rastreabilidade.md",
-  ])
-    check(
-      (await fs.readFile(path.join(dir, name), "utf8")).includes(r[0]),
-      `${r[0]} ausente em ${name}`,
-    );
+const ids = (text, type) => text.match(new RegExp("\\b" + type + "-\\d{2}\\b", "g")) || [];
+const [vision, spec, requirements, backlog, matrix, model, app, seed] = await Promise.all([
+  ...["DocumentoDeVisao.md", "CasosDeUso.md", "RequisitosFuncionais.md",
+    "Backlog.md", "Rastreabilidade.md", "UML/CasosDeUso.puml", "Prototipos/app.js"].map(read),
+  read("Prototipos/content.json").then(JSON.parse),
+]);
+const needStart = vision.indexOf("## 4. Necessidades");
+const featureStart = vision.indexOf("## 5. Funcionalidades");
+check(needStart >= 0 && featureStart > needStart, "Necessidades devem preceder funcionalidades na Visão");
+const features = vision.slice(featureStart, vision.indexOf("### 5.3"));
+const caseHeadings = [...spec.matchAll(/^## (UC-\d{2}) — (.+)$/gm)];
+const caseShapes = [...model.matchAll(/^\s*usecase "(UC-\d{2}) · ([^"]+)"/gm)];
+check(caseHeadings.length === data.cases.length, "Número de casos da especificação diverge do catálogo");
+check(caseShapes.length === data.cases.length, "Número de casos do diagrama diverge do catálogo");
+const associations = new Set([...model.matchAll(/^([A-Z][0-9]*) -- ([A-Z][0-9]*)$/gm)]
+  .map((m) => [m[1], m[2]].sort().join("-")));
+for (const [id, title, , needs, cases, rules] of data.rf) {
+  check(ids(features, "RF").includes(id), id + " ausente das funcionalidades da Visão");
+  check(requirements.includes("## " + id + " — " + title), id + " diverge do catálogo de RF");
+  check(backlog.includes(id + " / " + cases + " |"), id + " diverge do backlog");
+  const row = matrix.split(/\r?\n/).find((line) => line.startsWith("| " + id + " |"));
+  check(row?.startsWith("| " + [id, needs, cases, rules, "PB-" + id.slice(3)].join(" | ") + " | "),
+    id + " tem vínculos divergentes na matriz");
+  check(row?.includes("Prototipos/index.html#"), id + " sem link de tela");
+  const caseIds = ids(cases, "UC");
+  check(caseIds.length > 0, id + " sem caso de uso");
+  for (const caseId of caseIds)
+    check(data.cases.some((c) => c[0] === caseId && ids(c[7], "RF").includes(id)),
+      id + " sem referência recíproca em " + caseId);
+  for (const need of ids(needs, "NEC"))
+    check(data.needs.some((n) => n[0] === need && ids(n[3], "RF").includes(id)),
+      id + " sem referência recíproca em " + need);
 }
+for (const [id, , , coverage] of data.needs) {
+  check(vision.slice(needStart, featureStart).includes("| " + id + " |"),
+    id + " ausente da seção de necessidades");
+  check(ids(coverage, "RF").length + ids(coverage, "RNF").length > 0, id + " sem cobertura");
+  for (const rfId of ids(coverage, "RF"))
+    check(data.rf.some((r) => r[0] === rfId && ids(r[3], "NEC").includes(id)),
+      id + " sem referência recíproca em " + rfId);
+}
+for (const [id, title, actor, , , , , coverage] of data.cases) {
+  check(caseHeadings.filter((m) => m[1] === id && m[2].trim() === title).length === 1,
+    id + " ausente, duplicado ou divergente na especificação");
+  check(caseShapes.filter((m) => m[1] === id && m[2] === title).length === 1,
+    id + " ausente, duplicado ou divergente no PlantUML");
+  for (const [role, endpoint] of [["Estudante", "E"], ["Administrador", "A"]])
+    check(actor.includes(role) === associations.has([endpoint, "U" + id.slice(3)].sort().join("-")),
+      id + " diverge do ator " + role);
+  const rfIds = ids(coverage, "RF");
+  check(rfIds.length > 0, id + " sem requisito");
+  for (const rfId of rfIds)
+    check(data.rf.some((r) => r[0] === rfId && ids(r[4], "UC").includes(id)),
+      id + " sem referência recíproca em " + rfId);
+}
+const routeTable = app.match(/const pages = \{([\s\S]*?)\};/)?.[1] || "";
+const routes = new Set([...routeTable.matchAll(/^\s*"?([\w-]+)"?:/gm)].map((m) => m[1]));
 async function walk(folder) {
   const entries = await fs.readdir(folder, { withFileTypes: true });
   return (
@@ -69,10 +113,11 @@ for (const file of [
 ]) {
   const content = await fs.readFile(file, "utf8");
   for (const [, target] of content.matchAll(/\]\(([^)]+)\)/g)) {
-    if (/^(?:https?:|#|mailto:)/.test(target)) continue;
+    if (/^(?:https?:|mailto:)/.test(target)) continue;
+    const [relative, fragment] = target.split("#", 2);
     const location = path.resolve(
       path.dirname(file),
-      decodeURIComponent(target.split("#")[0]),
+      decodeURIComponent(relative) || path.basename(file),
     );
     check(
       await fs.stat(location).then(
@@ -81,6 +126,19 @@ for (const file of [
       ),
       `Link inexistente: ${path.relative(root, file)} -> ${target}`,
     );
+    if (location === path.join(proto, "index.html") && fragment) {
+      const [route, parameter] = fragment.split("/");
+      check(routes.has(route), "Rota inexistente: " + fragment);
+      if (route === "questao")
+        check(seed.questions.some((q) => q.id === parameter), "Questão inexistente: " + parameter);
+      if (route === "admin")
+        check(["questoes", "materiais"].includes(parameter), "Área de curadoria inexistente: " + fragment);
+    }
+    if (location.endsWith(".md") && fragment) {
+      const headings = [...(await fs.readFile(location, "utf8")).matchAll(/^#{1,6}\s+(.+)$/gm)]
+        .map((m) => m[1].toLowerCase().replace(/[^\p{L}\p{N}_ -]/gu, "").trim().replaceAll(" ", "-"));
+      check(headings.includes(decodeURIComponent(fragment)), "Seção inexistente: " + target);
+    }
   }
   for (const ref of content.matchAll(/\b(?:RF|RNF|RN|NEC|UC)-\d{2}\b/g))
     check(valid.has(ref[0]), `Referência inválida em ${file}: ${ref[0]}`);
@@ -89,9 +147,12 @@ for (const diagram of [
   "CasosDeUso",
   "Componentes",
   "Implantacao",
+  "ImplantacaoProposta",
   "Classes",
   "Sequencia",
+  "SequenciaMateriais",
   "Atividades",
+  "AtividadesMateriais",
 ]) {
   const svg = await fs.readFile(
     path.join(dir, "UML", diagram + ".svg"),
@@ -101,6 +162,9 @@ for (const diagram of [
     svg.includes("<svg") && !/Syntax Error|An error has occurred/i.test(svg),
     `Renderização inválida: ${diagram}`,
   );
+  if (diagram === "CasosDeUso")
+    for (const [id, title] of data.cases)
+      check(svg.includes(id + " · " + title), id + " ausente ou divergente no SVG");
 }
 // Dados mínimos de ensaio, em memória. Não são cadastrados no protótipo distribuído.
 const q = {
@@ -177,10 +241,6 @@ check(
   "Tema especial altera cálculo",
 );
 // Conteúdo publicado, filtros e manutenção introduzidos na versão 3.
-const proto = path.join(dir, "Prototipos");
-const seed = JSON.parse(
-  await fs.readFile(path.join(proto, "content.json"), "utf8"),
-);
 const bootstrap = (await fs.readFile(path.join(proto, "content.js"), "utf8"))
   .replace(/^.*?window\.EnadeSeed\s*=\s*/s, "")
   .replace(/;\s*$/, "");
@@ -189,7 +249,8 @@ check(
   "content.js diverge de content.json; execute scripts/build-content.mjs",
 );
 check(
-  seed.questions.length === 5,
+  seed.questions.length === 8 &&
+    seed.questions.filter((q) => q.component === "Formação geral").length === 3,
   "Seleção documental inicial alterada sem atualizar a verificação",
 );
 check(
@@ -205,7 +266,8 @@ for (const item of seed.questions) {
     item.adapted === true &&
       item.adaptationNote &&
       item.commentAttribution &&
-      item.pedagogicalReview.startsWith("Pendente"),
+      item.reviewType && item.reviewed === true &&
+      new URL(item.source).hash === "#page=" + item.originalPage,
     "Proveniência incompleta: " + item.id,
   );
   check(
@@ -228,6 +290,7 @@ check(
     course: first.course,
     component: first.component,
     theme: first.theme,
+    search: first.title.toUpperCase(),
   }).length === 1,
   "Filtros combinados divergem do catálogo",
 );
@@ -279,6 +342,20 @@ check(
   ),
   "Situação desconhecida de material aceita",
 );
+check(!C.filterQuestions(seed.questions, {
+  component: "Formação geral", search: first.title,
+}).length, "Busca por título ignorou o filtro de componente");
+const attachment = { id: "file", name: "Guia.pdf", type: "application/pdf", size: 100 };
+const material = { ...seed.materials[0], url: undefined, attachment };
+check(!C.validateMaterial(material).length, "Anexo compatível rejeitado");
+check(C.validateMaterial({ ...material, url: seed.materials[0].url }).includes("attachment"),
+  "Material com duas origens aceito");
+for (const changes of [
+  { name: "../Guia.pdf" }, { name: "Guia.exe" }, { type: "image/png" },
+  { size: 0 }, { size: C.attachmentLimit + 1 },
+])
+  check(C.validateMaterial({ ...material, attachment: { ...attachment, ...changes } }).includes("attachment"),
+    "Anexo inválido aceito: " + JSON.stringify(changes));
 console.log(
   `${checks} verificações concluídas: referências, links, cobertura, SVG, cálculo, prazo, histórico, filtros, versões, materiais e proveniência.`,
 );
