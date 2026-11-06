@@ -11,4 +11,4 @@ O protótipo acadêmico adota a paleta e a tipografia do [Guia de Marca da UNIFO
 
 Branco e neutros frios sustentam a leitura. Vermelho é reservado ao feedback de erro e exclusão. Estados de resposta também têm textos e símbolos, sem depender apenas da cor.
 
-A fonte [Satoshi Variable](assets/fonts/README.md) é servida pelo próprio pacote. A marca gráfica “e ↗ ENADE” e os ícones são elementos próprios deste projeto. Não reproduzem nem alteram o logotipo institucional; a filiação acadêmica aparece como UNIFOR · ADS · Grupo 2.
+A fonte [Satoshi Variable](assets/fonts/README.md) é servida pelo próprio pacote. A marca gráfica “e ↗ ENADE” e os ícones são elementos próprios deste projeto. Não reproduzem nem alteram o logotipo institucional; a filiação acadêmica aparece como UNIFOR · Grupo 2.

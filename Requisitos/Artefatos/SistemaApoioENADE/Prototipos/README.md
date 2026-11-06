@@ -1,6 +1,6 @@
 # Protótipo navegável — Espaço de estudo ENADE
 
-Versão 3.1 · 06/11/2026 · UNIFOR · ADS · Grupo 2.
+Versão 3.1 · 06/11/2026 · UNIFOR · Grupo 2.
 
 **[Abrir o protótipo público](https://enade-grupo2-estudo.netlify.app)**
 
